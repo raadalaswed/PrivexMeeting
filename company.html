@@ -1,1146 +1,970 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<!--
-===========================================================
-Project        : Privex Founders Operating System
-Module         : Company Identity & Vision
-Phase          : Phase 1
-Version        : 1.0.0
-File Name      : company.html
+<!-- ===========================================================
+Project     : Privex Founders Operating System
+Module      : Company & Identity Workshop
+Phase       : Phase 1
+Version     : 1.0.0
+File Name   : company.html
 Dependencies:
-- Sidebar Component
-- Topbar Component
-- Storage Layer
-- Navigation Engine
-- Shared UI Components
-Description:
-ورشة عمل تفاعلية لصياغة الرؤية، الرسالة، القيم، الثقافة، القصة، والهوية البصرية لشركة Privex.
-Last Updated:
-2026-07-01
-===========================================================
--->
+  - Sidebar Component
+  - Topbar Component
+  - Storage Layer
+  - Navigation Engine
+  - Shared UI Components
+Description : ورشة تفاعلية لتحديد رؤية Privex، رسالتها، قيمها الجوهرية، ثقافتها، قصة تأسيسها، وهويتها البصرية.
+Last Updated: 2026-07-01
+=========================================================== -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privex · الهوية والرؤية</title>
+<title>Privex OS — الشركة والهوية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ==========================================================
-   PRIVEX DESIGN SYSTEM — Shared across all Phase 1 modules
-   ========================================================== */
-:root{
-  --bg-void:#05060c;
-  --bg-deep:#090b16;
-  --bg-panel: rgba(20,24,42,0.55);
-  --bg-panel-solid:#10132224;
-  --bg-elevated: rgba(28,33,56,0.7);
-  --border-glass: rgba(255,255,255,0.08);
-  --border-glass-strong: rgba(255,255,255,0.16);
-  --blue-600:#3a5cff;
-  --blue-500:#4f7cff;
-  --blue-400:#7b9dff;
-  --purple-600:#7c3aed;
-  --purple-500:#8b5cf6;
-  --purple-400:#a78bfa;
-  --cyan:#22d3ee;
-  --text-primary:#eef1fb;
-  --text-secondary:#a4addc;
-  --text-dim:#5f6790;
-  --success:#34d399;
-  --success-dim: rgba(52,211,153,0.15);
-  --danger:#fb7185;
-  --danger-dim: rgba(251,113,133,0.15);
-  --warning:#fbbf24;
-  --radius-sm:10px;
-  --radius-md:16px;
-  --radius-lg:24px;
-  --shadow-glow: 0 0 40px rgba(79,124,255,0.15);
-  --font-body: 'Tajawal', 'Segoe UI', sans-serif;
-  --font-display: 'Rajdhani', 'Tajawal', sans-serif;
-}
 
-*{box-sizing:border-box; margin:0; padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  font-family:var(--font-body);
-  background:var(--bg-void);
-  color:var(--text-primary);
-  min-height:100vh;
-  overflow-x:hidden;
-  direction:rtl;
-}
+    /* ================= DESIGN TOKENS ================= */
+    :root{
+      --bg-0:#0a0d14;
+      --bg-1:#0e121b;
+      --bg-panel:rgba(255,255,255,0.035);
+      --bg-panel-solid:#121722;
+      --border:rgba(255,255,255,0.08);
+      --border-strong:rgba(255,255,255,0.14);
+      --text-1:#e9ecf5;
+      --text-2:#9aa3b8;
+      --text-3:#5f6880;
+      --blue:#4f7fff;
+      --blue-dim:rgba(79,127,255,0.14);
+      --purple:#9b6bff;
+      --purple-dim:rgba(155,107,255,0.14);
+      --green:#33d17a;
+      --amber:#f5b942;
+      --red:#ff5d6c;
+      --radius:10px;
+      --radius-sm:6px;
+      --font-display:'Space Grotesk',sans-serif;
+      --font-body:'Inter',sans-serif;
+      --font-mono:'JetBrains Mono',monospace;
+      --sidebar-w:236px;
+      --topbar-h:56px;
+      --maxw:1280px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      background:
+        radial-gradient(1100px 600px at 85% -10%, rgba(79,127,255,0.08), transparent 60%),
+        radial-gradient(900px 500px at -10% 20%, rgba(155,107,255,0.06), transparent 55%),
+        var(--bg-0);
+      color:var(--text-1);
+      font-family:var(--font-body);
+      font-size:14px;
+      line-height:1.6;
+      min-height:100vh;
+      direction:rtl;
+    }
+    ::selection{background:var(--blue-dim);color:#fff;}
+    a{color:inherit;text-decoration:none;}
+    button{font-family:inherit;cursor:pointer;}
+    ::-webkit-scrollbar{width:8px;height:8px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
-/* Ambient background texture */
-body::before{
-  content:'';
-  position:fixed; inset:0; z-index:-2;
-  background:
-    radial-gradient(circle at 15% 10%, rgba(79,124,255,0.16), transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(139,92,246,0.14), transparent 40%),
-    radial-gradient(circle at 50% 90%, rgba(34,211,238,0.08), transparent 45%),
-    var(--bg-void);
-}
-body::after{
-  content:'';
-  position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size:42px 42px;
-  mask-image: radial-gradient(circle at 50% 30%, black, transparent 75%);
-}
+    h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;}
+    .mono{font-family:var(--font-mono);}
+    .eyebrow{
+      font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;
+      color:var(--blue);text-transform:uppercase;display:flex;align-items:center;gap:6px;
+    }
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);}
 
-::selection{ background:var(--purple-500); color:#fff; }
-::-webkit-scrollbar{ width:8px; height:8px; }
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{ background:rgba(120,140,255,0.3); border-radius:10px; }
-::-webkit-scrollbar-thumb:hover{ background:rgba(120,140,255,0.55); }
+    /* ================= APP SHELL ================= */
+    .app-shell{display:flex;min-height:100vh;}
 
-a{ color:inherit; text-decoration:none; }
-button{ font-family:inherit; cursor:pointer; }
-textarea, input{ font-family:inherit; }
+    /* ================= SIDEBAR ================= */
+    .sidebar{
+      width:var(--sidebar-w);flex:0 0 var(--sidebar-w);
+      background:var(--bg-1);border-left:1px solid var(--border);
+      display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:40;
+    }
+    .sidebar-brand{
+      padding:18px 18px 16px;display:flex;align-items:center;gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .brand-mark{
+      width:30px;height:30px;border-radius:8px;flex:0 0 30px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;
+      box-shadow:0 0 16px rgba(79,127,255,0.35);
+    }
+    .brand-text{display:flex;flex-direction:column;line-height:1.2;}
+    .brand-text b{font-family:var(--font-display);font-size:14px;}
+    .brand-text span{font-size:10px;color:var(--text-3);font-family:var(--font-mono);letter-spacing:.04em;}
+    .sidebar-nav{flex:1;overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:2px;}
+    .nav-item{
+      display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);
+      color:var(--text-2);font-size:13px;transition:.15s;border:1px solid transparent;position:relative;
+    }
+    .nav-item .ic{width:16px;text-align:center;font-size:13px;opacity:.85;}
+    .nav-item .status-dot{margin-right:auto;width:6px;height:6px;border-radius:50%;background:var(--text-3);}
+    .nav-item .status-dot.done{background:var(--green);box-shadow:0 0 6px var(--green);}
+    .nav-item .status-dot.active{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+    .nav-item:hover{background:var(--bg-panel);color:var(--text-1);}
+    .nav-item.current{background:var(--blue-dim);color:#fff;border-color:rgba(79,127,255,0.3);}
+    .nav-section-label{font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;padding:14px 10px 6px;text-transform:uppercase;}
+    .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);}
+    .sidebar-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:6px;}
+    .sidebar-progress-track{height:5px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;}
+    .sidebar-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width .4s;}
 
-.glass{
-  background:var(--bg-panel);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border:1px solid var(--border-glass);
-  border-radius:var(--radius-md);
-}
+    /* ================= TOPBAR ================= */
+    .main-col{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .topbar{
+      height:var(--topbar-h);flex:0 0 var(--topbar-h);position:sticky;top:0;z-index:30;
+      display:flex;align-items:center;gap:14px;padding:0 22px;
+      background:rgba(14,18,27,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+    }
+    .topbar-crumb{font-size:12px;color:var(--text-3);font-family:var(--font-mono);}
+    .topbar-crumb b{color:var(--text-2);font-weight:500;}
+    .topbar-spacer{flex:1;}
+    .topbar-btn{
+      display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:var(--radius-sm);
+      background:var(--bg-panel);border:1px solid var(--border);color:var(--text-2);font-size:12px;
+      transition:.15s;
+    }
+    .topbar-btn:hover{border-color:var(--border-strong);color:var(--text-1);}
+    .topbar-ring{position:relative;width:30px;height:30px;flex:0 0 30px;}
+    .topbar-ring svg{transform:rotate(-90deg);}
+    .topbar-ring circle{fill:none;stroke-width:3;}
+    .topbar-ring .track{stroke:rgba(255,255,255,0.08);}
+    .topbar-ring .fill{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset .4s;}
+    .topbar-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:8px;color:var(--text-2);}
 
-/* ================= APP SHELL ================= */
-.app-shell{
-  display:grid;
-  grid-template-columns: 1fr 264px;
-  min-height:100vh;
-}
-.main-col{ display:flex; flex-direction:column; min-width:0; }
+    /* ================= MAIN CONTENT ================= */
+    .content{flex:1;padding:22px 26px 60px;}
+    .content-inner{max-width:var(--maxw);margin:0 auto;}
 
-/* ================= SIDEBAR ================= */
-.sidebar{
-  border-inline-start:1px solid var(--border-glass);
-  background:rgba(9,11,22,0.6);
-  backdrop-filter: blur(20px);
-  padding:28px 20px;
-  display:flex; flex-direction:column; gap:28px;
-  position:sticky; top:0; height:100vh; overflow-y:auto;
-}
-.brand{ display:flex; align-items:center; gap:10px; }
-.brand-mark{
-  width:38px; height:38px; border-radius:11px;
-  background:linear-gradient(135deg, var(--blue-500), var(--purple-500));
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-weight:700; font-size:16px; color:#fff;
-  box-shadow:0 0 22px rgba(124,58,237,0.5);
-}
-.brand-text b{ display:block; font-family:var(--font-display); font-size:16px; letter-spacing:.5px;}
-.brand-text span{ display:block; font-size:11px; color:var(--text-dim); }
+    /* ================= PAGE HEADER (compact — NOT a hero) ================= */
+    .page-head{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+      padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--bg-panel);margin-bottom:16px;
+    }
+    .page-head h1{font-size:19px;margin:6px 0 4px;}
+    .page-head p{color:var(--text-2);font-size:12.5px;max-width:560px;}
+    .page-head-stats{display:flex;gap:18px;flex:0 0 auto;}
+    .stat{text-align:center;}
+    .stat b{display:block;font-family:var(--font-mono);font-size:16px;color:var(--blue);}
+    .stat span{font-size:10px;color:var(--text-3);font-family:var(--font-mono);}
 
-.nav-group{ display:flex; flex-direction:column; gap:4px; }
-.nav-label{ font-size:11px; color:var(--text-dim); letter-spacing:1.5px; margin:6px 4px; font-family:var(--font-display); }
-.nav-item{
-  display:flex; align-items:center; gap:10px;
-  padding:10px 12px; border-radius:var(--radius-sm);
-  color:var(--text-secondary); font-size:14px; font-weight:500;
-  border:1px solid transparent;
-  transition:all .2s ease;
-  position:relative;
-}
-.nav-item .ni-dot{ width:6px; height:6px; border-radius:50%; background:var(--text-dim); flex-shrink:0; transition:all .2s ease;}
-.nav-item:hover{ background:var(--bg-elevated); color:var(--text-primary); }
-.nav-item.active{
-  background:linear-gradient(90deg, rgba(79,124,255,0.18), rgba(139,92,246,0.10));
-  color:#fff; border-color:var(--border-glass-strong);
-}
-.nav-item.active .ni-dot{ background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
-.nav-item .ni-progress{ margin-inline-start:auto; font-family:var(--font-display); font-size:11px; color:var(--text-dim); }
+    /* ================= WORKSPACE GRID ================= */
+    .workspace-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;}
+    .primary-col{min-width:0;display:flex;flex-direction:column;gap:14px;}
+    .side-col{display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(var(--topbar-h) + 14px);}
 
-.sidebar-progress{ margin-top:auto; padding-top:16px; border-top:1px solid var(--border-glass); }
-.sp-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); margin-bottom:8px; font-family:var(--font-display); letter-spacing:1px;}
-.sp-bar{ height:6px; border-radius:10px; background:rgba(255,255,255,0.06); overflow:hidden; }
-.sp-fill{ height:100%; border-radius:10px; background:linear-gradient(90deg, var(--blue-500), var(--purple-500), var(--cyan)); transition:width .6s ease; }
+    /* ================= CARD ================= */
+    .card{
+      background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+      padding:16px 18px;
+    }
+    .card-title{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+    .card-title h3{font-size:14.5px;}
+    .card-title .badge{margin-right:auto;}
+    .card-sub{color:var(--text-2);font-size:12px;margin-bottom:10px;}
 
-/* ================= TOPBAR ================= */
-.topbar{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 32px; border-bottom:1px solid var(--border-glass);
-  background:rgba(6,7,13,0.55); backdrop-filter: blur(14px);
-  position:sticky; top:0; z-index:20;
-}
-.tb-title{ display:flex; flex-direction:column; gap:2px; }
-.tb-title h1{ font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:.3px;}
-.tb-title span{ font-size:12px; color:var(--text-dim); }
-.tb-actions{ display:flex; align-items:center; gap:10px; }
-.save-indicator{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim); }
-.save-dot{ width:7px; height:7px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success); animation:pulse-dot 2.2s infinite; }
-@keyframes pulse-dot{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+    .badge{
+      font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;padding:3px 8px;border-radius:20px;
+      border:1px solid var(--border-strong);color:var(--text-2);text-transform:uppercase;
+    }
+    .badge.pending{color:var(--amber);border-color:rgba(245,185,66,0.35);background:rgba(245,185,66,0.08);}
+    .badge.approved{color:var(--green);border-color:rgba(51,209,122,0.35);background:rgba(51,209,122,0.08);}
+    .badge.info{color:var(--blue);border-color:rgba(79,127,255,0.35);background:var(--blue-dim);}
 
-.page-progress{ height:3px; width:100%; background:rgba(255,255,255,0.05); }
-.page-progress-fill{ height:100%; background:linear-gradient(90deg, var(--blue-500), var(--cyan)); width:0%; transition:width .5s ease; }
+    /* ================= SECTION (workshop unit) ================= */
+    .section-block{
+      border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-panel);overflow:hidden;
+    }
+    .section-block-head{
+      display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;
+      border-bottom:1px solid transparent;
+    }
+    .section-block.open .section-block-head{border-bottom-color:var(--border);}
+    .section-num{
+      font-family:var(--font-mono);font-size:11px;color:var(--blue);
+      background:var(--blue-dim);border-radius:5px;width:24px;height:24px;flex:0 0 24px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .section-block-head h3{font-size:14px;flex:1;}
+    .section-block-head .chev{color:var(--text-3);font-size:11px;transition:transform .2s;}
+    .section-block.open .chev{transform:rotate(90deg);}
+    .section-block-body{display:none;padding:4px 16px 16px;}
+    .section-block.open .section-block-body{display:block;}
+    .sb-explain{color:var(--text-2);font-size:12.8px;margin-bottom:10px;}
+    .sb-explain b{color:var(--text-1);font-weight:600;}
+    .term-row{
+      display:flex;gap:8px;align-items:baseline;padding:7px 10px;background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12.5px;
+    }
+    .term-row .term-en{font-family:var(--font-mono);color:var(--blue);flex:0 0 auto;font-size:11.5px;}
+    .term-row .term-ar{color:var(--text-2);}
+    .why-box{
+      display:flex;gap:8px;padding:9px 12px;border-radius:var(--radius-sm);
+      background:var(--purple-dim);border:1px solid rgba(155,107,255,0.25);font-size:12.3px;color:var(--text-1);margin:10px 0;
+    }
+    .why-box .ic{color:var(--purple);flex:0 0 auto;}
 
-/* ================= CONTENT ================= */
-.content{ padding:36px 40px 90px; max-width:1180px; width:100%; margin:0 auto; }
-.content > *{ animation: fadeUp .6s ease both; }
-@keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+    /* discussion / questions */
+    .q-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin:8px 0 12px;}
+    .q-list li{
+      font-size:12.6px;color:var(--text-1);padding:8px 10px 8px 10px;padding-inline-start:26px;position:relative;
+      background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-sm);
+    }
+    .q-list li::before{content:'؟';position:absolute;right:9px;top:7px;color:var(--blue);font-family:var(--font-mono);font-size:12px;}
 
-/* stagger */
-.content > *:nth-child(1){animation-delay:.02s;}
-.content > *:nth-child(2){animation-delay:.08s;}
-.content > *:nth-child(3){animation-delay:.14s;}
-.content > *:nth-child(4){animation-delay:.20s;}
-.content > *:nth-child(5){animation-delay:.26s;}
-.content > *:nth-child(6){animation-delay:.32s;}
-.content > *:nth-child(7){animation-delay:.38s;}
+    /* notes */
+    .notes-area{width:100%;min-height:72px;background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-sm);
+      color:var(--text-1);font-size:12.6px;padding:9px 10px;resize:vertical;font-family:var(--font-body);}
+    .notes-area:focus{outline:none;border-color:var(--blue);}
+    .notes-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:10.5px;color:var(--text-3);font-family:var(--font-mono);}
 
-.eyebrow{ font-family:var(--font-display); font-size:12px; letter-spacing:2px; color:var(--cyan); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
-.eyebrow::before{ content:''; width:22px; height:1px; background:var(--cyan); }
+    /* voting */
+    .vote-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}
+    .vote-card{
+      border:1px solid var(--border);background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);
+      padding:10px 8px;text-align:center;transition:.15s;
+    }
+    .vote-card:hover{border-color:var(--border-strong);}
+    .vote-card.selected{border-color:var(--blue);background:var(--blue-dim);}
+    .vote-card .vic{font-size:16px;display:block;margin-bottom:4px;}
+    .vote-card .vlabel{font-size:11.5px;color:var(--text-1);}
+    .vote-card .vcount{font-family:var(--font-mono);font-size:10px;color:var(--text-3);margin-top:3px;display:block;}
 
-/* ================= BUTTONS ================= */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:11px 20px; border-radius:12px; border:1px solid var(--border-glass-strong);
-  background:var(--bg-elevated); color:var(--text-primary); font-size:14px; font-weight:600;
-  transition:all .2s ease;
-}
-.btn:hover{ transform:translateY(-1px); border-color:rgba(124,140,255,0.6); }
-.btn-primary{
-  background:linear-gradient(135deg, var(--blue-500), var(--purple-600));
-  border:none; box-shadow:0 6px 24px rgba(79,124,255,0.35);
-  color:#fff;
-}
-.btn-primary:hover{ box-shadow:0 8px 30px rgba(139,92,246,0.5); }
-.btn-ghost{ background:transparent; border:1px solid var(--border-glass); color:var(--text-secondary); }
-.btn-ghost:hover{ color:#fff; }
-.btn-sm{ padding:7px 14px; font-size:13px; border-radius:9px; }
-.btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
-.btn-danger{ background:var(--danger-dim); border:1px solid rgba(251,113,133,0.4); color:#ffb4c0;}
-.btn-success{ background:var(--success-dim); border:1px solid rgba(52,211,153,0.4); color:#7cf0c4;}
+    .approve-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);}
+    .btn{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);
+      font-size:12.5px;font-weight:600;border:1px solid transparent;transition:.15s;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--blue),#3f6be0);color:#fff;box-shadow:0 4px 14px rgba(79,127,255,0.25);}
+    .btn-primary:hover{filter:brightness(1.08);}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed;filter:none;}
+    .btn-ghost{background:var(--bg-panel);border-color:var(--border);color:var(--text-2);}
+    .btn-ghost:hover{color:var(--text-1);border-color:var(--border-strong);}
+    .btn-approved{background:rgba(51,209,122,0.12);border-color:rgba(51,209,122,0.4);color:var(--green);}
+    .approve-status{margin-right:auto;font-size:11px;color:var(--text-3);font-family:var(--font-mono);}
 
-/* ================= CARDS ================= */
-.card{ padding:24px; }
-.card-title{ font-family:var(--font-display); font-size:19px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
-.card-sub{ color:var(--text-secondary); font-size:14px; line-height:1.9; }
-.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    /* decision cards (summary) */
+    .decision-card{border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;background:rgba(255,255,255,0.02);}
+    .decision-card + .decision-card{margin-top:8px;}
+    .decision-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+    .decision-card-top b{font-size:12.5px;}
+    .decision-card p{font-size:11.5px;color:var(--text-3);}
 
-.badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; font-family:var(--font-display); letter-spacing:.5px;}
-.badge-blue{ background:rgba(79,124,255,0.16); color:var(--blue-400); border:1px solid rgba(79,124,255,0.3);}
-.badge-purple{ background:rgba(139,92,246,0.16); color:var(--purple-400); border:1px solid rgba(139,92,246,0.3);}
-.badge-cyan{ background:rgba(34,211,238,0.14); color:var(--cyan); border:1px solid rgba(34,211,238,0.3);}
-.badge-success{ background:var(--success-dim); color:var(--success); border:1px solid rgba(52,211,153,0.35);}
+    /* timeline — secondary, capped */
+    .timeline-box{max-height:350px;overflow-y:auto;}
+    .tl-item{display:flex;gap:10px;padding:8px 2px;border-bottom:1px solid var(--border);font-size:12px;}
+    .tl-item:last-child{border-bottom:none;}
+    .tl-dot{width:8px;height:8px;border-radius:50%;background:var(--text-3);flex:0 0 8px;margin-top:4px;}
+    .tl-dot.done{background:var(--green);}
+    .tl-dot.active{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+    .tl-text b{display:block;color:var(--text-1);font-size:12px;}
+    .tl-text span{color:var(--text-3);font-size:10.5px;}
 
-/* ================= HERO ================= */
-.hero{
-  position:relative; padding:56px 44px; border-radius:var(--radius-lg); overflow:hidden;
-  background:linear-gradient(155deg, rgba(79,124,255,0.14), rgba(139,92,246,0.10) 60%, transparent);
-}
-.hero::before{
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(circle at 80% -10%, rgba(34,211,238,0.18), transparent 55%);
-  pointer-events:none;
-}
-.hero h2{ font-family:var(--font-display); font-size:38px; line-height:1.25; font-weight:800; max-width:720px;}
-.hero p{ color:var(--text-secondary); font-size:15.5px; max-width:640px; margin-top:14px; line-height:2; }
+    /* calculators / sliders (finance) */
+    .calc-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+    .calc-row-top{display:flex;justify-content:space-between;font-size:12px;}
+    .calc-row-top b{color:var(--text-1);}
+    .calc-row-top span{font-family:var(--font-mono);color:var(--blue);}
+    input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:3px;background:rgba(255,255,255,0.08);}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);cursor:pointer;}
+    input[type=number]{
+      width:88px;background:var(--bg-1);border:1px solid var(--border);border-radius:6px;color:var(--text-1);
+      padding:5px 8px;font-family:var(--font-mono);font-size:12px;
+    }
+    input[type=number]:focus{outline:none;border-color:var(--blue);}
+    .pie-wrap{display:flex;align-items:center;gap:14px;}
+    .pie-legend{display:flex;flex-direction:column;gap:5px;font-size:11.5px;}
+    .pie-legend .lg{display:flex;align-items:center;gap:6px;}
+    .lg-dot{width:8px;height:8px;border-radius:2px;}
+    .calc-result{margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--bg-1);border:1px solid var(--border);
+      display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12.5px;}
+    .calc-result b{color:var(--green);}
 
-/* ================= SECTION BLOCK (Workshop Unit) ================= */
-.section-block{ padding:30px 30px 26px; display:flex; flex-direction:column; gap:22px; }
-.sb-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;}
-.sb-head-left{ display:flex; align-items:center; gap:14px; }
-.sb-index{
-  width:44px; height:44px; border-radius:13px; flex-shrink:0;
-  background:linear-gradient(135deg, rgba(79,124,255,0.25), rgba(139,92,246,0.25));
-  border:1px solid var(--border-glass-strong);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-weight:800; font-size:17px;
-}
-.sb-title{ font-family:var(--font-display); font-size:21px; font-weight:700; }
-.sb-title small{ display:block; font-family:var(--font-body); font-size:12.5px; color:var(--text-dim); font-weight:400; margin-top:3px;}
+    /* progress bar generic */
+    .progress-track{height:6px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;transition:width .4s;}
 
-.sb-body{ color:var(--text-secondary); font-size:14.5px; line-height:2.1; }
-.sb-body p{ margin-bottom:10px; }
-.sb-body ul{ padding-inline-start:20px; display:flex; flex-direction:column; gap:6px; }
+    /* toast */
+    .toast{
+      position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(12px);
+      background:var(--bg-panel-solid);border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+      padding:10px 16px;font-size:12.5px;display:flex;align-items:center;gap:8px;z-index:100;
+      opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast .ic{color:var(--green);}
 
-.glossary{ display:flex; flex-direction:column; gap:8px; }
-.glossary-item{ display:flex; gap:10px; align-items:baseline; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-glass);}
-.glossary-term{ font-family:var(--font-display); color:var(--cyan); font-weight:700; font-size:13.5px; white-space:nowrap;}
-.glossary-def{ color:var(--text-secondary); font-size:13.5px; }
+    /* boot screen (index only) */
+    .boot-screen{
+      position:fixed;inset:0;background:var(--bg-0);z-index:200;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:14px;transition:opacity .5s, visibility .5s;
+    }
+    .boot-screen.hidden{opacity:0;visibility:hidden;}
+    .boot-logo{font-family:var(--font-display);font-size:26px;font-weight:700;
+      background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .boot-line{font-family:var(--font-mono);font-size:11px;color:var(--text-3);min-height:16px;}
+    .boot-bar{width:220px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+    .boot-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .3s;}
 
-.why-box{ padding:16px 18px; border-radius:12px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.25); font-size:13.5px; color:var(--text-secondary); line-height:1.9; }
-.why-box b{ color:var(--purple-400); font-family:var(--font-display); }
-
-.discussion{ display:flex; flex-direction:column; gap:10px; }
-.discussion h4{ font-family:var(--font-display); font-size:13px; letter-spacing:1px; color:var(--text-dim); margin-bottom:4px;}
-.discussion-q{ display:flex; gap:10px; padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); font-size:14px;}
-.discussion-q .q-mark{ color:var(--blue-400); font-family:var(--font-display); font-weight:800;}
-
-/* ================= NOTES ================= */
-.notes-wrap{ display:flex; flex-direction:column; gap:8px; }
-.notes-wrap label{ font-size:12.5px; color:var(--text-dim); font-family:var(--font-display); letter-spacing:.5px;}
-.notes-textarea{
-  width:100%; min-height:96px; resize:vertical; padding:14px 16px; border-radius:12px;
-  background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); color:var(--text-primary);
-  font-size:14px; line-height:1.8; outline:none; transition:border-color .2s ease;
-}
-.notes-textarea:focus{ border-color:var(--blue-500); background:rgba(79,124,255,0.05); }
-.notes-save-hint{ font-size:11px; color:var(--text-dim); }
-
-/* ================= VOTING ================= */
-.voting-card{ padding:20px; border-radius:14px; background:rgba(255,255,255,0.025); border:1px solid var(--border-glass); display:flex; flex-direction:column; gap:14px;}
-.vc-head{ display:flex; align-items:center; justify-content:space-between; }
-.vc-title{ font-family:var(--font-display); font-size:14px; letter-spacing:.5px; color:var(--text-secondary);}
-.vc-tally{ display:flex; gap:12px; font-size:12px; font-family:var(--font-display); }
-.vc-tally span{ display:flex; align-items:center; gap:5px; }
-.dot-agree{ width:7px;height:7px;border-radius:50%; background:var(--success);}
-.dot-object{ width:7px;height:7px;border-radius:50%; background:var(--danger);}
-.dot-edit{ width:7px;height:7px;border-radius:50%; background:var(--warning);}
-
-.founder-rows{ display:flex; flex-direction:column; gap:8px; }
-.founder-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid var(--border-glass); gap:10px; flex-wrap:wrap;}
-.founder-name{ font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:8px;}
-.founder-avatar{ width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; font-family:var(--font-display);}
-.vote-btns{ display:flex; gap:6px; }
-.vote-btn{ padding:6px 12px; border-radius:8px; border:1px solid var(--border-glass); background:transparent; color:var(--text-dim); font-size:12.5px; font-weight:600; transition:all .15s ease;}
-.vote-btn:hover{ border-color:var(--border-glass-strong); color:var(--text-primary);}
-.vote-btn.sel-agree{ background:var(--success-dim); border-color:var(--success); color:var(--success);}
-.vote-btn.sel-object{ background:var(--danger-dim); border-color:var(--danger); color:var(--danger);}
-.vote-btn.sel-edit{ background:rgba(251,191,36,0.14); border-color:var(--warning); color:var(--warning);}
-
-/* ================= DECISION ================= */
-.decision-card{
-  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
-  padding:18px 22px; border-radius:14px; border:1px dashed var(--border-glass-strong);
-  background:rgba(255,255,255,0.02);
-}
-.decision-card.approved{ border-style:solid; border-color:rgba(52,211,153,0.5); background:var(--success-dim); }
-.decision-status{ display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600;}
-.decision-status .stamp{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); font-size:18px;}
-.decision-card.approved .stamp{ background:var(--success); color:#04140d; }
-.decision-meta{ font-size:11.5px; color:var(--text-dim); }
-
-/* ================= TIMELINE / PROGRESS OVERVIEW ================= */
-.timeline{ display:flex; align-items:center; gap:0; padding:26px; overflow-x:auto; }
-.tl-step{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:130px; position:relative;}
-.tl-node{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; background:rgba(255,255,255,0.05); border:2px solid var(--border-glass-strong); z-index:2; font-size:15px;}
-.tl-step.done .tl-node{ background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); border-color:transparent; box-shadow:0 0 18px rgba(124,58,237,0.5);}
-.tl-step.current .tl-node{ border-color:var(--cyan); box-shadow:0 0 14px rgba(34,211,238,0.5); }
-.tl-line{ position:absolute; top:23px; height:2px; background:var(--border-glass); width:100%; right:50%; z-index:1;}
-.tl-step.done .tl-line{ background:linear-gradient(90deg,var(--purple-500),var(--blue-500)); }
-.tl-step:first-child .tl-line{ display:none; }
-.tl-label{ font-size:12.5px; text-align:center; color:var(--text-secondary); font-weight:600;}
-.tl-sub{ font-size:10.5px; color:var(--text-dim); }
-
-/* ================= TOAST ================= */
-.toast{
-  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
-  background:var(--bg-elevated); border:1px solid var(--border-glass-strong); backdrop-filter:blur(16px);
-  padding:12px 22px; border-radius:12px; font-size:13.5px; display:flex; align-items:center; gap:10px;
-  opacity:0; pointer-events:none; transition:all .35s ease; z-index:100; box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-.toast .t-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); }
-
-/* ================= MODAL (founder setup) ================= */
-.modal-overlay{ position:fixed; inset:0; background:rgba(4,5,10,0.7); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; pointer-events:none; transition:opacity .3s ease;}
-.modal-overlay.show{ opacity:1; pointer-events:auto; }
-.modal-box{ width:min(480px,92vw); padding:30px; transform:translateY(14px); transition:transform .3s ease;}
-.modal-overlay.show .modal-box{ transform:translateY(0); }
-.modal-box h3{ font-family:var(--font-display); font-size:20px; margin-bottom:6px;}
-.modal-box p{ color:var(--text-secondary); font-size:13.5px; margin-bottom:18px; }
-.founder-input-row{ display:flex; gap:8px; margin-bottom:10px; align-items:center;}
-.founder-input-row input{ flex:1; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.04); border:1px solid var(--border-glass); color:var(--text-primary); font-size:13.5px; outline:none;}
-.founder-input-row input:focus{ border-color:var(--blue-500); }
-.founder-input-row .fi-num{ width:26px; height:26px; border-radius:8px; background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--font-display); flex-shrink:0;}
-
-/* ================= UTILITIES ================= */
-.flex{ display:flex; } .items-center{ align-items:center; } .gap-8{gap:8px;} .gap-12{gap:12px;}
-.mt-8{margin-top:8px;} .mt-16{margin-top:16px;} .mt-24{margin-top:24px;} .mt-32{margin-top:32px;}
-.section-gap{ display:flex; flex-direction:column; gap:20px; }
-.divider{ height:1px; background:var(--border-glass); border:none; margin:6px 0; }
-.text-dim{ color:var(--text-dim); }
-.print-only{ display:none; }
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 980px){
-  .app-shell{ grid-template-columns:1fr; }
-  .sidebar{ position:fixed; inset-inline-end:0; top:0; width:78vw; max-width:300px; transform:translateX(100%); transition:transform .3s ease; z-index:60; border-inline-start:1px solid var(--border-glass); box-shadow:-20px 0 50px rgba(0,0,0,0.5);}
-  .sidebar.open{ transform:translateX(0); }
-  .menu-toggle{ display:flex !important; }
-  .grid-2, .grid-3{ grid-template-columns:1fr; }
-  .content{ padding:24px 18px 80px; }
-  .hero{ padding:36px 22px; }
-  .hero h2{ font-size:27px; }
-}
-.menu-toggle{ display:none; width:38px; height:38px; border-radius:10px; background:var(--bg-elevated); border:1px solid var(--border-glass); align-items:center; justify-content:center; font-size:18px;}
-.sidebar-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:50; opacity:0; pointer-events:none; transition:opacity .3s ease;}
-.sidebar-backdrop.show{ opacity:1; pointer-events:auto; }
-
-/* ================= PRINT ================= */
-@media print{
-  .sidebar, .topbar .tb-actions, .menu-toggle, .toast, .modal-overlay{ display:none !important; }
-  body{ background:#fff; color:#000; }
-  body::before, body::after{ display:none; }
-  .glass{ background:#fff; border:1px solid #ccc; -webkit-print-color-adjust:exact;}
-  .app-shell{ display:block; }
-}
-
+    /* responsive */
+    @media (max-width:1080px){
+      .workspace-grid{grid-template-columns:1fr;}
+      .side-col{position:static;}
+    }
+    @media (max-width:820px){
+      .sidebar{position:fixed;right:0;top:0;transform:translateX(100%);transition:.25s;box-shadow:-10px 0 30px rgba(0,0,0,.4);}
+      .sidebar.open{transform:translateX(0);}
+      .content{padding:16px 14px 50px;}
+      .page-head{flex-direction:column;}
+      .vote-cards{grid-template-columns:1fr 1fr;}
+      .sidebar-toggle{display:flex!important;}
+    }
+    @media (max-width:520px){
+      .vote-cards{grid-template-columns:1fr;}
+      .page-head-stats{width:100%;justify-content:space-between;}
+    }
+    .sidebar-toggle{
+      display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;
+      background:var(--bg-panel);border:1px solid var(--border);color:var(--text-2);flex:0 0 32px;
+    }
+    @media print{
+      .sidebar,.topbar,.sidebar-toggle,.section-block-head .chev,.approve-row .btn-ghost{display:none!important;}
+      body{background:#fff;color:#000;}
+      .card,.section-block,.page-head{border-color:#ccc;background:#fff;}
+      .content{padding:0;}
+    }
 
 </style>
 </head>
 <body>
-<div class="app-shell">
-
-    <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">PX</div>
-        <div class="brand-text"><b>PRIVEX</b><span>Founders OS · Phase 1</span></div>
-      </div>
-      <div class="nav-group">
-        <div class="nav-label">خارطة الاجتماع</div>
-        <div id="navGroup"></div>
-      </div>
-      <div class="sidebar-progress">
-        <div class="sp-label"><span>التقدم العام</span><span id="sidebarProgressLabel">0%</span></div>
-        <div class="sp-bar"><div class="sp-fill" id="sidebarProgressFill" style="width:0%"></div></div>
-      </div>
-    </aside>
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-<div class="main-col">
-
-      <!-- ================= TOPBAR ================= -->
-      <header class="topbar">
-        <div class="flex items-center gap-12">
-          <button class="menu-toggle" id="menuToggle">☰</button>
-          <div class="tb-title">
-            <h1>الهوية والرؤية</h1>
-            <span>ورشة عمل: صياغة الرؤية، الرسالة، القيم، الثقافة، القصة، والهوية البصرية</span>
+  <!-- ================= APP SHELL ================= -->
+  <div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">PX</div>
+      <div class="brand-text"><b>Privex</b><span>FOUNDERS OS · PHASE 1</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">مراحل التأسيس</div>
+      <a class="nav-item" data-page="index" href="index.html">
+        <span class="ic">&#8962;</span><span>الرئيسية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item current" data-page="company" href="company.html">
+        <span class="ic">&#9670;</span><span>الشركة والهوية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="management" href="management.html">
+        <span class="ic">&#9776;</span><span>الإدارة والمناصب</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="finance" href="finance.html">
+        <span class="ic">&#8364;</span><span>الأمور المالية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="marketing" href="marketing.html">
+        <span class="ic">&#9737;</span><span>التسويق والمجتمع</span><span class="status-dot"></span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-progress-label"><span>التقدّم الكلي</span><span class="sidebar-progress-value">0%</span></div>
+      <div class="sidebar-progress-track"><div class="sidebar-progress-fill" style="width:0%"></div></div>
+    </div>
+  </aside>
+    <div class="main-col">
+  <div class="topbar">
+    <button class="sidebar-toggle" aria-label="القائمة">&#9776;</button>
+    <div class="topbar-crumb">Privex OS <span style="opacity:.4">/</span> <b>الشركة والهوية</b></div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" onclick="printPage()"><span>&#9113;</span> طباعة PDF</button>
+    <div class="topbar-ring">
+      <svg width="30" height="30" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="13"></circle>
+        <circle class="fill" cx="15" cy="15" r="13"></circle>
+      </svg>
+      <div class="topbar-ring-label">0%</div>
+    </div>
+  </div>
+      <!-- ================= CONTENT ================= -->
+      <div class="content">
+        <div class="content-inner">
+        <!-- ================= HEADER ================= -->
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">المرحلة 1 · الوحدة 01</div>
+            <h1>ورشة الشركة والهوية</h1>
+            <p>تحديد رؤية Privex ورسالتها وقيمها الجوهرية وثقافتها وقصة تأسيسها وهويتها البصرية — بشكل جماعي وموثّق.</p>
+          </div>
+          <div class="page-head-stats">
+            <div class="stat"><b>6</b><span>أقسام</span></div>
+            <div class="stat"><b id="companyDoneStat">0</b><span>معتمدة</span></div>
           </div>
         </div>
-        <div class="tb-actions">
-          <span class="save-indicator"><span class="save-dot"></span> حفظ تلقائي محلي</span>
-          <button class="btn btn-ghost btn-sm" id="printBtn">🖨 طباعة PDF</button>
+
+        <!-- ================= WORKSHOP GRID ================= -->
+        <div class="workspace-grid">
+          <div class="primary-col">
+        <!-- ================= SECTION 1: الرؤية (Vision) ================= -->
+        <div class="section-block open" data-section="company-1">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">01</span>
+            <h3>الرؤية (Vision)</h3>
+            <span class="badge pending section-badge" data-section="company-1">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">الرؤية هي الصورة الكبيرة التي تريد <b>Privex</b> الوصول إليها بعد سنوات — الوجهة النهائية
+        وليست خطوة تنفيذية. بالنسبة لشركة عراقية ناشئة في التقنية والأمن السيبراني، الرؤية تجيب عن سؤال:
+        <b>«أين نريد أن نكون؟»</b> وليس «ماذا نفعل اليوم؟».</p>
+          <div class="term-row"><span class="term-en">Vision Statement</span><span class="term-ar">جملة قصيرة تصف المستقبل المنشود للشركة.</span></div>
+          <div class="term-row"><span class="term-en">Long-term Direction</span><span class="term-ar">الاتجاه بعيد المدى الذي تقاس عليه كل القرارات الكبرى.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>الرؤية مهمة لأنها البوصلة التي يرجع لها الفريق عند كل قرار استراتيجي كبير — بدونها تتحول القرارات إلى ردود أفعال عشوائية.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>أين نتخيل Privex بعد 5 سنوات: شركة محلية رائدة أم لاعب إقليمي في الأمن السيبراني؟</li>
+            <li>هل نركّز الرؤية على العراق أولاً ثم التوسع، أم نبني بعقلية إقليمية من اليوم؟</li>
+            <li>ما الأثر الذي نريد أن تتركه Privex في مجتمع الأمن السيبراني العراقي؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-1">
+            <div class="vote-card" data-choice="local">
+              <span class="vic">&#127919;</span><span class="vlabel">رؤية محلية أولاً</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="regional">
+              <span class="vic">&#127760;</span><span class="vlabel">رؤية إقليمية</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="ambitious">
+              <span class="vic">&#128640;</span><span class="vlabel">رؤية طموحة جداً</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-1" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-1">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-1\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-1">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-      </header>
-      <div class="page-progress"><div class="page-progress-fill" id="pageProgressFill"></div></div>
-<main class="content section-gap">
-
-    <!-- ================= SECTION: VISION ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">01</div>
-          <div class="sb-title">الرؤية<small>Vision</small></div>
+        <!-- ================= SECTION 2: الرسالة (Mission) ================= -->
+        <div class="section-block" data-section="company-2">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">02</span>
+            <h3>الرسالة (Mission)</h3>
+            <span class="badge pending section-badge" data-section="company-2">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">إن كانت الرؤية هي «الوجهة»، فالرسالة هي «الطريق» — وصف عملي لما تقوم به Privex يومياً
+        لخدمة عملائها وتحقيق الرؤية. الرسالة يجب أن تذكر بوضوح الخدمات الأساسية: تطوير المواقع، الأنظمة
+        الإلكترونية، إدارة السوشال ميديا، الهوية البصرية، الاستضافة، والحلول السيبرانية.</p>
+          <div class="term-row"><span class="term-en">Mission Statement</span><span class="term-ar">وصف عملي لسبب وجود الشركة وما تقدمه اليوم.</span></div>
+          <div class="term-row"><span class="term-en">Value Proposition</span><span class="term-ar">القيمة المميزة التي تقدمها Privex مقارنة بغيرها.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>الرسالة توضح للعملاء والفريق «لماذا تختارنا؟» بلغة مباشرة، وتمنع تشتت الشركة في خدمات خارج نطاقها.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>هل نضع الأمن السيبراني كخدمة أساسية أم كميزة تفاضلية (Differentiator) فوق باقي الخدمات؟</li>
+            <li>من هو العميل المستهدف الأساسي في السنة الأولى: شركات صغيرة، مطاعم، أم قطاع حكومي؟</li>
+            <li>ما الجملة الواحدة التي تلخص ما تفعله Privex لأي شخص يسمع عنها لأول مرة؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-2">
+            <div class="vote-card" data-choice="security_first">
+              <span class="vic">&#128737;</span><span class="vlabel">الأمن أولاً</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="full_tech">
+              <span class="vic">&#128187;</span><span class="vlabel">التقنية الشاملة</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="creative">
+              <span class="vic">&#127912;</span><span class="vlabel">الهوية والإبداع</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-2" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-2">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-2\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-2">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>الرؤية هي الصورة الكبيرة والبعيدة المدى لما تريد Privex أن تصبح عليه بعد سنوات. إنها ليست خطة عمل، بل بوصلة تحدد الاتجاه العام لكل قرار يتخذه الفريق لاحقاً.</p>
-<p>رؤية جيدة يجب أن تكون طموحة بما يكفي لتلهم الفريق، وواضحة بما يكفي ليستطيع أي عضو جديد فهمها من الوهلة الأولى.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>أن تكون Privex الشريك التقني الأول للشركات الناشئة في العراق خلال خمس سنوات.</li><li>أن تصبح Privex مرجعاً موثوقاً في الأمن السيبراني والحلول الرقمية على مستوى المنطقة.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Vision</span><span class="glossary-def">الصورة المستقبلية طويلة المدى التي تسعى الشركة للوصول إليها.</span></div><div class="glossary-item"><span class="glossary-term">North Star</span><span class="glossary-def">الهدف المرجعي الذي توجّه إليه كل القرارات الاستراتيجية.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>بدون رؤية واضحة، يتخذ الفريق قرارات متضاربة مع مرور الوقت. الرؤية توحّد اتجاه الأعضاء الأربعة وتمنحهم معياراً لتقييم أي فرصة عمل جديدة: هل تقربنا من رؤيتنا أم تبعدنا عنها؟</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>أين نتخيل Privex بعد خمس سنوات من الآن؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هو الأثر الذي نريد أن تتركه الشركة في السوق العراقي والإقليمي؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>هل رؤيتنا طموحة بما يكفي لتحفيزنا في الأوقات الصعبة؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="vision" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="vision">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
+        <!-- ================= SECTION 3: القيم الجوهرية (Core Values) ================= -->
+        <div class="section-block" data-section="company-3">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">03</span>
+            <h3>القيم الجوهرية (Core Values)</h3>
+            <span class="badge pending section-badge" data-section="company-3">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">القيم الجوهرية هي المبادئ الثابتة التي تحكم سلوك الفريق واتخاذ القرار، حتى عند الضغط أو
+        الخلاف. هي ليست شعارات على جدار — بل معيار فعلي: «هل هذا القرار يتوافق مع قيمنا؟».</p>
+          <div class="term-row"><span class="term-en">Integrity</span><span class="term-ar">الأمانة والشفافية في التعامل مع العملاء والفريق.</span></div>
+          <div class="term-row"><span class="term-en">Ownership</span><span class="term-ar">تحمّل كل فرد لمسؤولية عمله دون انتظار متابعة.</span></div>
+          <div class="term-row"><span class="term-en">Continuous Learning</span><span class="term-ar">التعلّم المستمر — طبيعي لفريق قادم من دفعة أكاديمية متخصصة بالأمن السيبراني.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>القيم تُستخدم عملياً في تقييم الأعضاء الجدد، حل النزاعات الداخلية، وتحديد أي عميل يليق العمل معه.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما هي القيم الثلاث أو الأربع الأهم التي يجب أن تظهر في كل قرار تتخذه Privex؟</li>
+            <li>كيف نتعامل مع موقف يتعارض فيه الربح السريع مع إحدى قيمنا؟</li>
+            <li>هل الشفافية بين الشركاء الأربعة تُعتبر قيمة رسمية مكتوبة أم مفهومة ضمنياً فقط؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-3">
+            <div class="vote-card" data-choice="transparency">
+              <span class="vic">&#129309;</span><span class="vlabel">الشفافية</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="professionalism">
+              <span class="vic">&#127919;</span><span class="vlabel">الاحترافية</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="learning">
+              <span class="vic">&#128218;</span><span class="vlabel">التعلم المستمر</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-3" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-3">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-3\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-3">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="vision">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        <!-- ================= SECTION 4: ثقافة الشركة (Company Culture) ================= -->
+        <div class="section-block" data-section="company-4">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">04</span>
+            <h3>ثقافة الشركة (Company Culture)</h3>
+            <span class="badge pending section-badge" data-section="company-4">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">ثقافة الشركة هي «الطريقة التي نعمل بها فعلياً» — أسلوب التواصل بين الأعضاء، ساعات العمل،
+        طريقة اتخاذ القرار الجماعي، والتعامل مع الأخطاء. بما أن الفريق أربعة مؤسسين فقط، الثقافة في هذه
+        المرحلة تُبنى بالقدوة الشخصية أكثر من السياسات المكتوبة.</p>
+          <div class="term-row"><span class="term-en">Flat Structure</span><span class="term-ar">هيكل غير هرمي حيث القرارات تُناقش جماعياً بين المؤسسين الأربعة.</span></div>
+          <div class="term-row"><span class="term-en">Async Communication</span><span class="term-ar">تواصل غير متزامن عبر أدوات مثل الرسائل والمهام المكتوبة بدل الاجتماعات الدائمة.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>ثقافة واضحة منذ اليوم الأول تمنع الاحتكاك لاحقاً عند نمو الفريق وانضمام أعضاء جدد من خارج نواة التأسيس.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>هل نعتمد اجتماعات أسبوعية ثابتة أم عند الحاجة فقط؟</li>
+            <li>كيف نوثّق القرارات المهمة حتى لا تُنسى أو تُفسَّر بشكل مختلف لاحقاً؟</li>
+            <li>ما هو أسلوبنا في التعامل مع الخطأ: مساءلة صارمة أم تعلم من الخطأ بدون لوم؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-4">
+            <div class="vote-card" data-choice="weekly">
+              <span class="vic">&#128197;</span><span class="vlabel">اجتماعات أسبوعية</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="as_needed">
+              <span class="vic">&#9889;</span><span class="vlabel">عند الحاجة فقط</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="document_all">
+              <span class="vic">&#128221;</span><span class="vlabel">توثيق كل شيء</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-4" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-4">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-4\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-4">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: MISSION ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">02</div>
-          <div class="sb-title">الرسالة<small>Mission</small></div>
+        <!-- ================= SECTION 5: قصة الشركة (Company Story) ================= -->
+        <div class="section-block" data-section="company-5">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">05</span>
+            <h3>قصة الشركة (Company Story)</h3>
+            <span class="badge pending section-badge" data-section="company-5">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">قصة الشركة هي السرد الذي يشرح «لماذا بدأت Privex ومن أسسها؟». فريق التأسيس ينتمي إلى
+        <b>أول دفعة أكاديمية لهندسة الأمن السيبراني في العراق</b>، من بين نحو <b>450 طالباً</b>، والمؤسس حقق
+        <b>المركز الأول على دفعته لثلاث مراحل جامعية متتالية</b>. هذه خلفية قوية تُبنى عليها قصة موثوقة —
+        لكن يجب عرضها بثقة دون مبالغة.</p>
+          <div class="term-row"><span class="term-en">Founding Story</span><span class="term-ar">السرد الذي يشرح الدافع والخلفية وراء تأسيس الشركة.</span></div>
+          <div class="term-row"><span class="term-en">Credibility Markers</span><span class="term-ar">عناصر واقعية تبني الثقة، مثل الخلفية الأكاديمية والإنجازات الموثّقة.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>القصة الصادقة والمبنية على إنجاز حقيقي تبني ثقة العملاء أسرع من أي شعار تسويقي، خصوصاً في مجال تقني حساس كالأمن السيبراني.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>كيف نصوغ خلفية «أول دفعة سيبراني في العراق» بشكل احترافي دون أن تبدو مبالغاً فيها؟</li>
+            <li>هل نذكر إنجاز المركز الأول للمؤسس في كل مادة تسويقية، أم في السياق المناسب فقط؟</li>
+            <li>ما هي اللحظة أو الفكرة الأساسية التي دفعت الفريق لتأسيس Privex تحديداً؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-5">
+            <div class="vote-card" data-choice="academic">
+              <span class="vic">&#127942;</span><span class="vlabel">التركيز على الإنجاز الأكاديمي</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="team">
+              <span class="vic">&#128101;</span><span class="vlabel">التركيز على الفريق</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="idea">
+              <span class="vic">&#128161;</span><span class="vlabel">التركيز على الفكرة</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-5" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-5">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-5\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-5">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>الرسالة تصف ماذا تفعل الشركة اليوم، ولمن تقدّم خدماتها، ولماذا. هي إجابة عملية على سؤال: ماذا نقدّم الآن لنصل إلى رؤيتنا؟</p>
-<p>على عكس الرؤية، الرسالة أكثر واقعية وارتباطاً بالحاضر، وتُستخدم غالباً في المواد التسويقية وتعريف الشركة.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>نُمكّن الشركات الصغيرة والمتوسطة في العراق من النمو رقمياً عبر حلول تقنية موثوقة وآمنة.</li><li>نقدّم خدمات تطوير وأمن سيبراني بجودة عالمية وبفهم عميق للسوق المحلي.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Mission</span><span class="glossary-def">الغرض العملي الحالي للشركة ولمن تخدمه.</span></div><div class="glossary-item"><span class="glossary-term">Value Proposition</span><span class="glossary-def">القيمة المميزة التي تقدمها الشركة مقارنة بمنافسيها.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>الرسالة توضّح للعملاء والفريق ما الذي يميز Privex فعلياً، وتُستخدم كأداة تسويقية وتوجيهية يومية، بعكس الرؤية التي تبقى بعيدة المدى.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما الذي نقدّمه اليوم بشكل مختلف عن باقي شركات التقنية في العراق؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من هو عميلنا المثالي في المرحلة الأولى؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>هل رسالتنا تعكس فعلاً خلفيتنا في الأمن السيبراني كميزة تنافسية؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="mission" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="mission">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
+        <!-- ================= SECTION 6: الهوية البصرية (Identity) ================= -->
+        <div class="section-block" data-section="company-6">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">06</span>
+            <h3>الهوية البصرية (Identity)</h3>
+            <span class="badge pending section-badge" data-section="company-6">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain">الهوية البصرية هي الشكل المرئي الذي يمثّل Privex في كل نقطة تواصل: الشعار، الألوان، الخط،
+        ونبرة الصوت التصميمية. الاتجاه المطلوب: طابع Cyber Security احترافي — ألوان داكنة، أزرق وبنفسجي،
+        وتأثيرات زجاجية (Glassmorphism) تعكس التقنية والثقة.</p>
+          <div class="term-row"><span class="term-en">Brand Identity</span><span class="term-ar">مجموعة العناصر المرئية التي تُعرّف الشركة بصرياً.</span></div>
+          <div class="term-row"><span class="term-en">Glassmorphism</span><span class="term-ar">أسلوب تصميم يعتمد شفافية وضبابية الخلفيات لإعطاء عمق بصري.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>الهوية البصرية الموحدة هي أول شيء يراه العميل — تصميم غير متسق يقلل الثقة حتى لو كانت الخدمة ممتازة.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>هل نعتمد الأزرق كلون أساسي والبنفسجي كلون ثانوي، أم العكس؟</li>
+            <li>هل الشعار يعتمد على رمز تقني (قفل / درع / دائرة اتصال) أم على الحروف فقط؟</li>
+            <li>ما هي النبرة البصرية: مينيمال حاد، أم تقني كثيف التفاصيل؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="company-6">
+            <div class="vote-card" data-choice="shield">
+              <span class="vic">&#128274;</span><span class="vlabel">درع/قفل رمزي</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="wordmark">
+              <span class="vic">&#128196;</span><span class="vlabel">حروف فقط (Wordmark)</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="abstract">
+              <span class="vic">&#9889;</span><span class="vlabel">رمز تقني مجرد</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="company-6" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="company-6">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'company-6\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="company-6">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <div class="founder-rows"></div>
-      </div>
+          </div>
 
-      <div class="decision-card" data-section="mission">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+          <!-- ================= SIDE COLUMN ================= -->
+          <div class="side-col">
+            <div class="card">
+              <div class="card-title"><h3>سجل القرارات</h3></div>
+              <div id="decisionLedger"><p style="color:var(--text-3);font-size:11.5px;">لا توجد قرارات معتمدة بعد.</p></div>
+            </div>
+            <div class="card">
+              <div class="card-title"><h3>خارطة المرحلة</h3><span class="badge info">Phase 1</span></div>
+              <div class="timeline-box">
+                <div class="tl-item"><span class="tl-dot done"></span><div class="tl-text"><b>البداية</b><span>index.html</span></div></div>
+                <div class="tl-item"><span class="tl-dot active"></span><div class="tl-text"><b>الشركة والهوية</b><span>أنت هنا</span></div></div>
+                <div class="tl-item"><span class="tl-dot"></span><div class="tl-text"><b>الإدارة والمناصب</b><span>management.html</span></div></div>
+                <div class="tl-item"><span class="tl-dot"></span><div class="tl-text"><b>الأمور المالية</b><span>finance.html</span></div></div>
+                <div class="tl-item"><span class="tl-dot"></span><div class="tl-text"><b>التسويق والمجتمع</b><span>marketing.html</span></div></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: VALUES ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">03</div>
-          <div class="sb-title">القيم الجوهرية<small>Core Values</small></div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
       </div>
-
-      <div class="sb-body section-gap">
-        <p>القيم الجوهرية هي المبادئ الثابتة التي تحكم سلوك الفريق واتخاذ القرار، بغض النظر عن الظروف. هي ما يميز ثقافة Privex عن أي شركة أخرى تقدّم خدمات مشابهة.</p>
-<p>يُفضّل أن تكون القيم قليلة العدد (3-5 قيم) وقابلة للتطبيق الفعلي، لا مجرد كلمات تحفيزية عامة.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>الأمانة التقنية: لا نبالغ في وعودنا، ونشرح للعميل الحلول الواقعية.</li><li>الأمان أولاً: بحكم خلفيتنا في الأمن السيبراني، الأمان ليس خدمة إضافية بل معيار أساسي في كل مشروع.</li><li>التعلّم المستمر: نواكب أحدث الأدوات والتهديدات التقنية باستمرار.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Core Values</span><span class="glossary-def">المبادئ الأساسية غير القابلة للتفاوض التي تحكم قرارات الشركة وسلوك فريقها.</span></div><div class="glossary-item"><span class="glossary-term">Culture Fit</span><span class="glossary-def">مدى توافق الموظف أو الشريك الجديد مع هذه القيم.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>القيم هي معيار عملي لاتخاذ القرارات اليومية: عند التعاقد، عند التسعير، عند التعامل مع عميل صعب. فريق يتفق على قيمه الجوهرية يتجنب نزاعات كثيرة لاحقاً.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي القيم الثلاث أو الأربع التي لا نقبل التنازل عنها مهما كانت الظروف؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نترجم هذه القيم إلى سلوك ملموس داخل الشركة؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ماذا نفعل إذا خالف أحد الشركاء إحدى هذه القيم؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="values" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="values">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="values">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: CULTURE ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">04</div>
-          <div class="sb-title">ثقافة الشركة<small>Company Culture</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>ثقافة الشركة هي بيئة العمل الفعلية اليومية: كيف يتواصل الفريق، كيف تُتخذ القرارات، وكيف يُدار التوازن بين العمل والحياة الشخصية خصوصاً في مرحلة التأسيس.</p>
-<p>بما أن الفريق يتكون من أربعة أعضاء فقط، فإن الثقافة تتشكل من عاداتهم اليومية أكثر من أي مستند رسمي.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>اجتماع أسبوعي قصير لمراجعة التقدم والعقبات.</li><li>قرارات كبيرة تُتخذ بالتصويت الجماعي، وليس بقرار فردي.</li><li>الشفافية الكاملة في الأرقام المالية بين الشركاء الأربعة.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Culture</span><span class="glossary-def">مجموعة العادات وطرق التواصل والقرار التي تتشكل بها بيئة العمل فعلياً.</span></div><div class="glossary-item"><span class="glossary-term">Async Communication</span><span class="glossary-def">التواصل غير المتزامن، مفيد عندما يعمل الأعضاء بجداول مختلفة.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>في الشركات الناشئة الصغيرة، الثقافة غير المكتوبة تتشكل بسرعة وتصبح صعبة التغيير لاحقاً. تحديدها مبكراً يمنع سوء الفهم بين الشركاء الأربعة.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>كيف نريد أن تبدو أيامنا العملية الفعلية كفريق مؤسس؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نتعامل مع الخلافات الداخلية بين الشركاء؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي طقوس أو عادات نريد ترسيخها منذ اليوم الأول؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="culture" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="culture">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="culture">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: STORY ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">05</div>
-          <div class="sb-title">قصة الشركة<small>Company Story</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>قصة الشركة هي السرد الذي يشرح كيف ولماذا تأسست Privex. القصص الجيدة تبني ثقة العملاء وتمنح الفريق شعوراً بالهدف.</p>
-<p>قصة Privex ترتبط مباشرة بخلفية الفريق الأكاديمية في الأمن السيبراني، وهي عنصر يجب إبرازه بثقة دون مبالغة.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>انطلقت Privex من فريق من أول دفعة متخصصة في هندسة الأمن السيبراني في العراق، بخبرة أكاديمية موثقة بتفوق دراسي متكرر لأحد المؤسسين.</li><li>بدأت الفكرة من رغبة الفريق في تقديم حلول تقنية تجمع بين جودة التطوير وصرامة الأمان، وهي فجوة لاحظوها في السوق المحلي.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Founding Story</span><span class="glossary-def">السرد الموثّق لأصل الفكرة والدافع وراء تأسيس الشركة.</span></div><div class="glossary-item"><span class="glossary-term">Credibility Markers</span><span class="glossary-def">عناصر تبني الثقة مثل الخلفية الأكاديمية أو الإنجازات الموثقة.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>قصة صادقة ومقنعة تفرّق Privex عن عشرات شركات التطوير المشابهة، وتُستخدم لاحقاً في الموقع، وملف الشركة، والمقابلات الإعلامية.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>كيف نروي قصة تأسيس Privex بطريقة مقنعة دون مبالغة؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي التفاصيل الأكاديمية أو الشخصية التي تستحق الإبراز في القصة؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نستخدم هذه القصة في التسويق لاحقاً؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="story" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="story">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="story">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: IDENTITY ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">06</div>
-          <div class="sb-title">الهوية البصرية<small>Brand Identity</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>الهوية البصرية هي الانطباع البصري المتكرر للشركة: الاسم، الشعار، الألوان، الخطوط، ونبرة الصوت في المحتوى. هي ما يتذكره العميل بعد رؤية أي مادة تسويقية.</p>
-<p>بما أن Privex شركة تقنية بطابع أمن سيبراني، يُفضّل أن تعكس الهوية طابعاً موثوقاً وحديثاً، لا صاخباً.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>لوحة ألوان داكنة مع لمسات أزرق وبنفسجي توحي بالتقنية والأمان.</li><li>نبرة صوت احترافية وواثقة، تشرح المفاهيم التقنية بلغة مبسطة للعميل غير التقني.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Brand Identity</span><span class="glossary-def">مجموعة العناصر البصرية واللفظية التي تمثل الشركة بشكل موحّد.</span></div><div class="glossary-item"><span class="glossary-term">Tone of Voice</span><span class="glossary-def">الأسلوب اللغوي الذي تستخدمه الشركة في كل تواصل مكتوب.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>هوية بصرية متسقة تبني الثقة بشكل أسرع، وتجعل Privex قابلة للتمييز فوراً في سوق مزدحم بالمنافسين.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي الألوان والخطوط التي تعكس هوية Privex فعلياً؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نريد أن يصف العميل نبرة تواصلنا معه؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من سيتولى تصميم الشعار والهوية الكاملة، وما الجدول الزمني؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="identity" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="identity">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="identity">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-</main>
-</div>
-</div>
-
-  <!-- ================= FOUNDER SETUP MODAL ================= -->
-  <div class="modal-overlay" id="founderModal">
-    <div class="modal-box glass">
-      <h3>مرحباً بالفريق المؤسس 👋</h3>
-      <p>أدخلوا أسماء الأعضاء الأربعة لتفعيل نظام التصويت والملاحظات الخاص بكل عضو خلال الاجتماع.</p>
-      <form id="founderForm">
-        <div class="founder-input-row"><span class="fi-num">1</span><input type="text" placeholder="اسم العضو الأول" required></div>
-        <div class="founder-input-row"><span class="fi-num">2</span><input type="text" placeholder="اسم العضو الثاني" required></div>
-        <div class="founder-input-row"><span class="fi-num">3</span><input type="text" placeholder="اسم العضو الثالث" required></div>
-        <div class="founder-input-row"><span class="fi-num">4</span><input type="text" placeholder="اسم العضو الرابع" required></div>
-        <div class="flex gap-8 mt-16">
-          <button type="submit" class="btn btn-primary" style="flex:1">حفظ ومتابعة</button>
-          <button type="button" class="btn btn-ghost" id="founderSkip">تخطي الآن</button>
-        </div>
-      </form>
     </div>
   </div>
 
-  <!-- ================= TOAST NOTIFICATION ================= -->
-  <div class="toast" id="toast"><span class="t-dot"></span><span class="t-msg">تم الحفظ</span></div>
-
-<script>
-const PROJECT_INFO = {
-    project: "Privex Founders Operating System",
-    phase: 1,
-    version: "1.0.0",
-    module: "Company Identity & Vision",
-    file: "company.html",
-    dependsOn: [
-        "Sidebar Component",
-        "Topbar Component",
-        "Storage Layer",
-        "Navigation Engine",
-        "Shared UI Components"
-    ],
-    nextModule: "management.html — الإدارة والصلاحيات"
-};
-// PROJECT_INFO is documentation metadata only — not consumed by app logic.
-
-/* ================= STORAGE ================= */
-/* ================= STORAGE LAYER ================= */
-/* Independent storage layer — swappable with Firebase later without
-   changing any calling code across the app. */
-const STORAGE_PREFIX = 'privex_';
-
-const PrivexStorage = {
-  _key(k){ return STORAGE_PREFIX + k; },
-
-  saveMeeting(data){
-    try{
-      const existing = this.loadMeeting() || {};
-      const merged = Object.assign({}, existing, data, { updatedAt: new Date().toISOString() });
-      localStorage.setItem(this._key('meeting'), JSON.stringify(merged));
-      return merged;
-    }catch(e){ console.error('saveMeeting failed', e); return null; }
-  },
-  loadMeeting(){
-    try{
-      const raw = localStorage.getItem(this._key('meeting'));
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ console.error('loadMeeting failed', e); return null; }
-  },
-
-  saveFounders(names){
-    try{ localStorage.setItem(this._key('founders'), JSON.stringify(names)); return true; }
-    catch(e){ console.error('saveFounders failed', e); return false; }
-  },
-  loadFounders(){
-    try{
-      const raw = localStorage.getItem(this._key('founders'));
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
-  },
-
-  saveVotes(sectionId, votes){
-    try{
-      const all = this._loadAll('votes');
-      all[sectionId] = votes;
-      localStorage.setItem(this._key('votes'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveVotes failed', e); return false; }
-  },
-  loadVotes(sectionId){
-    const all = this._loadAll('votes');
-    return all[sectionId] || {};
-  },
-
-  saveNotes(sectionId, text){
-    try{
-      const all = this._loadAll('notes');
-      all[sectionId] = text;
-      localStorage.setItem(this._key('notes'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveNotes failed', e); return false; }
-  },
-  loadNotes(sectionId){
-    const all = this._loadAll('notes');
-    return all[sectionId] || '';
-  },
-
-  saveDecision(sectionId, approved){
-    try{
-      const all = this._loadAll('decisions');
-      all[sectionId] = { approved: !!approved, at: new Date().toISOString() };
-      localStorage.setItem(this._key('decisions'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveDecision failed', e); return false; }
-  },
-  loadDecision(sectionId){
-    const all = this._loadAll('decisions');
-    return all[sectionId] || { approved:false, at:null };
-  },
-
-  _loadAll(bucket){
-    try{
-      const raw = localStorage.getItem(this._key(bucket));
-      return raw ? JSON.parse(raw) : {};
-    }catch(e){ return {}; }
-  },
-
-  setModuleProgress(moduleKey, percent){
-    try{
-      const all = this._loadAll('progress');
-      all[moduleKey] = Math.round(percent);
-      localStorage.setItem(this._key('progress'), JSON.stringify(all));
-      return true;
-    }catch(e){ return false; }
-  },
-  getModuleProgress(moduleKey){
-    const all = this._loadAll('progress');
-    return all[moduleKey] || 0;
-  },
-  getAllProgress(){
-    return this._loadAll('progress');
-  },
-  getOverallProgress(){
-    const modules = ['company','management','finance','marketing'];
-    const all = this.getAllProgress();
-    const sum = modules.reduce((s,m)=> s + (all[m]||0), 0);
-    return Math.round(sum / modules.length);
-  },
-
-  exportSnapshot(){
-    const snapshot = {
-      meeting: this.loadMeeting(),
-      founders: this.loadFounders(),
-      votes: this._loadAll('votes'),
-      notes: this._loadAll('notes'),
-      decisions: this._loadAll('decisions'),
-      progress: this._loadAll('progress'),
-      exportedAt: new Date().toISOString()
+  <script>
+    // ================= PROJECT MANIFEST =================
+    // Documentation only — not referenced in logic.
+    const PROJECT_INFO = {
+      project: "Privex Founders Operating System",
+      phase: 1,
+      version: "1.0.0",
+      module: "Company & Identity Workshop",
+      file: "company.html",
+      dependsOn: ["Sidebar", "Topbar", "Storage Layer", "Navigation"],
+      nextModule: "Management & Roles Workshop"
     };
-    return snapshot;
-  }
-};
 
-/* ================= NAVIGATION ENGINE ================= */
-const NAV_ITEMS = [
-  { key:'index',      file:'index.html',      label:'البوابة الرئيسية',      icon:'01' },
-  { key:'company',    file:'company.html',    label:'الهوية والرؤية',        icon:'02' },
-  { key:'management',  file:'management.html', label:'الإدارة والصلاحيات',    icon:'03' },
-  { key:'finance',    file:'finance.html',    label:'الأمور المالية',        icon:'04' },
-  { key:'marketing',  file:'marketing.html',  label:'التسويق والمجتمع',      icon:'05' },
-];
 
-function initSidebar(activeKey){
-  const nav = document.getElementById('navGroup');
-  if(!nav) return;
-  const progress = PrivexStorage.getAllProgress();
-  nav.innerHTML = NAV_ITEMS.map(item=>{
-    const isModule = item.key !== 'index';
-    const pct = isModule ? (progress[item.key]||0) : null;
-    return `
-      <a class="nav-item ${item.key===activeKey?'active':''}" href="${item.file}">
-        <span class="ni-dot"></span>
-        <span>${item.label}</span>
-        ${pct!==null ? `<span class="ni-progress">${pct}%</span>` : ''}
-      </a>`;
-  }).join('');
+    // ================= STORAGE LAYER =================
+    // Isolated layer so LocalStorage can be swapped for Firebase later
+    // without touching UI logic. All reads/writes for the meeting go
+    // through these functions only.
+    const STORAGE_KEY = 'privex_meeting_v1';
 
-  const overall = PrivexStorage.getOverallProgress();
-  const fill = document.getElementById('sidebarProgressFill');
-  const label = document.getElementById('sidebarProgressLabel');
-  if(fill) fill.style.width = overall + '%';
-  if(label) label.textContent = overall + '%';
-}
-
-function initMobileMenu(){
-  const toggle = document.getElementById('menuToggle');
-  const sidebar = document.getElementById('sidebar');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  if(!toggle || !sidebar) return;
-  const open = ()=>{ sidebar.classList.add('open'); backdrop.classList.add('show'); };
-  const close = ()=>{ sidebar.classList.remove('open'); backdrop.classList.remove('show'); };
-  toggle.addEventListener('click', open);
-  backdrop && backdrop.addEventListener('click', close);
-}
-
-/* ================= TOAST ================= */
-let toastTimer = null;
-function showToast(msg){
-  const toast = document.getElementById('toast');
-  if(!toast) return;
-  toast.querySelector('.t-msg').textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2400);
-}
-
-/* ================= FOUNDER SETUP MODAL ================= */
-function ensureFounders(onReady){
-  let founders = PrivexStorage.loadFounders();
-  if(founders && founders.length === 4 && founders.every(n=>n && n.trim())){
-    if(onReady) onReady(founders);
-    return;
-  }
-  const overlay = document.getElementById('founderModal');
-  if(!overlay){ if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']); return; }
-  overlay.classList.add('show');
-  const form = document.getElementById('founderForm');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const inputs = form.querySelectorAll('input');
-    const names = Array.from(inputs).map((i,idx)=> i.value.trim() || ('المؤسس ' + (idx+1)));
-    PrivexStorage.saveFounders(names);
-    overlay.classList.remove('show');
-    showToast('تم حفظ بيانات الفريق المؤسس');
-    if(onReady) onReady(names);
-    renderAllFounderRows();
-  });
-  const skipBtn = document.getElementById('founderSkip');
-  if(skipBtn){
-    skipBtn.addEventListener('click', ()=>{
-      overlay.classList.remove('show');
-      if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']);
-    });
-  }
-}
-
-/* ================= VOTING SYSTEM ================= */
-function initials(name){
-  const parts = name.trim().split(/\s+/);
-  return (parts[0] ? parts[0][0] : 'م');
-}
-
-function renderVotingCard(sectionId){
-  const container = document.querySelector(`.voting-card[data-section="${sectionId}"] .founder-rows`);
-  if(!container) return;
-  const founders = PrivexStorage.loadFounders() || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4'];
-  const votes = PrivexStorage.loadVotes(sectionId);
-
-  container.innerHTML = founders.map((name, idx)=>{
-    const vote = votes[name] || null;
-    return `
-      <div class="founder-row">
-        <span class="founder-name"><span class="founder-avatar">${initials(name)}</span>${name}</span>
-        <span class="vote-btns" data-founder="${name.replace(/"/g,'')}" data-section="${sectionId}">
-          <button type="button" class="vote-btn ${vote==='agree'?'sel-agree':''}" data-value="agree">موافق</button>
-          <button type="button" class="vote-btn ${vote==='object'?'sel-object':''}" data-value="object">اعتراض</button>
-          <button type="button" class="vote-btn ${vote==='edit'?'sel-edit':''}" data-value="edit">يحتاج تعديل</button>
-        </span>
-      </div>`;
-  }).join('');
-
-  updateTally(sectionId);
-
-  container.querySelectorAll('.vote-btn').forEach(btn=>{
-    btn.addEventListener('click', function(){
-      const wrap = this.closest('.vote-btns');
-      const founder = wrap.getAttribute('data-founder');
-      const sec = wrap.getAttribute('data-section');
-      const value = this.getAttribute('data-value');
-      const currentVotes = PrivexStorage.loadVotes(sec);
-      currentVotes[founder] = (currentVotes[founder] === value) ? null : value;
-      if(!currentVotes[founder]) delete currentVotes[founder];
-      PrivexStorage.saveVotes(sec, currentVotes);
-      renderVotingCard(sec);
-      showToast('تم تسجيل التصويت');
-    });
-  });
-}
-
-function updateTally(sectionId){
-  const card = document.querySelector(`.voting-card[data-section="${sectionId}"]`);
-  if(!card) return;
-  const votes = PrivexStorage.loadVotes(sectionId);
-  const values = Object.values(votes);
-  const agree = values.filter(v=>v==='agree').length;
-  const object = values.filter(v=>v==='object').length;
-  const edit = values.filter(v=>v==='edit').length;
-  const tally = card.querySelector('.vc-tally');
-  if(tally){
-    tally.innerHTML = `
-      <span><span class="dot-agree"></span> ${agree} موافق</span>
-      <span><span class="dot-object"></span> ${object} اعتراض</span>
-      <span><span class="dot-edit"></span> ${edit} تعديل</span>`;
-  }
-}
-
-function renderAllFounderRows(){
-  document.querySelectorAll('.voting-card').forEach(card=>{
-    const sectionId = card.getAttribute('data-section');
-    if(sectionId) renderVotingCard(sectionId);
-  });
-}
-
-/* ================= NOTES ================= */
-function initNotes(){
-  document.querySelectorAll('.notes-textarea').forEach(area=>{
-    const sectionId = area.getAttribute('data-section');
-    area.value = PrivexStorage.loadNotes(sectionId);
-    let debounce;
-    area.addEventListener('input', ()=>{
-      clearTimeout(debounce);
-      debounce = setTimeout(()=>{
-        PrivexStorage.saveNotes(sectionId, area.value);
-        const hint = area.parentElement.querySelector('.notes-save-hint');
-        if(hint){ hint.textContent = 'تم الحفظ تلقائياً ✓'; setTimeout(()=> hint.textContent='يُحفظ تلقائياً أثناء الكتابة', 1600); }
-      }, 500);
-    });
-  });
-}
-
-/* ================= DECISION / APPROVAL ================= */
-function initDecisions(moduleKey){
-  document.querySelectorAll('.decision-card').forEach(card=>{
-    const sectionId = card.getAttribute('data-section');
-    const btn = card.querySelector('.decision-approve-btn');
-    const status = card.querySelector('.decision-status .status-text');
-    const stamp = card.querySelector('.stamp');
-    const meta = card.querySelector('.decision-meta');
-
-    function render(){
-      const d = PrivexStorage.loadDecision(sectionId);
-      card.classList.toggle('approved', d.approved);
-      if(status) status.textContent = d.approved ? 'تم اعتماد هذا القرار' : 'بانتظار الاعتماد';
-      if(stamp) stamp.textContent = d.approved ? '✓' : '○';
-      if(meta) meta.textContent = d.approved && d.at ? ('تاريخ الاعتماد: ' + new Date(d.at).toLocaleString('ar-IQ')) : 'لم يتم الاعتماد بعد';
-      if(btn) btn.textContent = d.approved ? 'إلغاء الاعتماد' : 'اعتماد القرار';
+    function loadMeeting(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { notes:{}, votes:{}, approvals:{}, meta:{} };
+      }catch(e){
+        console.warn('Storage read failed, using empty state.', e);
+        return { notes:{}, votes:{}, approvals:{}, meta:{} };
+      }
     }
 
-    if(btn){
-      btn.addEventListener('click', ()=>{
-        const d = PrivexStorage.loadDecision(sectionId);
-        PrivexStorage.saveDecision(sectionId, !d.approved);
-        render();
-        updateModuleProgress(moduleKey);
-        showToast(!d.approved ? 'تم اعتماد القرار ✓' : 'تم إلغاء الاعتماد');
+    function saveMeeting(state){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        return true;
+      }catch(e){
+        console.warn('Storage write failed.', e);
+        return false;
+      }
+    }
+
+    function saveNotes(sectionId, text){
+      const state = loadMeeting();
+      state.notes[sectionId] = { text, updatedAt: new Date().toISOString() };
+      saveMeeting(state);
+    }
+
+    function loadNotes(sectionId){
+      const state = loadMeeting();
+      return state.notes[sectionId] ? state.notes[sectionId].text : '';
+    }
+
+    function saveVotes(sectionId, choice){
+      const state = loadMeeting();
+      if(!state.votes[sectionId]) state.votes[sectionId] = {};
+      state.votes[sectionId][choice] = (state.votes[sectionId][choice] || 0) + 1;
+      state.votes[sectionId]._selected = choice;
+      saveMeeting(state);
+      return state.votes[sectionId];
+    }
+
+    function loadVotes(sectionId){
+      const state = loadMeeting();
+      return state.votes[sectionId] || {};
+    }
+
+    function saveApproval(sectionId, decisionLabel){
+      const state = loadMeeting();
+      state.approvals[sectionId] = { decision: decisionLabel, approvedAt: new Date().toISOString() };
+      saveMeeting(state);
+    }
+
+    function loadApproval(sectionId){
+      const state = loadMeeting();
+      return state.approvals[sectionId] || null;
+    }
+
+    function getPageProgress(pageId, totalSections){
+      const state = loadMeeting();
+      let done = 0;
+      for(let i=1;i<=totalSections;i++){
+        const sid = pageId + '-' + i;
+        if(state.approvals[sid]) done++;
+      }
+      return { done, total: totalSections };
+    }
+
+    // ================= NAVIGATION / PROGRESS ENGINE =================
+    const PAGES = [
+      {id:'index',    file:'index.html',      label:'البداية',        sections:0},
+      {id:'company',  file:'company.html',    label:'الشركة والهوية', sections:6},
+      {id:'management',file:'management.html',label:'الإدارة والمناصب',sections:6},
+      {id:'finance',  file:'finance.html',    label:'الأمور المالية', sections:8},
+      {id:'marketing',file:'marketing.html',  label:'التسويق والمجتمع',sections:6}
+    ];
+
+    function renderSidebarProgress(){
+      const track = document.querySelector('.sidebar-progress-fill');
+      const label = document.querySelector('.sidebar-progress-value');
+      if(!track) return;
+      let totalDone = 0, totalAll = 0;
+      PAGES.forEach(p=>{
+        if(p.sections>0){
+          const pr = getPageProgress(p.id, p.sections);
+          totalDone += pr.done; totalAll += pr.total;
+          const dot = document.querySelector('.nav-item[data-page=\''+p.id+'\'] .status-dot');
+          if(dot){
+            dot.classList.remove('done','active');
+            if(pr.done === pr.total && pr.total>0) dot.classList.add('done');
+            else if(pr.done>0) dot.classList.add('active');
+          }
+        }
+      });
+      const pct = totalAll ? Math.round((totalDone/totalAll)*100) : 0;
+      track.style.width = pct + '%';
+      if(label) label.textContent = pct + '%';
+      const ring = document.querySelector('.topbar-ring .fill');
+      const ringLabel = document.querySelector('.topbar-ring-label');
+      if(ring){
+        const c = 2*Math.PI*13;
+        ring.style.strokeDasharray = c;
+        ring.style.strokeDashoffset = c - (pct/100)*c;
+      }
+      if(ringLabel) ringLabel.textContent = pct+'%';
+    }
+
+    function markCurrentNav(pageId){
+      document.querySelectorAll('.nav-item').forEach(el=>{
+        el.classList.toggle('current', el.dataset.page === pageId);
       });
     }
-    render();
-  });
-  updateModuleProgress(moduleKey);
-}
 
-function updateModuleProgress(moduleKey){
-  const cards = document.querySelectorAll('.decision-card');
-  if(!cards.length) return;
-  let approved = 0;
-  cards.forEach(c=>{
-    const sectionId = c.getAttribute('data-section');
-    if(PrivexStorage.loadDecision(sectionId).approved) approved++;
-  });
-  const percent = (approved / cards.length) * 100;
-  PrivexStorage.setModuleProgress(moduleKey, percent);
+    // ================= SIDEBAR TOGGLE (mobile) =================
+    function toggleSidebar(){
+      document.querySelector('.sidebar').classList.toggle('open');
+    }
 
-  const pageFill = document.getElementById('pageProgressFill');
-  if(pageFill) pageFill.style.width = percent + '%';
-  const sideFill = document.getElementById('sidebarProgressFill');
-  if(sideFill) sideFill.style.width = PrivexStorage.getOverallProgress() + '%';
-  const sideLabel = document.getElementById('sidebarProgressLabel');
-  if(sideLabel) sideLabel.textContent = PrivexStorage.getOverallProgress() + '%';
-  initSidebar(window.PRIVEX_ACTIVE_KEY);
-}
+    // ================= TOAST =================
+    function showToast(msg, icon){
+      icon = icon || '✓';
+      let t = document.querySelector('.toast');
+      if(!t){
+        t = document.createElement('div');
+        t.className='toast';
+        t.innerHTML = '<span class="ic">'+icon+'</span><span class="msg"></span>';
+        document.body.appendChild(t);
+      }
+      t.querySelector('.ic').textContent = icon;
+      t.querySelector('.msg').textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+    }
 
-/* ================= PRINT ================= */
-function initPrintButton(){
-  const btn = document.getElementById('printBtn');
-  if(btn) btn.addEventListener('click', ()=> window.print());
-}
+    // ================= SECTION BLOCK (accordion) =================
+    function toggleSection(headEl){
+      headEl.closest('.section-block').classList.toggle('open');
+    }
 
-/* ================= BOOTSTRAP HELPER ================= */
-function bootPrivexPage(moduleKey){
-  window.PRIVEX_ACTIVE_KEY = moduleKey;
-  initSidebar(moduleKey);
-  initMobileMenu();
-  initPrintButton();
-  ensureFounders(()=>{ renderAllFounderRows(); });
-  initNotes();
-  if(document.querySelector('.decision-card')) initDecisions(moduleKey);
-  renderAllFounderRows();
-}
+    // ================= NOTES BINDING =================
+    function bindNotes(sectionId){
+      const el = document.querySelector('.notes-area[data-section=\''+sectionId+'\']');
+      if(!el) return;
+      el.value = loadNotes(sectionId);
+      let debounce;
+      el.addEventListener('input', ()=>{
+        clearTimeout(debounce);
+        const meta = el.parentElement.querySelector('.notes-meta .save-state');
+        if(meta) meta.textContent = 'جارٍ الحفظ...';
+        debounce = setTimeout(()=>{
+          saveNotes(sectionId, el.value);
+          if(meta) meta.textContent = 'تم الحفظ محلياً ✓';
+        }, 500);
+      });
+    }
+
+    // ================= VOTING BINDING =================
+    function bindVoting(sectionId){
+      const wrap = document.querySelector('.vote-cards[data-section=\''+sectionId+'\']');
+      if(!wrap) return;
+      const votes = loadVotes(sectionId);
+      const selected = votes._selected;
+      wrap.querySelectorAll('.vote-card').forEach(card=>{
+        const choice = card.dataset.choice;
+        const count = votes[choice] || 0;
+        const cEl = card.querySelector('.vcount');
+        if(cEl) cEl.textContent = count + ' صوت';
+        if(choice === selected) card.classList.add('selected');
+        card.addEventListener('click', ()=>{
+          wrap.querySelectorAll('.vote-card').forEach(c=>c.classList.remove('selected'));
+          card.classList.add('selected');
+          const updated = saveVotes(sectionId, choice);
+          card.querySelector('.vcount').textContent = (updated[choice]||1) + ' صوت';
+          showToast('تم تسجيل التصويت','☑');
+          updateApproveState(sectionId);
+        });
+      });
+    }
+
+    // ================= APPROVAL BINDING =================
+    function updateApproveState(sectionId){
+      const btn = document.querySelector('.approve-btn[data-section=\''+sectionId+'\']');
+      const status = document.querySelector('.approve-status[data-section=\''+sectionId+'\']');
+      const approval = loadApproval(sectionId);
+      const badge = document.querySelector('.section-badge[data-section=\''+sectionId+'\']');
+      if(approval){
+        if(btn){ btn.classList.add('btn-approved'); btn.classList.remove('btn-primary'); btn.innerHTML = '✓ تم الاعتماد'; }
+        if(status) status.textContent = 'اعتُمد بتاريخ ' + new Date(approval.approvedAt).toLocaleDateString('ar-IQ');
+        if(badge){ badge.textContent='APPROVED'; badge.className='badge approved section-badge'; badge.dataset.section=sectionId; }
+      }
+    }
+
+    function bindApproval(sectionId, decisionLabel){
+      const btn = document.querySelector('.approve-btn[data-section=\''+sectionId+'\']');
+      if(!btn) return;
+      updateApproveState(sectionId);
+      btn.addEventListener('click', ()=>{
+        saveApproval(sectionId, decisionLabel);
+        updateApproveState(sectionId);
+        renderSidebarProgress();
+        renderDecisionLedger();
+        showToast('تم اعتماد القرار','✓');
+      });
+    }
+
+    // ================= DECISION LEDGER (side panel) =================
+    function renderDecisionLedger(){
+      const box = document.getElementById('decisionLedger');
+      if(!box) return;
+      const state = loadMeeting();
+      const keys = Object.keys(state.approvals || {}).filter(k=>k.startsWith(CURRENT_PAGE_ID+'-'));
+      if(keys.length === 0){
+        box.innerHTML = '<p style="color:var(--text-3);font-size:11.5px;">لا توجد قرارات معتمدة بعد في هذه الصفحة.</p>';
+        return;
+      }
+      box.innerHTML = keys.map(k=>{
+        const a = state.approvals[k];
+        const title = (document.querySelector('.section-block[data-section=\''+k+'\'] h3') || {}).textContent || k;
+        return '<div class="decision-card"><div class="decision-card-top"><b>'+title+'</b><span class="badge approved">APPROVED</span></div><p>'+a.decision+' — '+new Date(a.approvedAt).toLocaleString('ar-IQ')+'</p></div>';
+      }).join('');
+    }
+
+    // ================= INIT =================
+    function initWorkshopPage(pageId, sectionIds){
+      window.CURRENT_PAGE_ID = pageId;
+      markCurrentNav(pageId);
+      renderSidebarProgress();
+      sectionIds.forEach(sid=>{
+        bindNotes(sid);
+        bindVoting(sid);
+      });
+      renderDecisionLedger();
+      const toggleBtn = document.querySelector('.sidebar-toggle');
+      if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    }
+
+    function printPage(){ window.print(); }
 
 
-/* ================= PAGE BOOTSTRAP ================= */
-document.addEventListener('DOMContentLoaded', function(){
-  bootPrivexPage('company');
-  PrivexStorage.saveMeeting({ lastVisited: 'company.html' });
-});
-</script>
-<!-- ================= END OF FILE ================= -->
+    // ================= PAGE INIT: COMPANY ================= 
+    document.addEventListener('DOMContentLoaded', function(){
+      initWorkshopPage('company', ['company-1', 'company-2', 'company-3', 'company-4', 'company-5', 'company-6']);
+      bindApproval('company-1', 'تحديد نص الرؤية النهائي لشركة Privex');
+      bindApproval('company-2', 'اعتماد نص الرسالة الرسمي');
+      bindApproval('company-3', 'اعتماد قائمة القيم الجوهرية النهائية');
+      bindApproval('company-4', 'اعتماد أسلوب العمل والتواصل الداخلي');
+      bindApproval('company-5', 'اعتماد الصياغة الرسمية لقصة التأسيس');
+      bindApproval('company-6', 'اعتماد الاتجاه العام للهوية البصرية');
+    });
+  </script>
 </body>
 </html>
+<!-- ================= END OF FILE ================= -->
