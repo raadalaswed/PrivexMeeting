@@ -1,1286 +1,1154 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<!--
-===========================================================
-Project        : Privex Founders Operating System
-Module         : Financial Model
-Phase          : Phase 1
-Version        : 1.0.0
-File Name      : finance.html
+<!-- ===========================================================
+Project     : Privex Founders Operating System
+Module      : Finance Workshop
+Phase       : Phase 1
+Version     : 1.0.0
+File Name   : finance.html
 Dependencies:
-- Sidebar Component
-- Topbar Component
-- Storage Layer
-- Navigation Engine
-- Shared UI Components
-Description:
-ورشة عمل تفاعلية للنموذج المالي: الإيرادات، المصاريف، الرواتب، الاحتياطي، الميزانيات، ونقطة التعادل، مع أدوات حاسبة تفاعلية.
-Last Updated:
-2026-07-01
-===========================================================
--->
+  - Sidebar Component
+  - Topbar Component
+  - Storage Layer
+  - Navigation Engine
+  - Shared UI Components
+Description : ورشة تفاعلية عن الإيرادات، المصاريف، التدفق النقدي، الأرباح، الرواتب، الاحتياطات، الميزانيات ونقطة التعادل، مع حاسبات تفاعلية.
+Last Updated: 2026-07-01
+=========================================================== -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privex · الأمور المالية</title>
+<title>Privex OS — الأمور المالية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ==========================================================
-   PRIVEX DESIGN SYSTEM — Shared across all Phase 1 modules
-   ========================================================== */
-:root{
-  --bg-void:#05060c;
-  --bg-deep:#090b16;
-  --bg-panel: rgba(20,24,42,0.55);
-  --bg-panel-solid:#10132224;
-  --bg-elevated: rgba(28,33,56,0.7);
-  --border-glass: rgba(255,255,255,0.08);
-  --border-glass-strong: rgba(255,255,255,0.16);
-  --blue-600:#3a5cff;
-  --blue-500:#4f7cff;
-  --blue-400:#7b9dff;
-  --purple-600:#7c3aed;
-  --purple-500:#8b5cf6;
-  --purple-400:#a78bfa;
-  --cyan:#22d3ee;
-  --text-primary:#eef1fb;
-  --text-secondary:#a4addc;
-  --text-dim:#5f6790;
-  --success:#34d399;
-  --success-dim: rgba(52,211,153,0.15);
-  --danger:#fb7185;
-  --danger-dim: rgba(251,113,133,0.15);
-  --warning:#fbbf24;
-  --radius-sm:10px;
-  --radius-md:16px;
-  --radius-lg:24px;
-  --shadow-glow: 0 0 40px rgba(79,124,255,0.15);
-  --font-body: 'Tajawal', 'Segoe UI', sans-serif;
-  --font-display: 'Rajdhani', 'Tajawal', sans-serif;
-}
 
-*{box-sizing:border-box; margin:0; padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  font-family:var(--font-body);
-  background:var(--bg-void);
-  color:var(--text-primary);
-  min-height:100vh;
-  overflow-x:hidden;
-  direction:rtl;
-}
+    /* ================= DESIGN TOKENS ================= */
+    :root{
+      --bg-0:#0a0d14;
+      --bg-1:#0e121b;
+      --bg-panel:rgba(255,255,255,0.035);
+      --bg-panel-solid:#121722;
+      --border:rgba(255,255,255,0.08);
+      --border-strong:rgba(255,255,255,0.14);
+      --text-1:#e9ecf5;
+      --text-2:#9aa3b8;
+      --text-3:#5f6880;
+      --blue:#4f7fff;
+      --blue-dim:rgba(79,127,255,0.14);
+      --purple:#9b6bff;
+      --purple-dim:rgba(155,107,255,0.14);
+      --green:#33d17a;
+      --amber:#f5b942;
+      --red:#ff5d6c;
+      --radius:10px;
+      --radius-sm:6px;
+      --font-display:'Space Grotesk',sans-serif;
+      --font-body:'Inter',sans-serif;
+      --font-mono:'JetBrains Mono',monospace;
+      --sidebar-w:236px;
+      --topbar-h:56px;
+      --maxw:1280px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      background:
+        radial-gradient(1100px 600px at 85% -10%, rgba(79,127,255,0.08), transparent 60%),
+        radial-gradient(900px 500px at -10% 20%, rgba(155,107,255,0.06), transparent 55%),
+        var(--bg-0);
+      color:var(--text-1);
+      font-family:var(--font-body);
+      font-size:14px;
+      line-height:1.6;
+      min-height:100vh;
+      direction:rtl;
+    }
+    ::selection{background:var(--blue-dim);color:#fff;}
+    a{color:inherit;text-decoration:none;}
+    button{font-family:inherit;cursor:pointer;}
+    ::-webkit-scrollbar{width:8px;height:8px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
-/* Ambient background texture */
-body::before{
-  content:'';
-  position:fixed; inset:0; z-index:-2;
-  background:
-    radial-gradient(circle at 15% 10%, rgba(79,124,255,0.16), transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(139,92,246,0.14), transparent 40%),
-    radial-gradient(circle at 50% 90%, rgba(34,211,238,0.08), transparent 45%),
-    var(--bg-void);
-}
-body::after{
-  content:'';
-  position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size:42px 42px;
-  mask-image: radial-gradient(circle at 50% 30%, black, transparent 75%);
-}
+    h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;}
+    .mono{font-family:var(--font-mono);}
+    .eyebrow{
+      font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;
+      color:var(--blue);text-transform:uppercase;display:flex;align-items:center;gap:6px;
+    }
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);}
 
-::selection{ background:var(--purple-500); color:#fff; }
-::-webkit-scrollbar{ width:8px; height:8px; }
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{ background:rgba(120,140,255,0.3); border-radius:10px; }
-::-webkit-scrollbar-thumb:hover{ background:rgba(120,140,255,0.55); }
+    /* ================= APP SHELL ================= */
+    .app-shell{display:flex;min-height:100vh;}
 
-a{ color:inherit; text-decoration:none; }
-button{ font-family:inherit; cursor:pointer; }
-textarea, input{ font-family:inherit; }
+    /* ================= SIDEBAR ================= */
+    .sidebar{
+      width:var(--sidebar-w);flex:0 0 var(--sidebar-w);
+      background:var(--bg-1);border-left:1px solid var(--border);
+      display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:40;
+    }
+    .sidebar-brand{
+      padding:18px 18px 16px;display:flex;align-items:center;gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .brand-mark{
+      width:30px;height:30px;border-radius:8px;flex:0 0 30px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;
+      box-shadow:0 0 16px rgba(79,127,255,0.35);
+    }
+    .brand-text{display:flex;flex-direction:column;line-height:1.2;}
+    .brand-text b{font-family:var(--font-display);font-size:14px;}
+    .brand-text span{font-size:10px;color:var(--text-3);font-family:var(--font-mono);letter-spacing:.04em;}
+    .sidebar-nav{flex:1;overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:2px;}
+    .nav-item{
+      display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);
+      color:var(--text-2);font-size:13px;transition:.15s;border:1px solid transparent;position:relative;
+    }
+    .nav-item .ic{width:16px;text-align:center;font-size:13px;opacity:.85;}
+    .nav-item .status-dot{margin-right:auto;width:6px;height:6px;border-radius:50%;background:var(--text-3);}
+    .nav-item .status-dot.done{background:var(--green);box-shadow:0 0 6px var(--green);}
+    .nav-item .status-dot.active{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+    .nav-item:hover{background:var(--bg-panel);color:var(--text-1);}
+    .nav-item.current{background:var(--blue-dim);color:#fff;border-color:rgba(79,127,255,0.3);}
+    .nav-section-label{font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;padding:14px 10px 6px;text-transform:uppercase;}
+    .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);}
+    .sidebar-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:6px;}
+    .sidebar-progress-track{height:5px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;}
+    .sidebar-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width .4s;}
 
-.glass{
-  background:var(--bg-panel);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border:1px solid var(--border-glass);
-  border-radius:var(--radius-md);
-}
+    /* ================= TOPBAR ================= */
+    .main-col{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .topbar{
+      height:var(--topbar-h);flex:0 0 var(--topbar-h);position:sticky;top:0;z-index:30;
+      display:flex;align-items:center;gap:14px;padding:0 22px;
+      background:rgba(14,18,27,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+    }
+    .topbar-crumb{font-size:12px;color:var(--text-3);font-family:var(--font-mono);}
+    .topbar-crumb b{color:var(--text-2);font-weight:500;}
+    .topbar-spacer{flex:1;}
+    .topbar-btn{
+      display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:var(--radius-sm);
+      background:var(--bg-panel);border:1px solid var(--border);color:var(--text-2);font-size:12px;
+      transition:.15s;
+    }
+    .topbar-btn:hover{border-color:var(--border-strong);color:var(--text-1);}
+    .topbar-ring{position:relative;width:30px;height:30px;flex:0 0 30px;}
+    .topbar-ring svg{transform:rotate(-90deg);}
+    .topbar-ring circle{fill:none;stroke-width:3;}
+    .topbar-ring .track{stroke:rgba(255,255,255,0.08);}
+    .topbar-ring .fill{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset .4s;}
+    .topbar-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:8px;color:var(--text-2);}
 
-/* ================= APP SHELL ================= */
-.app-shell{
-  display:grid;
-  grid-template-columns: 1fr 264px;
-  min-height:100vh;
-}
-.main-col{ display:flex; flex-direction:column; min-width:0; }
+    /* ================= MAIN CONTENT ================= */
+    .content{flex:1;padding:22px 26px 60px;}
+    .content-inner{max-width:var(--maxw);margin:0 auto;}
 
-/* ================= SIDEBAR ================= */
-.sidebar{
-  border-inline-start:1px solid var(--border-glass);
-  background:rgba(9,11,22,0.6);
-  backdrop-filter: blur(20px);
-  padding:28px 20px;
-  display:flex; flex-direction:column; gap:28px;
-  position:sticky; top:0; height:100vh; overflow-y:auto;
-}
-.brand{ display:flex; align-items:center; gap:10px; }
-.brand-mark{
-  width:38px; height:38px; border-radius:11px;
-  background:linear-gradient(135deg, var(--blue-500), var(--purple-500));
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-weight:700; font-size:16px; color:#fff;
-  box-shadow:0 0 22px rgba(124,58,237,0.5);
-}
-.brand-text b{ display:block; font-family:var(--font-display); font-size:16px; letter-spacing:.5px;}
-.brand-text span{ display:block; font-size:11px; color:var(--text-dim); }
+    /* ================= PAGE HEADER (compact — NOT a hero) ================= */
+    .page-head{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+      padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--bg-panel);margin-bottom:16px;
+    }
+    .page-head h1{font-size:19px;margin:6px 0 4px;}
+    .page-head p{color:var(--text-2);font-size:12.5px;max-width:560px;}
+    .page-head-stats{display:flex;gap:18px;flex:0 0 auto;}
+    .stat{text-align:center;}
+    .stat b{display:block;font-family:var(--font-mono);font-size:16px;color:var(--blue);}
+    .stat span{font-size:10px;color:var(--text-3);font-family:var(--font-mono);}
 
-.nav-group{ display:flex; flex-direction:column; gap:4px; }
-.nav-label{ font-size:11px; color:var(--text-dim); letter-spacing:1.5px; margin:6px 4px; font-family:var(--font-display); }
-.nav-item{
-  display:flex; align-items:center; gap:10px;
-  padding:10px 12px; border-radius:var(--radius-sm);
-  color:var(--text-secondary); font-size:14px; font-weight:500;
-  border:1px solid transparent;
-  transition:all .2s ease;
-  position:relative;
-}
-.nav-item .ni-dot{ width:6px; height:6px; border-radius:50%; background:var(--text-dim); flex-shrink:0; transition:all .2s ease;}
-.nav-item:hover{ background:var(--bg-elevated); color:var(--text-primary); }
-.nav-item.active{
-  background:linear-gradient(90deg, rgba(79,124,255,0.18), rgba(139,92,246,0.10));
-  color:#fff; border-color:var(--border-glass-strong);
-}
-.nav-item.active .ni-dot{ background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
-.nav-item .ni-progress{ margin-inline-start:auto; font-family:var(--font-display); font-size:11px; color:var(--text-dim); }
+    /* ================= WORKSPACE GRID ================= */
+    .workspace-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;}
+    .primary-col{min-width:0;display:flex;flex-direction:column;gap:14px;}
+    .side-col{display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(var(--topbar-h) + 14px);}
 
-.sidebar-progress{ margin-top:auto; padding-top:16px; border-top:1px solid var(--border-glass); }
-.sp-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); margin-bottom:8px; font-family:var(--font-display); letter-spacing:1px;}
-.sp-bar{ height:6px; border-radius:10px; background:rgba(255,255,255,0.06); overflow:hidden; }
-.sp-fill{ height:100%; border-radius:10px; background:linear-gradient(90deg, var(--blue-500), var(--purple-500), var(--cyan)); transition:width .6s ease; }
+    /* ================= CARD ================= */
+    .card{
+      background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+      padding:16px 18px;
+    }
+    .card-title{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+    .card-title h3{font-size:14.5px;}
+    .card-title .badge{margin-right:auto;}
+    .card-sub{color:var(--text-2);font-size:12px;margin-bottom:10px;}
 
-/* ================= TOPBAR ================= */
-.topbar{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 32px; border-bottom:1px solid var(--border-glass);
-  background:rgba(6,7,13,0.55); backdrop-filter: blur(14px);
-  position:sticky; top:0; z-index:20;
-}
-.tb-title{ display:flex; flex-direction:column; gap:2px; }
-.tb-title h1{ font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:.3px;}
-.tb-title span{ font-size:12px; color:var(--text-dim); }
-.tb-actions{ display:flex; align-items:center; gap:10px; }
-.save-indicator{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim); }
-.save-dot{ width:7px; height:7px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success); animation:pulse-dot 2.2s infinite; }
-@keyframes pulse-dot{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+    .badge{
+      font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;padding:3px 8px;border-radius:20px;
+      border:1px solid var(--border-strong);color:var(--text-2);text-transform:uppercase;
+    }
+    .badge.pending{color:var(--amber);border-color:rgba(245,185,66,0.35);background:rgba(245,185,66,0.08);}
+    .badge.approved{color:var(--green);border-color:rgba(51,209,122,0.35);background:rgba(51,209,122,0.08);}
+    .badge.info{color:var(--blue);border-color:rgba(79,127,255,0.35);background:var(--blue-dim);}
 
-.page-progress{ height:3px; width:100%; background:rgba(255,255,255,0.05); }
-.page-progress-fill{ height:100%; background:linear-gradient(90deg, var(--blue-500), var(--cyan)); width:0%; transition:width .5s ease; }
+    /* ================= SECTION (workshop unit) ================= */
+    .section-block{
+      border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-panel);overflow:hidden;
+    }
+    .section-block-head{
+      display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;
+      border-bottom:1px solid transparent;
+    }
+    .section-block.open .section-block-head{border-bottom-color:var(--border);}
+    .section-num{
+      font-family:var(--font-mono);font-size:11px;color:var(--blue);
+      background:var(--blue-dim);border-radius:5px;width:24px;height:24px;flex:0 0 24px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .section-block-head h3{font-size:14px;flex:1;}
+    .section-block-head .chev{color:var(--text-3);font-size:11px;transition:transform .2s;}
+    .section-block.open .chev{transform:rotate(90deg);}
+    .section-block-body{display:none;padding:4px 16px 16px;}
+    .section-block.open .section-block-body{display:block;}
+    .sb-explain{color:var(--text-2);font-size:12.8px;margin-bottom:10px;}
+    .sb-explain b{color:var(--text-1);font-weight:600;}
+    .term-row{
+      display:flex;gap:8px;align-items:baseline;padding:7px 10px;background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12.5px;
+    }
+    .term-row .term-en{font-family:var(--font-mono);color:var(--blue);flex:0 0 auto;font-size:11.5px;}
+    .term-row .term-ar{color:var(--text-2);}
+    .why-box{
+      display:flex;gap:8px;padding:9px 12px;border-radius:var(--radius-sm);
+      background:var(--purple-dim);border:1px solid rgba(155,107,255,0.25);font-size:12.3px;color:var(--text-1);margin:10px 0;
+    }
+    .why-box .ic{color:var(--purple);flex:0 0 auto;}
 
-/* ================= CONTENT ================= */
-.content{ padding:36px 40px 90px; max-width:1180px; width:100%; margin:0 auto; }
-.content > *{ animation: fadeUp .6s ease both; }
-@keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+    /* discussion / questions */
+    .q-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin:8px 0 12px;}
+    .q-list li{
+      font-size:12.6px;color:var(--text-1);padding:8px 10px 8px 10px;padding-inline-start:26px;position:relative;
+      background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-sm);
+    }
+    .q-list li::before{content:'؟';position:absolute;right:9px;top:7px;color:var(--blue);font-family:var(--font-mono);font-size:12px;}
 
-/* stagger */
-.content > *:nth-child(1){animation-delay:.02s;}
-.content > *:nth-child(2){animation-delay:.08s;}
-.content > *:nth-child(3){animation-delay:.14s;}
-.content > *:nth-child(4){animation-delay:.20s;}
-.content > *:nth-child(5){animation-delay:.26s;}
-.content > *:nth-child(6){animation-delay:.32s;}
-.content > *:nth-child(7){animation-delay:.38s;}
+    /* notes */
+    .notes-area{width:100%;min-height:72px;background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-sm);
+      color:var(--text-1);font-size:12.6px;padding:9px 10px;resize:vertical;font-family:var(--font-body);}
+    .notes-area:focus{outline:none;border-color:var(--blue);}
+    .notes-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:10.5px;color:var(--text-3);font-family:var(--font-mono);}
 
-.eyebrow{ font-family:var(--font-display); font-size:12px; letter-spacing:2px; color:var(--cyan); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
-.eyebrow::before{ content:''; width:22px; height:1px; background:var(--cyan); }
+    /* voting */
+    .vote-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}
+    .vote-card{
+      border:1px solid var(--border);background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);
+      padding:10px 8px;text-align:center;transition:.15s;
+    }
+    .vote-card:hover{border-color:var(--border-strong);}
+    .vote-card.selected{border-color:var(--blue);background:var(--blue-dim);}
+    .vote-card .vic{font-size:16px;display:block;margin-bottom:4px;}
+    .vote-card .vlabel{font-size:11.5px;color:var(--text-1);}
+    .vote-card .vcount{font-family:var(--font-mono);font-size:10px;color:var(--text-3);margin-top:3px;display:block;}
 
-/* ================= BUTTONS ================= */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:11px 20px; border-radius:12px; border:1px solid var(--border-glass-strong);
-  background:var(--bg-elevated); color:var(--text-primary); font-size:14px; font-weight:600;
-  transition:all .2s ease;
-}
-.btn:hover{ transform:translateY(-1px); border-color:rgba(124,140,255,0.6); }
-.btn-primary{
-  background:linear-gradient(135deg, var(--blue-500), var(--purple-600));
-  border:none; box-shadow:0 6px 24px rgba(79,124,255,0.35);
-  color:#fff;
-}
-.btn-primary:hover{ box-shadow:0 8px 30px rgba(139,92,246,0.5); }
-.btn-ghost{ background:transparent; border:1px solid var(--border-glass); color:var(--text-secondary); }
-.btn-ghost:hover{ color:#fff; }
-.btn-sm{ padding:7px 14px; font-size:13px; border-radius:9px; }
-.btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
-.btn-danger{ background:var(--danger-dim); border:1px solid rgba(251,113,133,0.4); color:#ffb4c0;}
-.btn-success{ background:var(--success-dim); border:1px solid rgba(52,211,153,0.4); color:#7cf0c4;}
+    .approve-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);}
+    .btn{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);
+      font-size:12.5px;font-weight:600;border:1px solid transparent;transition:.15s;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--blue),#3f6be0);color:#fff;box-shadow:0 4px 14px rgba(79,127,255,0.25);}
+    .btn-primary:hover{filter:brightness(1.08);}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed;filter:none;}
+    .btn-ghost{background:var(--bg-panel);border-color:var(--border);color:var(--text-2);}
+    .btn-ghost:hover{color:var(--text-1);border-color:var(--border-strong);}
+    .btn-approved{background:rgba(51,209,122,0.12);border-color:rgba(51,209,122,0.4);color:var(--green);}
+    .approve-status{margin-right:auto;font-size:11px;color:var(--text-3);font-family:var(--font-mono);}
 
-/* ================= CARDS ================= */
-.card{ padding:24px; }
-.card-title{ font-family:var(--font-display); font-size:19px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
-.card-sub{ color:var(--text-secondary); font-size:14px; line-height:1.9; }
-.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    /* decision cards (summary) */
+    .decision-card{border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;background:rgba(255,255,255,0.02);}
+    .decision-card + .decision-card{margin-top:8px;}
+    .decision-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+    .decision-card-top b{font-size:12.5px;}
+    .decision-card p{font-size:11.5px;color:var(--text-3);}
 
-.badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; font-family:var(--font-display); letter-spacing:.5px;}
-.badge-blue{ background:rgba(79,124,255,0.16); color:var(--blue-400); border:1px solid rgba(79,124,255,0.3);}
-.badge-purple{ background:rgba(139,92,246,0.16); color:var(--purple-400); border:1px solid rgba(139,92,246,0.3);}
-.badge-cyan{ background:rgba(34,211,238,0.14); color:var(--cyan); border:1px solid rgba(34,211,238,0.3);}
-.badge-success{ background:var(--success-dim); color:var(--success); border:1px solid rgba(52,211,153,0.35);}
+    /* timeline — secondary, capped */
+    .timeline-box{max-height:350px;overflow-y:auto;}
+    .tl-item{display:flex;gap:10px;padding:8px 2px;border-bottom:1px solid var(--border);font-size:12px;}
+    .tl-item:last-child{border-bottom:none;}
+    .tl-dot{width:8px;height:8px;border-radius:50%;background:var(--text-3);flex:0 0 8px;margin-top:4px;}
+    .tl-dot.done{background:var(--green);}
+    .tl-dot.active{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+    .tl-text b{display:block;color:var(--text-1);font-size:12px;}
+    .tl-text span{color:var(--text-3);font-size:10.5px;}
 
-/* ================= HERO ================= */
-.hero{
-  position:relative; padding:56px 44px; border-radius:var(--radius-lg); overflow:hidden;
-  background:linear-gradient(155deg, rgba(79,124,255,0.14), rgba(139,92,246,0.10) 60%, transparent);
-}
-.hero::before{
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(circle at 80% -10%, rgba(34,211,238,0.18), transparent 55%);
-  pointer-events:none;
-}
-.hero h2{ font-family:var(--font-display); font-size:38px; line-height:1.25; font-weight:800; max-width:720px;}
-.hero p{ color:var(--text-secondary); font-size:15.5px; max-width:640px; margin-top:14px; line-height:2; }
+    /* calculators / sliders (finance) */
+    .calc-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+    .calc-row-top{display:flex;justify-content:space-between;font-size:12px;}
+    .calc-row-top b{color:var(--text-1);}
+    .calc-row-top span{font-family:var(--font-mono);color:var(--blue);}
+    input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:3px;background:rgba(255,255,255,0.08);}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);cursor:pointer;}
+    input[type=number]{
+      width:88px;background:var(--bg-1);border:1px solid var(--border);border-radius:6px;color:var(--text-1);
+      padding:5px 8px;font-family:var(--font-mono);font-size:12px;
+    }
+    input[type=number]:focus{outline:none;border-color:var(--blue);}
+    .pie-wrap{display:flex;align-items:center;gap:14px;}
+    .pie-legend{display:flex;flex-direction:column;gap:5px;font-size:11.5px;}
+    .pie-legend .lg{display:flex;align-items:center;gap:6px;}
+    .lg-dot{width:8px;height:8px;border-radius:2px;}
+    .calc-result{margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--bg-1);border:1px solid var(--border);
+      display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12.5px;}
+    .calc-result b{color:var(--green);}
 
-/* ================= SECTION BLOCK (Workshop Unit) ================= */
-.section-block{ padding:30px 30px 26px; display:flex; flex-direction:column; gap:22px; }
-.sb-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;}
-.sb-head-left{ display:flex; align-items:center; gap:14px; }
-.sb-index{
-  width:44px; height:44px; border-radius:13px; flex-shrink:0;
-  background:linear-gradient(135deg, rgba(79,124,255,0.25), rgba(139,92,246,0.25));
-  border:1px solid var(--border-glass-strong);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-weight:800; font-size:17px;
-}
-.sb-title{ font-family:var(--font-display); font-size:21px; font-weight:700; }
-.sb-title small{ display:block; font-family:var(--font-body); font-size:12.5px; color:var(--text-dim); font-weight:400; margin-top:3px;}
+    /* progress bar generic */
+    .progress-track{height:6px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;transition:width .4s;}
 
-.sb-body{ color:var(--text-secondary); font-size:14.5px; line-height:2.1; }
-.sb-body p{ margin-bottom:10px; }
-.sb-body ul{ padding-inline-start:20px; display:flex; flex-direction:column; gap:6px; }
+    /* toast */
+    .toast{
+      position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(12px);
+      background:var(--bg-panel-solid);border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+      padding:10px 16px;font-size:12.5px;display:flex;align-items:center;gap:8px;z-index:100;
+      opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast .ic{color:var(--green);}
 
-.glossary{ display:flex; flex-direction:column; gap:8px; }
-.glossary-item{ display:flex; gap:10px; align-items:baseline; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-glass);}
-.glossary-term{ font-family:var(--font-display); color:var(--cyan); font-weight:700; font-size:13.5px; white-space:nowrap;}
-.glossary-def{ color:var(--text-secondary); font-size:13.5px; }
+    /* boot screen (index only) */
+    .boot-screen{
+      position:fixed;inset:0;background:var(--bg-0);z-index:200;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:14px;transition:opacity .5s, visibility .5s;
+    }
+    .boot-screen.hidden{opacity:0;visibility:hidden;}
+    .boot-logo{font-family:var(--font-display);font-size:26px;font-weight:700;
+      background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .boot-line{font-family:var(--font-mono);font-size:11px;color:var(--text-3);min-height:16px;}
+    .boot-bar{width:220px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+    .boot-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .3s;}
 
-.why-box{ padding:16px 18px; border-radius:12px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.25); font-size:13.5px; color:var(--text-secondary); line-height:1.9; }
-.why-box b{ color:var(--purple-400); font-family:var(--font-display); }
-
-.discussion{ display:flex; flex-direction:column; gap:10px; }
-.discussion h4{ font-family:var(--font-display); font-size:13px; letter-spacing:1px; color:var(--text-dim); margin-bottom:4px;}
-.discussion-q{ display:flex; gap:10px; padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); font-size:14px;}
-.discussion-q .q-mark{ color:var(--blue-400); font-family:var(--font-display); font-weight:800;}
-
-/* ================= NOTES ================= */
-.notes-wrap{ display:flex; flex-direction:column; gap:8px; }
-.notes-wrap label{ font-size:12.5px; color:var(--text-dim); font-family:var(--font-display); letter-spacing:.5px;}
-.notes-textarea{
-  width:100%; min-height:96px; resize:vertical; padding:14px 16px; border-radius:12px;
-  background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); color:var(--text-primary);
-  font-size:14px; line-height:1.8; outline:none; transition:border-color .2s ease;
-}
-.notes-textarea:focus{ border-color:var(--blue-500); background:rgba(79,124,255,0.05); }
-.notes-save-hint{ font-size:11px; color:var(--text-dim); }
-
-/* ================= VOTING ================= */
-.voting-card{ padding:20px; border-radius:14px; background:rgba(255,255,255,0.025); border:1px solid var(--border-glass); display:flex; flex-direction:column; gap:14px;}
-.vc-head{ display:flex; align-items:center; justify-content:space-between; }
-.vc-title{ font-family:var(--font-display); font-size:14px; letter-spacing:.5px; color:var(--text-secondary);}
-.vc-tally{ display:flex; gap:12px; font-size:12px; font-family:var(--font-display); }
-.vc-tally span{ display:flex; align-items:center; gap:5px; }
-.dot-agree{ width:7px;height:7px;border-radius:50%; background:var(--success);}
-.dot-object{ width:7px;height:7px;border-radius:50%; background:var(--danger);}
-.dot-edit{ width:7px;height:7px;border-radius:50%; background:var(--warning);}
-
-.founder-rows{ display:flex; flex-direction:column; gap:8px; }
-.founder-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid var(--border-glass); gap:10px; flex-wrap:wrap;}
-.founder-name{ font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:8px;}
-.founder-avatar{ width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; font-family:var(--font-display);}
-.vote-btns{ display:flex; gap:6px; }
-.vote-btn{ padding:6px 12px; border-radius:8px; border:1px solid var(--border-glass); background:transparent; color:var(--text-dim); font-size:12.5px; font-weight:600; transition:all .15s ease;}
-.vote-btn:hover{ border-color:var(--border-glass-strong); color:var(--text-primary);}
-.vote-btn.sel-agree{ background:var(--success-dim); border-color:var(--success); color:var(--success);}
-.vote-btn.sel-object{ background:var(--danger-dim); border-color:var(--danger); color:var(--danger);}
-.vote-btn.sel-edit{ background:rgba(251,191,36,0.14); border-color:var(--warning); color:var(--warning);}
-
-/* ================= DECISION ================= */
-.decision-card{
-  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
-  padding:18px 22px; border-radius:14px; border:1px dashed var(--border-glass-strong);
-  background:rgba(255,255,255,0.02);
-}
-.decision-card.approved{ border-style:solid; border-color:rgba(52,211,153,0.5); background:var(--success-dim); }
-.decision-status{ display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600;}
-.decision-status .stamp{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); font-size:18px;}
-.decision-card.approved .stamp{ background:var(--success); color:#04140d; }
-.decision-meta{ font-size:11.5px; color:var(--text-dim); }
-
-/* ================= TIMELINE / PROGRESS OVERVIEW ================= */
-.timeline{ display:flex; align-items:center; gap:0; padding:26px; overflow-x:auto; }
-.tl-step{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:130px; position:relative;}
-.tl-node{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; background:rgba(255,255,255,0.05); border:2px solid var(--border-glass-strong); z-index:2; font-size:15px;}
-.tl-step.done .tl-node{ background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); border-color:transparent; box-shadow:0 0 18px rgba(124,58,237,0.5);}
-.tl-step.current .tl-node{ border-color:var(--cyan); box-shadow:0 0 14px rgba(34,211,238,0.5); }
-.tl-line{ position:absolute; top:23px; height:2px; background:var(--border-glass); width:100%; right:50%; z-index:1;}
-.tl-step.done .tl-line{ background:linear-gradient(90deg,var(--purple-500),var(--blue-500)); }
-.tl-step:first-child .tl-line{ display:none; }
-.tl-label{ font-size:12.5px; text-align:center; color:var(--text-secondary); font-weight:600;}
-.tl-sub{ font-size:10.5px; color:var(--text-dim); }
-
-/* ================= TOAST ================= */
-.toast{
-  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
-  background:var(--bg-elevated); border:1px solid var(--border-glass-strong); backdrop-filter:blur(16px);
-  padding:12px 22px; border-radius:12px; font-size:13.5px; display:flex; align-items:center; gap:10px;
-  opacity:0; pointer-events:none; transition:all .35s ease; z-index:100; box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-.toast .t-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); }
-
-/* ================= MODAL (founder setup) ================= */
-.modal-overlay{ position:fixed; inset:0; background:rgba(4,5,10,0.7); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; pointer-events:none; transition:opacity .3s ease;}
-.modal-overlay.show{ opacity:1; pointer-events:auto; }
-.modal-box{ width:min(480px,92vw); padding:30px; transform:translateY(14px); transition:transform .3s ease;}
-.modal-overlay.show .modal-box{ transform:translateY(0); }
-.modal-box h3{ font-family:var(--font-display); font-size:20px; margin-bottom:6px;}
-.modal-box p{ color:var(--text-secondary); font-size:13.5px; margin-bottom:18px; }
-.founder-input-row{ display:flex; gap:8px; margin-bottom:10px; align-items:center;}
-.founder-input-row input{ flex:1; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.04); border:1px solid var(--border-glass); color:var(--text-primary); font-size:13.5px; outline:none;}
-.founder-input-row input:focus{ border-color:var(--blue-500); }
-.founder-input-row .fi-num{ width:26px; height:26px; border-radius:8px; background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--font-display); flex-shrink:0;}
-
-/* ================= UTILITIES ================= */
-.flex{ display:flex; } .items-center{ align-items:center; } .gap-8{gap:8px;} .gap-12{gap:12px;}
-.mt-8{margin-top:8px;} .mt-16{margin-top:16px;} .mt-24{margin-top:24px;} .mt-32{margin-top:32px;}
-.section-gap{ display:flex; flex-direction:column; gap:20px; }
-.divider{ height:1px; background:var(--border-glass); border:none; margin:6px 0; }
-.text-dim{ color:var(--text-dim); }
-.print-only{ display:none; }
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 980px){
-  .app-shell{ grid-template-columns:1fr; }
-  .sidebar{ position:fixed; inset-inline-end:0; top:0; width:78vw; max-width:300px; transform:translateX(100%); transition:transform .3s ease; z-index:60; border-inline-start:1px solid var(--border-glass); box-shadow:-20px 0 50px rgba(0,0,0,0.5);}
-  .sidebar.open{ transform:translateX(0); }
-  .menu-toggle{ display:flex !important; }
-  .grid-2, .grid-3{ grid-template-columns:1fr; }
-  .content{ padding:24px 18px 80px; }
-  .hero{ padding:36px 22px; }
-  .hero h2{ font-size:27px; }
-}
-.menu-toggle{ display:none; width:38px; height:38px; border-radius:10px; background:var(--bg-elevated); border:1px solid var(--border-glass); align-items:center; justify-content:center; font-size:18px;}
-.sidebar-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:50; opacity:0; pointer-events:none; transition:opacity .3s ease;}
-.sidebar-backdrop.show{ opacity:1; pointer-events:auto; }
-
-/* ================= PRINT ================= */
-@media print{
-  .sidebar, .topbar .tb-actions, .menu-toggle, .toast, .modal-overlay{ display:none !important; }
-  body{ background:#fff; color:#000; }
-  body::before, body::after{ display:none; }
-  .glass{ background:#fff; border:1px solid #ccc; -webkit-print-color-adjust:exact;}
-  .app-shell{ display:block; }
-}
-
-
-/* ================= FINANCE TOOLS (finance-only) ================= */
-.tool-card{ padding:28px; display:flex; flex-direction:column; gap:20px; }
-.slider-row{ display:flex; flex-direction:column; gap:6px; }
-.slider-row .sr-top{ display:flex; justify-content:space-between; font-size:13px; }
-.slider-row .sr-top b{ font-family:var(--font-display); color:var(--cyan); }
-input[type="range"]{ -webkit-appearance:none; width:100%; height:5px; border-radius:10px; background:rgba(255,255,255,0.08); outline:none;}
-input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:17px; height:17px; border-radius:50%; background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); cursor:pointer; box-shadow:0 0 10px rgba(124,58,237,0.6); }
-.pie-wrap{ display:flex; align-items:center; gap:26px; flex-wrap:wrap; justify-content:center; }
-.pie{ width:180px; height:180px; border-radius:50%; flex-shrink:0; box-shadow:0 0 40px rgba(79,124,255,0.2); }
-.pie-legend{ display:flex; flex-direction:column; gap:8px; }
-.pie-legend .pl-item{ display:flex; align-items:center; gap:8px; font-size:13px; }
-.pl-swatch{ width:11px; height:11px; border-radius:4px; }
-.calc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-.calc-field{ display:flex; flex-direction:column; gap:6px; }
-.calc-field label{ font-size:12px; color:var(--text-dim); font-family:var(--font-display); }
-.calc-field input{ padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.04); border:1px solid var(--border-glass); color:var(--text-primary); font-size:14px; outline:none;}
-.calc-field input:focus{ border-color:var(--blue-500); }
-.calc-result{ display:flex; gap:16px; flex-wrap:wrap; }
-.calc-result-box{ flex:1; min-width:160px; padding:16px; border-radius:12px; background:rgba(34,211,238,0.06); border:1px solid rgba(34,211,238,0.25); text-align:center;}
-.calc-result-box .crv{ font-family:var(--font-display); font-size:24px; font-weight:800; color:var(--cyan); }
-.calc-result-box .crl{ font-size:11.5px; color:var(--text-dim); margin-top:4px; }
+    /* responsive */
+    @media (max-width:1080px){
+      .workspace-grid{grid-template-columns:1fr;}
+      .side-col{position:static;}
+    }
+    @media (max-width:820px){
+      .sidebar{position:fixed;right:0;top:0;transform:translateX(100%);transition:.25s;box-shadow:-10px 0 30px rgba(0,0,0,.4);}
+      .sidebar.open{transform:translateX(0);}
+      .content{padding:16px 14px 50px;}
+      .page-head{flex-direction:column;}
+      .vote-cards{grid-template-columns:1fr 1fr;}
+      .sidebar-toggle{display:flex!important;}
+    }
+    @media (max-width:520px){
+      .vote-cards{grid-template-columns:1fr;}
+      .page-head-stats{width:100%;justify-content:space-between;}
+    }
+    .sidebar-toggle{
+      display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;
+      background:var(--bg-panel);border:1px solid var(--border);color:var(--text-2);flex:0 0 32px;
+    }
+    @media print{
+      .sidebar,.topbar,.sidebar-toggle,.section-block-head .chev,.approve-row .btn-ghost{display:none!important;}
+      body{background:#fff;color:#000;}
+      .card,.section-block,.page-head{border-color:#ccc;background:#fff;}
+      .content{padding:0;}
+    }
 
 </style>
 </head>
 <body>
-<div class="app-shell">
-
-    <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">PX</div>
-        <div class="brand-text"><b>PRIVEX</b><span>Founders OS · Phase 1</span></div>
-      </div>
-      <div class="nav-group">
-        <div class="nav-label">خارطة الاجتماع</div>
-        <div id="navGroup"></div>
-      </div>
-      <div class="sidebar-progress">
-        <div class="sp-label"><span>التقدم العام</span><span id="sidebarProgressLabel">0%</span></div>
-        <div class="sp-bar"><div class="sp-fill" id="sidebarProgressFill" style="width:0%"></div></div>
-      </div>
-    </aside>
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-<div class="main-col">
-
-      <!-- ================= TOPBAR ================= -->
-      <header class="topbar">
-        <div class="flex items-center gap-12">
-          <button class="menu-toggle" id="menuToggle">☰</button>
-          <div class="tb-title">
-            <h1>الأمور المالية</h1>
-            <span>ورشة عمل: النموذج المالي الكامل مع أدوات حاسبة تفاعلية</span>
+  <!-- ================= APP SHELL ================= -->
+  <div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">PX</div>
+      <div class="brand-text"><b>Privex</b><span>FOUNDERS OS · PHASE 1</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">مراحل التأسيس</div>
+      <a class="nav-item" data-page="index" href="index.html">
+        <span class="ic">&#8962;</span><span>الرئيسية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="company" href="company.html">
+        <span class="ic">&#9670;</span><span>الشركة والهوية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="management" href="management.html">
+        <span class="ic">&#9776;</span><span>الإدارة والمناصب</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item current" data-page="finance" href="finance.html">
+        <span class="ic">&#8364;</span><span>الأمور المالية</span><span class="status-dot"></span>
+      </a>
+      <a class="nav-item" data-page="marketing" href="marketing.html">
+        <span class="ic">&#9737;</span><span>التسويق والمجتمع</span><span class="status-dot"></span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-progress-label"><span>التقدّم الكلي</span><span class="sidebar-progress-value">0%</span></div>
+      <div class="sidebar-progress-track"><div class="sidebar-progress-fill" style="width:0%"></div></div>
+    </div>
+  </aside>
+    <div class="main-col">
+  <div class="topbar">
+    <button class="sidebar-toggle" aria-label="القائمة">&#9776;</button>
+    <div class="topbar-crumb">Privex OS <span style="opacity:.4">/</span> <b>الأمور المالية</b></div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" onclick="printPage()"><span>&#9113;</span> طباعة PDF</button>
+    <div class="topbar-ring">
+      <svg width="30" height="30" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="13"></circle>
+        <circle class="fill" cx="15" cy="15" r="13"></circle>
+      </svg>
+      <div class="topbar-ring-label">0%</div>
+    </div>
+  </div>
+      <!-- ================= CONTENT ================= -->
+      <div class="content">
+        <div class="content-inner">
+        <!-- ================= HEADER ================= -->
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">المرحلة 1 · الوحدة 03</div>
+            <h1>ورشة الأمور المالية</h1>
+            <p>الإيرادات، المصاريف، التدفق النقدي، الأرباح، الرواتب، الاحتياطات، الميزانيات، ونقطة التعادل — مع أدوات حساب تفاعلية.</p>
+          </div>
+          <div class="page-head-stats">
+            <div class="stat"><b>8</b><span>أقسام</span></div>
+            <div class="stat"><b>3</b><span>حاسبات</span></div>
           </div>
         </div>
-        <div class="tb-actions">
-          <span class="save-indicator"><span class="save-dot"></span> حفظ تلقائي محلي</span>
-          <button class="btn btn-ghost btn-sm" id="printBtn">🖨 طباعة PDF</button>
+
+        <div class="workspace-grid">
+          <div class="primary-col">
+        <!-- ================= SECTION 1: الإيرادات (Revenue) ================= -->
+        <div class="section-block open" data-section="finance-1">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">01</span>
+            <h3>الإيرادات (Revenue)</h3>
+            <span class="badge pending section-badge" data-section="finance-1">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Revenue</b> هي إجمالي الأموال الداخلة للشركة من بيع الخدمات — تطوير المواقع، الهوية
+        البصرية، إدارة السوشال ميديا، وغيرها — <b>قبل</b> خصم أي مصاريف. الإيراد ليس ربحاً؛ هو رقم إجمالي فقط.</p>
+          <div class="term-row"><span class="term-en">Gross Revenue</span><span class="term-ar">إجمالي الإيراد قبل خصم أي تكاليف.</span></div>
+          <div class="term-row"><span class="term-en">Recurring Revenue</span><span class="term-ar">إيراد متكرر شهرياً مثل عقود الاستضافة والصيانة.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>تتبّع الإيراد بشكل منفصل عن الربح يمنع الفريق من الشعور بنجاح وهمي بينما المصاريف تلتهم كل الدخل.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما هي الخدمات التي نتوقع أن تُشكّل أكبر مصدر إيراد في السنة الأولى؟</li>
+            <li>هل نعتمد نموذج مشاريع لمرة واحدة، أم عقود شهرية متكررة (Retainers)، أم كليهما؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-1">
+            <div class="vote-card" data-choice="one_time">
+              <span class="vic">&#128176;</span><span class="vlabel">مشاريع لمرة واحدة</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="recurring">
+              <span class="vic">&#128257;</span><span class="vlabel">عقود شهرية متكررة</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="mixed">
+              <span class="vic">&#9878;</span><span class="vlabel">مزيج متوازن</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-1" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-1">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-1\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-1">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-      </header>
-      <div class="page-progress"><div class="page-progress-fill" id="pageProgressFill"></div></div>
-<main class="content section-gap">
-
-    <!-- ================= SECTION: REVENUE-EXPENSES ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">01</div>
-          <div class="sb-title">الإيرادات والمصاريف<small>Revenue & Expenses</small></div>
+        <!-- ================= SECTION 2: المصاريف والتكاليف التشغيلية (Expenses & Operating Cost) ================= -->
+        <div class="section-block" data-section="finance-2">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">02</span>
+            <h3>المصاريف والتكاليف التشغيلية (Expenses & Operating Cost)</h3>
+            <span class="badge pending section-badge" data-section="finance-2">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Expenses</b> هي كل الأموال الخارجة من الشركة، بينما <b>Operating Cost</b> (التكلفة
+        التشغيلية) هي المصاريف الثابتة اللازمة لتشغيل الشركة يومياً بغض النظر عن حجم المشاريع: الاستضافة،
+        الأدوات، الاشتراكات، والدومينات.</p>
+          <div class="term-row"><span class="term-en">Fixed Cost</span><span class="term-ar">تكلفة ثابتة لا تتغير بتغيّر حجم العمل (اشتراكات، أدوات).</span></div>
+          <div class="term-row"><span class="term-en">Variable Cost</span><span class="term-ar">تكلفة تتغير حسب حجم المشروع (مثل موارد تصميم إضافية).</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>فصل التكاليف الثابتة عن المتغيرة ضروري لحساب نقطة التعادل (Break-even) لاحقاً بدقة.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما هي التكاليف الثابتة الشهرية المتوقعة (أدوات، استضافة، اشتراكات)؟</li>
+            <li>هل نحتاج مكتباً فعلياً في هذه المرحلة أم نعمل عن بعد بالكامل؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-2">
+            <div class="vote-card" data-choice="office">
+              <span class="vic">&#127968;</span><span class="vlabel">مكتب فعلي</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="remote">
+              <span class="vic">&#128187;</span><span class="vlabel">عمل عن بعد بالكامل</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="hybrid">
+              <span class="vic">&#128260;</span><span class="vlabel">هجين</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-2" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-2">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-2\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-2">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>الإيرادات (Revenue) هي كل الأموال الداخلة من بيع الخدمات: تطوير المواقع، إدارة السوشال ميديا، الأمن السيبراني، وغيرها. المصاريف (Expenses) هي كل الأموال الخارجة لتشغيل الشركة.</p>
-<p>من المهم فصل المصاريف الثابتة (لا تتغير شهرياً مثل الاستضافة) عن المصاريف المتغيرة (ترتبط بحجم العمل مثل تكلفة مشروع معيّن).</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>إيراد: رسوم تصميم موقع لعميل بقيمة 1,500,000 دينار عراقي.</li><li>مصروف ثابت: اشتراك أدوات التصميم والاستضافة الشهري.</li><li>مصروف متغير: تكلفة عمالة إضافية لمشروع كبير محدد.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Revenue</span><span class="glossary-def">إجمالي الأموال الداخلة من بيع الخدمات قبل خصم أي تكاليف.</span></div><div class="glossary-item"><span class="glossary-term">Fixed vs Variable Cost</span><span class="glossary-def">التمييز بين التكاليف الثابتة شهرياً والتكاليف المرتبطة بحجم العمل.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>فهم دقيق للإيرادات والمصاريف هو أساس أي قرار تسعير أو توظيف لاحق. بدون هذا الفصل، يصعب معرفة ما إذا كانت الشركة تحقق ربحاً فعلياً أم لا.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي مصادر الإيراد الأساسية التي سنركّز عليها في الأشهر الستة الأولى؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي المصاريف الثابتة الشهرية التي نتوقعها فعلياً؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نوثّق كل إيراد ومصروف بشكل منظم منذ اليوم الأول؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="revenue-expenses" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="revenue-expenses">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
+        <!-- ================= SECTION 3: التدفق النقدي (Cash Flow) ================= -->
+        <div class="section-block" data-section="finance-3">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">03</span>
+            <h3>التدفق النقدي (Cash Flow)</h3>
+            <span class="badge pending section-badge" data-section="finance-3">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Cash Flow</b> هو حركة الأموال الفعلية داخل وخارج الشركة عبر الزمن — ليس فقط كم تربح،
+        بل <b>متى</b> يصلك المال فعلياً. شركة قد تكون رابحة على الورق لكنها تعاني إذا تأخر العملاء بالدفع.</p>
+          <div class="term-row"><span class="term-en">Positive Cash Flow</span><span class="term-ar">دخول أموال أكثر مما يخرج خلال فترة معينة.</span></div>
+          <div class="term-row"><span class="term-en">Payment Terms</span><span class="term-ar">شروط الدفع المتفق عليها مع العميل (دفعة مقدمة، عند التسليم، إلخ).</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>إدارة التدفق النقدي تمنع أزمة سيولة حتى لو كانت الشركة رابحة نظرياً على المدى الطويل.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>هل نطلب دفعة مقدمة (Deposit) من كل عميل قبل بدء العمل؟ كم نسبتها؟</li>
+            <li>كيف نتعامل مع عميل يتأخر بالدفع بعد التسليم؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-3">
+            <div class="vote-card" data-choice="deposit_50">
+              <span class="vic">&#128181;</span><span class="vlabel">دفعة مقدمة 50%</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="deposit_30">
+              <span class="vic">&#128179;</span><span class="vlabel">دفعة مقدمة 30%</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="full_on_delivery">
+              <span class="vic">&#9989;</span><span class="vlabel">دفع كامل عند التسليم</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-3" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-3">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-3\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-3">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <div class="founder-rows"></div>
-      </div>
+        <!-- ================= SECTION 4: الربح وهامش الربح (Profit & Profit Margin) ================= -->
+        <div class="section-block" data-section="finance-4">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">04</span>
+            <h3>الربح وهامش الربح (Profit & Profit Margin)</h3>
+            <span class="badge pending section-badge" data-section="finance-4">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Profit</b> هو ما يتبقى من الإيراد بعد خصم كل المصاريف. أما <b>Profit Margin</b> فهو
+        نسبة الربح إلى الإيراد — مؤشر يوضح كفاءة الشركة في تحويل الإيراد إلى ربح فعلي.</p>
+          <div class="term-row"><span class="term-en">Net Profit</span><span class="term-ar">الربح الصافي بعد خصم كل التكاليف.</span></div>
+          <div class="term-row"><span class="term-en">Profit Margin %</span><span class="term-ar">(الربح ÷ الإيراد) × 100</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>هامش ربح منخفض يعني أن الشركة تعمل بجهد كبير مقابل عائد قليل — مؤشر لإعادة تسعير الخدمات.</span></div>
 
-      <div class="decision-card" data-section="revenue-expenses">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+            <div class="eyebrow" style="margin:14px 0 6px;">حاسبة هامش الربح</div>
+            <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;background:rgba(255,255,255,0.02);">
+            <div class="calc-row">
+              <div class="calc-row-top"><b>الإيراد الشهري (USD)</b></div>
+              <input type="number" id="margin_revenue" value="3000" oninput="calcMargin()">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>إجمالي المصاريف (USD)</b></div>
+              <input type="number" id="margin_expenses" value="1800" oninput="calcMargin()">
+            </div>
+            <div class="calc-result"><span>الربح الصافي / هامش الربح</span><b id="margin_result">1200$ / 40%</b></div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما هو هامش الربح المستهدف لكل نوع خدمة تقدمها Privex؟</li>
+            <li>هل نقبل مشاريع بهامش ربح منخفض في البداية لبناء المحفظة (Portfolio)؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-4">
+            <div class="vote-card" data-choice="high_margin">
+              <span class="vic">&#128200;</span><span class="vlabel">هامش مرتفع دائماً</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="build_reputation">
+              <span class="vic">&#127942;</span><span class="vlabel">هامش منخفض لبناء السمعة</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="case_by_case">
+              <span class="vic">&#9878;</span><span class="vlabel">حسب نوع العميل</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-4" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-4">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-4\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-4">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: CASHFLOW-PROFIT ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">02</div>
-          <div class="sb-title">التدفق النقدي والربح<small>Cash Flow & Profit</small></div>
+        <!-- ================= SECTION 5: نظام الرواتب والمكافآت والعمولات ================= -->
+        <div class="section-block" data-section="finance-5">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">05</span>
+            <h3>نظام الرواتب والمكافآت والعمولات</h3>
+            <span class="badge pending section-badge" data-section="finance-5">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Salary System</b> نظام رواتب ثابتة شهرية، <b>Bonus System</b> مكافآت إضافية عند تحقيق
+        أهداف معينة، و<b>Commission</b> عمولة مرتبطة مباشرة بجلب عميل أو إغلاق صفقة — عادة لدور CBO.</p>
+          <div class="term-row"><span class="term-en">Base Salary</span><span class="term-ar">الراتب الثابت الشهري بغض النظر عن أداء المشاريع.</span></div>
+          <div class="term-row"><span class="term-en">Performance Bonus</span><span class="term-ar">مكافأة مرتبطة بتحقيق هدف محدد.</span></div>
+          <div class="term-row"><span class="term-en">Commission</span><span class="term-ar">نسبة من قيمة الصفقة تُمنح لمن جلبها.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>نظام رواتب واضح منذ البداية يمنع الشعور بعدم الإنصاف بين المؤسسين لاحقاً، خصوصاً مع اختلاف الأدوار.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>هل يأخذ المؤسسون رواتب ثابتة من الشهر الأول أم فقط بعد تحقيق إيراد مستقر؟</li>
+            <li>هل نعتمد عمولة لمن يجلب عميلاً جديداً بغض النظر عن منصبه؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-5">
+            <div class="vote-card" data-choice="from_start">
+              <span class="vic">&#128181;</span><span class="vlabel">رواتب من اليوم الأول</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="after_stability">
+              <span class="vic">&#8987;</span><span class="vlabel">رواتب بعد الاستقرار</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="profit_share_only">
+              <span class="vic">&#127942;</span><span class="vlabel">أرباح فقط (بدون راتب)</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-5" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-5">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-5\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-5">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>التدفق النقدي (Cash Flow) هو حركة الأموال الفعلية داخل وخارج الشركة خلال فترة زمنية، وهو مختلف عن الربح المحاسبي لأن العميل قد يتأخر بالدفع رغم إنجاز العمل.</p>
-<p>الربح (Profit) هو الفرق بين الإيرادات والمصاريف، بينما هامش الربح (Profit Margin) هو نسبة هذا الربح إلى الإيراد الكلي، وهو مؤشر أدق لصحة النموذج المالي.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>تدفق نقدي سلبي مؤقت: تم دفع رواتب الشهر بينما لم يُحصّل بعد مبلغ مشروع منجز.</li><li>هامش ربح 30%: من كل مليون دينار إيراد، يتبقى 300 ألف دينار ربح صافٍ بعد كل التكاليف.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Cash Flow</span><span class="glossary-def">حركة الأموال الفعلية الداخلة والخارجة، بصرف النظر عن توقيت الفوترة.</span></div><div class="glossary-item"><span class="glossary-term">Profit Margin</span><span class="glossary-def">نسبة الربح الصافي إلى إجمالي الإيراد، تُستخدم لقياس كفاءة النموذج المالي.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>شركة قد تكون مربحة على الورق لكنها تنهار بسبب نقص السيولة النقدية الفعلية. متابعة التدفق النقدي بانتظام تحمي الشركة من هذا الخطر تحديداً.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>كيف نتعامل مع تأخر دفعات العملاء دون التأثير على التدفق النقدي للشركة؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هو هامش الربح المستهدف لكل نوع من خدماتنا؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من يتابع التدفق النقدي بشكل دوري بين الأعضاء الأربعة؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="cashflow-profit" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="cashflow-profit">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
+        <!-- ================= SECTION 6: صندوق الاحتياط وصندوق الطوارئ ================= -->
+        <div class="section-block" data-section="finance-6">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">06</span>
+            <h3>صندوق الاحتياط وصندوق الطوارئ</h3>
+            <span class="badge pending section-badge" data-section="finance-6">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Reserve Fund</b> صندوق احتياطي يُبنى تدريجياً من جزء ثابت من الأرباح لدعم استقرار
+        الشركة، بينما <b>Emergency Fund</b> صندوق طوارئ مخصص لمواقف غير متوقعة (فقدان عميل كبير، عطل تقني
+        مكلف، إلخ).</p>
+          <div class="term-row"><span class="term-en">Reserve Fund</span><span class="term-ar">ادخار تراكمي جزء من الأرباح لدعم استمرارية الشركة.</span></div>
+          <div class="term-row"><span class="term-en">Emergency Fund</span><span class="term-ar">مبلغ مخصص حصراً للطوارئ غير المخطط لها.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>شركات ناشئة كثيرة تفشل بسبب صدمة مالية واحدة كان يمكن تجاوزها بوجود احتياطي بسيط.</span></div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما النسبة من الأرباح الشهرية التي تُقتطع تلقائياً لصندوق الاحتياط؟</li>
+            <li>من يملك صلاحية استخدام صندوق الطوارئ، وبأي حد أقصى بدون موافقة الجميع؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-6">
+            <div class="vote-card" data-choice="pct_10">
+              <span class="vic">&#128176;</span><span class="vlabel">10% من الأرباح</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="pct_15">
+              <span class="vic">&#128200;</span><span class="vlabel">15% من الأرباح</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="pct_20">
+              <span class="vic">&#128202;</span><span class="vlabel">20% من الأرباح</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-6" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-6">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-6\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-6">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <div class="founder-rows"></div>
-      </div>
+        <!-- ================= SECTION 7: ميزانية التسويق والمعدات ================= -->
+        <div class="section-block" data-section="finance-7">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">07</span>
+            <h3>ميزانية التسويق والمعدات</h3>
+            <span class="badge pending section-badge" data-section="finance-7">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Marketing Budget</b> الميزانية المخصصة للإعلانات والمحتوى وبناء المجتمع، و<b>Equipment
+        Budget</b> ميزانية شراء أو تحديث المعدات (كاميرات، أجهزة، برمجيات مرخّصة) اللازمة لتقديم الخدمة
+        باحترافية.</p>
+          <div class="term-row"><span class="term-en">Marketing Budget</span><span class="term-ar">الميزانية المخصصة لجذب العملاء وبناء الحضور الرقمي.</span></div>
+          <div class="term-row"><span class="term-en">Equipment Budget</span><span class="term-ar">الميزانية المخصصة للأدوات والمعدات المادية والبرمجية.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>بدون ميزانية تسويق واضحة، يعتمد نمو الشركة فقط على التوصية الشفهية — وهذا بطيء وغير مضمون.</span></div>
 
-      <div class="decision-card" data-section="cashflow-profit">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+            <div class="eyebrow" style="margin:14px 0 6px;">حاسبة توزيع الميزانية</div>
+            <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;background:rgba(255,255,255,0.02);">
+            <div class="pie-wrap">
+              <div id="budgetPie" style="width:120px;height:120px;border-radius:50%;flex:0 0 120px;background:conic-gradient(var(--blue) 0% 40%, var(--purple) 40% 65%, var(--green) 65% 85%, var(--amber) 85% 100%);"></div>
+              <div class="pie-legend">
+                <div class="lg"><span class="lg-dot" style="background:var(--blue)"></span>رواتب <span id="lbl_salary" class="mono">40%</span></div>
+                <div class="lg"><span class="lg-dot" style="background:var(--purple)"></span>تسويق <span id="lbl_marketing" class="mono">25%</span></div>
+                <div class="lg"><span class="lg-dot" style="background:var(--green)"></span>احتياط <span id="lbl_reserve" class="mono">20%</span></div>
+                <div class="lg"><span class="lg-dot" style="background:var(--amber)"></span>معدات <span id="lbl_equipment" class="mono">15%</span></div>
+              </div>
+            </div>
+            <div class="calc-row" style="margin-top:10px;">
+              <div class="calc-row-top"><b>رواتب</b><span id="slv_salary">40%</span></div>
+              <input type="range" min="0" max="100" value="40" id="sl_salary" oninput="calcBudget('salary')">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>تسويق</b><span id="slv_marketing">25%</span></div>
+              <input type="range" min="0" max="100" value="25" id="sl_marketing" oninput="calcBudget('marketing')">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>احتياط</b><span id="slv_reserve">20%</span></div>
+              <input type="range" min="0" max="100" value="20" id="sl_reserve" oninput="calcBudget('reserve')">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>معدات</b><span id="slv_equipment">15%</span></div>
+              <input type="range" min="0" max="100" value="15" id="sl_equipment" oninput="calcBudget('equipment')">
+            </div>
+            <p style="font-size:10.5px;color:var(--text-3);">يتم إعادة التوازن تلقائياً ليبقى المجموع 100%.</p>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>ما نسبة الإيراد الشهري التي تُخصص للتسويق تحديداً؟</li>
+            <li>ما هي المعدات الأولوية للاستثمار فيها أولاً (كاميرا، لابتوب، تراخيص برامج)؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-7">
+            <div class="vote-card" data-choice="marketing_first">
+              <span class="vic">&#128266;</span><span class="vlabel">تسويق أولاً</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="equipment_first">
+              <span class="vic">&#128247;</span><span class="vlabel">معدات أولاً</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="balanced">
+              <span class="vic">&#9878;</span><span class="vlabel">توزيع متوازن</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-7" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-7">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-7\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-7">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
+        <!-- ================= SECTION 8: نقطة التعادل (Break-even Point) ================= -->
+        <div class="section-block" data-section="finance-8">
+          <div class="section-block-head" onclick="toggleSection(this)">
+            <span class="section-num">08</span>
+            <h3>نقطة التعادل (Break-even Point)</h3>
+            <span class="badge pending section-badge" data-section="finance-8">PENDING</span>
+            <span class="chev">&#10148;</span>
+          </div>
+          <div class="section-block-body">
+            <p class="sb-explain"><b>Break-even Point</b> هي النقطة التي يتساوى عندها إجمالي الإيراد مع إجمالي التكاليف —
+        أي لا ربح ولا خسارة. معرفة هذه النقطة تحدد الحد الأدنى من المشاريع أو الإيراد الشهري اللازم لبقاء
+        Privex مستدامة.</p>
+          <div class="term-row"><span class="term-en">Break-even Units</span><span class="term-ar">عدد المشاريع/الوحدات اللازمة لتغطية كل التكاليف.</span></div>
+          <div class="term-row"><span class="term-en">Fixed vs Variable</span><span class="term-ar">التمييز بين التكلفة الثابتة والمتغيرة ضروري لحساب هذه النقطة بدقة.</span></div>
+            <div class="why-box"><span class="ic">&#9679;</span><span>معرفة نقطة التعادل تمنع الشركة من قبول مشاريع أقل من التكلفة الفعلية دون أن يلاحظ الفريق ذلك.</span></div>
 
-    <!-- ================= SECTION: SALARY-BONUS ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">03</div>
-          <div class="sb-title">الرواتب والمكافآت والعمولات<small>Salary, Bonus & Commission</small></div>
+            <div class="eyebrow" style="margin:14px 0 6px;">حاسبة نقطة التعادل</div>
+            <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;background:rgba(255,255,255,0.02);">
+            <div class="calc-row">
+              <div class="calc-row-top"><b>التكاليف الثابتة الشهرية (USD)</b></div>
+              <input type="number" id="be_fixed" value="900" oninput="calcBreakeven()">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>متوسط سعر المشروع (USD)</b></div>
+              <input type="number" id="be_price" value="300" oninput="calcBreakeven()">
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-top"><b>التكلفة المتغيرة لكل مشروع (USD)</b></div>
+              <input type="number" id="be_var" value="60" oninput="calcBreakeven()">
+            </div>
+            <div class="calc-result"><span>عدد المشاريع اللازمة شهرياً</span><b id="be_result">3.75 مشروع</b></div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">أسئلة للنقاش</div>
+            <ul class="q-list">
+            <li>كم عدد المشاريع الشهرية اللازمة لتغطية كل التكاليف الثابتة؟</li>
+            <li>هل نضع هدفاً شهرياً واضحاً لتجاوز نقطة التعادل بهامش أمان؟</li>
+            </ul>
+            <div class="eyebrow" style="margin:12px 0 6px;">التصويت</div>
+            <div class="vote-cards" data-section="finance-8">
+            <div class="vote-card" data-choice="safety_20">
+              <span class="vic">&#127919;</span><span class="vlabel">هامش أمان 20%</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="safety_50">
+              <span class="vic">&#128200;</span><span class="vlabel">هامش أمان 50%</span><span class="vcount">0 صوت</span>
+            </div>
+            <div class="vote-card" data-choice="no_margin">
+              <span class="vic">&#9878;</span><span class="vlabel">تعادل فقط دون هامش</span><span class="vcount">0 صوت</span>
+            </div>
+            </div>
+            <div class="eyebrow" style="margin:12px 0 6px;">ملاحظات الاجتماع</div>
+            <textarea class="notes-area" data-section="finance-8" placeholder="اكتب ملاحظات الفريق هنا..."></textarea>
+            <div class="notes-meta"><span class="save-state">لم يتم الحفظ بعد</span><span>يُحفظ تلقائياً محلياً</span></div>
+            <div class="approve-row">
+              <span class="approve-status" data-section="finance-8">لم يُعتمد بعد</span>
+              <button class="btn btn-ghost" onclick="document.querySelector('.notes-area[data-section=\'finance-8\']').focus()">إضافة ملاحظة</button>
+              <button class="btn btn-primary approve-btn" data-section="finance-8">اعتماد القرار</button>
+            </div>
+          </div>
         </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
+          </div>
 
-      <div class="sb-body section-gap">
-        <p>نظام الرواتب (Salary System) يحدد كيف يُدفع لكل عضو مقابل عمله الأساسي. نظام المكافآت (Bonus) يكافئ إنجازاً استثنائياً، بينما العمولة (Commission) ترتبط مباشرة بجلب عمل أو مبيعات جديدة.</p>
-<p>في مرحلة التأسيس المبكرة، كثير من الشركات الناشئة تبدأ برواتب رمزية أو مؤجلة ريثما يستقر التدفق النقدي.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>راتب أساسي شهري ثابت لكل عضو بحد أدنى متفق عليه.</li><li>عمولة 5% لأي عضو يجلب عميلاً جديداً بشكل مباشر خارج القنوات المعتادة.</li><li>مكافأة استثنائية عند إنجاز مشروع كبير قبل الموعد المحدد.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Commission</span><span class="glossary-def">نسبة مالية تُدفع لعضو مقابل جلب عمل أو صفقة جديدة مباشرة.</span></div><div class="glossary-item"><span class="glossary-term">Deferred Salary</span><span class="glossary-def">راتب مؤجل الصرف يُسجَّل كدين على الشركة لحين تحسن السيولة.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>نظام رواتب وحوافز واضح يمنع الشعور بعدم العدالة بين الأعضاء الأربعة، ويحفّز كل عضو على جلب فرص عمل جديدة للشركة.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>هل نبدأ برواتب ثابتة من اليوم الأول أم نؤجلها لحين استقرار الإيرادات؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي نسبة العمولة العادلة لمن يجلب عميلاً جديداً؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نحدد معايير استحقاق المكافآت الاستثنائية؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="salary-bonus" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="salary-bonus">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
+          <div class="side-col">
+            <div class="card">
+              <div class="card-title"><h3>سجل القرارات</h3></div>
+              <div id="decisionLedger"><p style="color:var(--text-3);font-size:11.5px;">لا توجد قرارات معتمدة بعد.</p></div>
+            </div>
+            <div class="card">
+              <div class="card-title"><h3>ملخص مالي سريع</h3><span class="badge info">Live</span></div>
+              <div class="calc-result" style="margin-bottom:8px;"><span>هامش الربح الحالي</span><b id="side_margin">40%</b></div>
+              <div class="calc-result"><span>نقطة التعادل الحالية</span><b id="side_breakeven">3.75 مشروع</b></div>
+            </div>
+          </div>
         </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="salary-bonus">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
         </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
       </div>
-    </section>
-
-    <!-- ================= SECTION: RESERVE-EMERGENCY ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">04</div>
-          <div class="sb-title">صندوق الاحتياطي والطوارئ<small>Reserve & Emergency Fund</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>صندوق الاحتياطي (Reserve Fund) هو نسبة من الأرباح تُجنّب جانباً لتغطية نمو الشركة المستقبلي (معدات، توظيف). صندوق الطوارئ (Emergency Fund) مخصص فقط للأزمات غير المتوقعة كتأخر دفعات عميل كبير أو مصروف طارئ.</p>
-<p>القاعدة الشائعة هي تخصيص ما يكفي لتغطية 3 إلى 6 أشهر من المصاريف الثابتة كحد أدنى في صندوق الطوارئ.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>تخصيص 10% من كل دفعة عميل تلقائياً لصندوق الاحتياطي قبل توزيع الأرباح.</li><li>استخدام صندوق الطوارئ فقط بموافقة الأعضاء الأربعة مجتمعين، لا بقرار فردي.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Reserve Fund</span><span class="glossary-def">أموال مجنّبة لدعم نمو الشركة المخطط له، كالتوسع أو شراء معدات.</span></div><div class="glossary-item"><span class="glossary-term">Emergency Fund</span><span class="glossary-def">أموال مجنّبة حصرياً للأزمات غير المخطط لها.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>شركة بدون احتياطي مالي معرّضة للانهيار عند أول أزمة أو تأخر دفعة كبيرة. هذان الصندوقان يمنحان الشركة مرونة للاستمرار في الظروف الصعبة.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي النسبة المئوية المناسبة لتخصيصها من كل إيراد لصندوق الاحتياطي؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كم شهراً من المصاريف الثابتة نريد أن يغطيها صندوق الطوارئ؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من يوافق على صرف أي مبلغ من صندوق الطوارئ؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="reserve-emergency" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="reserve-emergency">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="reserve-emergency">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= INTERACTIVE TOOL: BUDGET ALLOCATION ================= -->
-    <div class="glass tool-card">
-      <div class="card-title"><span class="badge badge-cyan">أداة تفاعلية</span> موزّع الميزانية الشهرية</div>
-      <p class="card-sub">حرّكوا الأشرطة لتوزيع كل 100 نقطة من الإيرادات الشهرية على البنود التالية، وشاهدوا التوزيع مباشرة في الرسم الدائري. القيم تُحفظ تلقائياً.</p>
-      <div class="pie-wrap">
-        <div class="pie" id="budgetPie"></div>
-        <div class="pie-legend" id="budgetLegend"></div>
-      </div>
-      <div class="section-gap" id="budgetSliders"></div>
-    </div>
-
-    <!-- ================= SECTION: MARKETING-EQUIPMENT-BUDGET ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">05</div>
-          <div class="sb-title">ميزانية التسويق والمعدات<small>Marketing & Equipment Budget</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>ميزانية التسويق (Marketing Budget) هي المبلغ المخصص شهرياً للإعلانات والمحتوى وبناء العلامة التجارية. ميزانية المعدات (Equipment Budget) تغطي الأجهزة والبرامج والتراخيص اللازمة لتقديم خدمات بجودة عالية.</p>
-<p>في شركة تقنية بأمن سيبراني، جزء من ميزانية المعدات يجب أن يُخصص لأدوات وتراخيص أمنية متخصصة.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>تخصيص نسبة ثابتة شهرياً لإعلانات السوشال ميديا وإنتاج المحتوى.</li><li>شراء تراخيص أدوات فحص الثغرات الأمنية وأدوات التصميم الاحترافية سنوياً.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Marketing Budget</span><span class="glossary-def">المبلغ المخصص دورياً لأنشطة الترويج وبناء العلامة التجارية.</span></div><div class="glossary-item"><span class="glossary-term">CapEx (Equipment)</span><span class="glossary-def">الإنفاق الرأسمالي على المعدات والأدوات التي تُستخدم لفترة طويلة.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>بدون ميزانية تسويق واضحة، يعتمد نمو الشركة فقط على التوصيات الشخصية، وهو مصدر عملاء غير مستقر على المدى الطويل.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي النسبة المناسبة من الإيراد الشهري لتخصيصها للتسويق؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي المعدات أو التراخيص الأساسية التي نحتاجها في الأشهر الثلاثة الأولى؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>هل نعيد تقييم هذه الميزانية شهرياً أم ربع سنوياً؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="marketing-equipment-budget" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="marketing-equipment-budget">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="marketing-equipment-budget">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= SECTION: BREAKEVEN ================= -->
-    <section class="glass section-block">
-      <div class="sb-head">
-        <div class="sb-head-left">
-          <div class="sb-index">06</div>
-          <div class="sb-title">نقطة التعادل<small>Break-even Point</small></div>
-        </div>
-        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
-      </div>
-
-      <div class="sb-body section-gap">
-        <p>نقطة التعادل هي المستوى الذي تتساوى فيه الإيرادات مع إجمالي التكاليف، أي النقطة التي لا تحقق فيها الشركة ربحاً ولا خسارة. أي إيراد فوق هذه النقطة يُعتبر ربحاً صافياً.</p>
-<p>حساب نقطة التعادل يساعد الفريق على تحديد الحد الأدنى من المشاريع أو العملاء اللازمين شهرياً لتغطية التكاليف الثابتة.</p>
-        
-      <div>
-        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
-        <ul><li>إذا كانت التكاليف الثابتة الشهرية 3 ملايين دينار، وهامش المساهمة لكل مشروع 550 ألف دينار، فنقطة التعادل تقارب 6 مشاريع شهرياً.</li></ul>
-      </div>
-        
-      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Break-even Point</span><span class="glossary-def">المستوى الذي تتساوى فيه الإيرادات مع التكاليف الكلية دون ربح أو خسارة.</span></div><div class="glossary-item"><span class="glossary-term">Contribution Margin</span><span class="glossary-def">الفرق بين سعر بيع الخدمة وتكلفتها المتغيرة، يُستخدم في حساب نقطة التعادل.</span></div></div>
-      </div>
-
-      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>معرفة نقطة التعادل تمنح الفريق هدفاً شهرياً واضحاً وملموساً بدلاً من العمل بدون معيار لقياس النجاح المالي الفعلي.</div>
-
-      <div class="discussion">
-        <h4>أسئلة للنقاش</h4>
-        <div class="discussion-q"><span class="q-mark">?</span><span>بناءً على الحاسبة أعلاه، كم مشروعاً شهرياً نحتاج فعلياً للوصول لنقطة التعادل؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>هل هذا الرقم واقعي بالنسبة لقدرة الفريق الحالية؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي الخطوات لتقليل نقطة التعادل (تقليل تكاليف ثابتة أو رفع الأسعار)؟</span></div>
-      </div>
-
-      <div class="notes-wrap">
-        <label>ملاحظات الاجتماع</label>
-        <textarea class="notes-textarea" data-section="breakeven" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
-        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
-      </div>
-
-      <div class="voting-card" data-section="breakeven">
-        <div class="vc-head">
-          <span class="vc-title">تصويت الفريق المؤسس</span>
-          <div class="vc-tally"></div>
-        </div>
-        <div class="founder-rows"></div>
-      </div>
-
-      <div class="decision-card" data-section="breakeven">
-        <div class="decision-status">
-          <span class="stamp">○</span>
-          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
-        </div>
-        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
-      </div>
-    </section>
-
-    <!-- ================= INTERACTIVE TOOL: BREAK-EVEN CALCULATOR ================= -->
-    <div class="glass tool-card">
-      <div class="card-title"><span class="badge badge-cyan">أداة تفاعلية</span> حاسبة نقطة التعادل</div>
-      <p class="card-sub">أدخلوا الأرقام التقديرية لمشروع أو خدمة نموذجية لحساب عدد الوحدات أو المشاريع اللازمة لتغطية التكاليف الثابتة.</p>
-      <div class="calc-grid">
-        <div class="calc-field"><label>التكاليف الثابتة الشهرية (IQD)</label><input type="number" id="beFixed" value="3000000"></div>
-        <div class="calc-field"><label>متوسط سعر بيع المشروع (IQD)</label><input type="number" id="bePrice" value="750000"></div>
-        <div class="calc-field"><label>التكلفة المتغيرة للمشروع (IQD)</label><input type="number" id="beVar" value="200000"></div>
-      </div>
-      <div class="calc-result">
-        <div class="calc-result-box"><div class="crv" id="beUnits">—</div><div class="crl">عدد المشاريع لتحقيق التعادل شهرياً</div></div>
-        <div class="calc-result-box"><div class="crv" id="beRevenue">—</div><div class="crl">الإيراد اللازم لتغطية التكاليف (IQD)</div></div>
-        <div class="calc-result-box"><div class="crv" id="beMargin">—</div><div class="crl">هامش المساهمة لكل مشروع</div></div>
-      </div>
-    </div>
-</main>
-</div>
-</div>
-
-  <!-- ================= FOUNDER SETUP MODAL ================= -->
-  <div class="modal-overlay" id="founderModal">
-    <div class="modal-box glass">
-      <h3>مرحباً بالفريق المؤسس 👋</h3>
-      <p>أدخلوا أسماء الأعضاء الأربعة لتفعيل نظام التصويت والملاحظات الخاص بكل عضو خلال الاجتماع.</p>
-      <form id="founderForm">
-        <div class="founder-input-row"><span class="fi-num">1</span><input type="text" placeholder="اسم العضو الأول" required></div>
-        <div class="founder-input-row"><span class="fi-num">2</span><input type="text" placeholder="اسم العضو الثاني" required></div>
-        <div class="founder-input-row"><span class="fi-num">3</span><input type="text" placeholder="اسم العضو الثالث" required></div>
-        <div class="founder-input-row"><span class="fi-num">4</span><input type="text" placeholder="اسم العضو الرابع" required></div>
-        <div class="flex gap-8 mt-16">
-          <button type="submit" class="btn btn-primary" style="flex:1">حفظ ومتابعة</button>
-          <button type="button" class="btn btn-ghost" id="founderSkip">تخطي الآن</button>
-        </div>
-      </form>
     </div>
   </div>
 
-  <!-- ================= TOAST NOTIFICATION ================= -->
-  <div class="toast" id="toast"><span class="t-dot"></span><span class="t-msg">تم الحفظ</span></div>
-
-<script>
-const PROJECT_INFO = {
-    project: "Privex Founders Operating System",
-    phase: 1,
-    version: "1.0.0",
-    module: "Financial Model",
-    file: "finance.html",
-    dependsOn: [
-        "Sidebar Component",
-        "Topbar Component",
-        "Storage Layer",
-        "Navigation Engine",
-        "Shared UI Components"
-    ],
-    nextModule: "marketing.html — التسويق والمجتمع"
-};
-// PROJECT_INFO is documentation metadata only — not consumed by app logic.
-
-/* ================= STORAGE ================= */
-/* ================= STORAGE LAYER ================= */
-/* Independent storage layer — swappable with Firebase later without
-   changing any calling code across the app. */
-const STORAGE_PREFIX = 'privex_';
-
-const PrivexStorage = {
-  _key(k){ return STORAGE_PREFIX + k; },
-
-  saveMeeting(data){
-    try{
-      const existing = this.loadMeeting() || {};
-      const merged = Object.assign({}, existing, data, { updatedAt: new Date().toISOString() });
-      localStorage.setItem(this._key('meeting'), JSON.stringify(merged));
-      return merged;
-    }catch(e){ console.error('saveMeeting failed', e); return null; }
-  },
-  loadMeeting(){
-    try{
-      const raw = localStorage.getItem(this._key('meeting'));
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ console.error('loadMeeting failed', e); return null; }
-  },
-
-  saveFounders(names){
-    try{ localStorage.setItem(this._key('founders'), JSON.stringify(names)); return true; }
-    catch(e){ console.error('saveFounders failed', e); return false; }
-  },
-  loadFounders(){
-    try{
-      const raw = localStorage.getItem(this._key('founders'));
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
-  },
-
-  saveVotes(sectionId, votes){
-    try{
-      const all = this._loadAll('votes');
-      all[sectionId] = votes;
-      localStorage.setItem(this._key('votes'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveVotes failed', e); return false; }
-  },
-  loadVotes(sectionId){
-    const all = this._loadAll('votes');
-    return all[sectionId] || {};
-  },
-
-  saveNotes(sectionId, text){
-    try{
-      const all = this._loadAll('notes');
-      all[sectionId] = text;
-      localStorage.setItem(this._key('notes'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveNotes failed', e); return false; }
-  },
-  loadNotes(sectionId){
-    const all = this._loadAll('notes');
-    return all[sectionId] || '';
-  },
-
-  saveDecision(sectionId, approved){
-    try{
-      const all = this._loadAll('decisions');
-      all[sectionId] = { approved: !!approved, at: new Date().toISOString() };
-      localStorage.setItem(this._key('decisions'), JSON.stringify(all));
-      return true;
-    }catch(e){ console.error('saveDecision failed', e); return false; }
-  },
-  loadDecision(sectionId){
-    const all = this._loadAll('decisions');
-    return all[sectionId] || { approved:false, at:null };
-  },
-
-  _loadAll(bucket){
-    try{
-      const raw = localStorage.getItem(this._key(bucket));
-      return raw ? JSON.parse(raw) : {};
-    }catch(e){ return {}; }
-  },
-
-  setModuleProgress(moduleKey, percent){
-    try{
-      const all = this._loadAll('progress');
-      all[moduleKey] = Math.round(percent);
-      localStorage.setItem(this._key('progress'), JSON.stringify(all));
-      return true;
-    }catch(e){ return false; }
-  },
-  getModuleProgress(moduleKey){
-    const all = this._loadAll('progress');
-    return all[moduleKey] || 0;
-  },
-  getAllProgress(){
-    return this._loadAll('progress');
-  },
-  getOverallProgress(){
-    const modules = ['company','management','finance','marketing'];
-    const all = this.getAllProgress();
-    const sum = modules.reduce((s,m)=> s + (all[m]||0), 0);
-    return Math.round(sum / modules.length);
-  },
-
-  exportSnapshot(){
-    const snapshot = {
-      meeting: this.loadMeeting(),
-      founders: this.loadFounders(),
-      votes: this._loadAll('votes'),
-      notes: this._loadAll('notes'),
-      decisions: this._loadAll('decisions'),
-      progress: this._loadAll('progress'),
-      exportedAt: new Date().toISOString()
+  <script>
+    // ================= PROJECT MANIFEST =================
+    // Documentation only — not referenced in logic.
+    const PROJECT_INFO = {
+      project: "Privex Founders Operating System",
+      phase: 1,
+      version: "1.0.0",
+      module: "Finance Workshop",
+      file: "finance.html",
+      dependsOn: ["Sidebar", "Topbar", "Storage Layer", "Navigation"],
+      nextModule: "Marketing Workshop"
     };
-    return snapshot;
-  }
-};
 
-/* ================= NAVIGATION ENGINE ================= */
-const NAV_ITEMS = [
-  { key:'index',      file:'index.html',      label:'البوابة الرئيسية',      icon:'01' },
-  { key:'company',    file:'company.html',    label:'الهوية والرؤية',        icon:'02' },
-  { key:'management',  file:'management.html', label:'الإدارة والصلاحيات',    icon:'03' },
-  { key:'finance',    file:'finance.html',    label:'الأمور المالية',        icon:'04' },
-  { key:'marketing',  file:'marketing.html',  label:'التسويق والمجتمع',      icon:'05' },
-];
 
-function initSidebar(activeKey){
-  const nav = document.getElementById('navGroup');
-  if(!nav) return;
-  const progress = PrivexStorage.getAllProgress();
-  nav.innerHTML = NAV_ITEMS.map(item=>{
-    const isModule = item.key !== 'index';
-    const pct = isModule ? (progress[item.key]||0) : null;
-    return `
-      <a class="nav-item ${item.key===activeKey?'active':''}" href="${item.file}">
-        <span class="ni-dot"></span>
-        <span>${item.label}</span>
-        ${pct!==null ? `<span class="ni-progress">${pct}%</span>` : ''}
-      </a>`;
-  }).join('');
+    // ================= STORAGE LAYER =================
+    // Isolated layer so LocalStorage can be swapped for Firebase later
+    // without touching UI logic. All reads/writes for the meeting go
+    // through these functions only.
+    const STORAGE_KEY = 'privex_meeting_v1';
 
-  const overall = PrivexStorage.getOverallProgress();
-  const fill = document.getElementById('sidebarProgressFill');
-  const label = document.getElementById('sidebarProgressLabel');
-  if(fill) fill.style.width = overall + '%';
-  if(label) label.textContent = overall + '%';
-}
-
-function initMobileMenu(){
-  const toggle = document.getElementById('menuToggle');
-  const sidebar = document.getElementById('sidebar');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  if(!toggle || !sidebar) return;
-  const open = ()=>{ sidebar.classList.add('open'); backdrop.classList.add('show'); };
-  const close = ()=>{ sidebar.classList.remove('open'); backdrop.classList.remove('show'); };
-  toggle.addEventListener('click', open);
-  backdrop && backdrop.addEventListener('click', close);
-}
-
-/* ================= TOAST ================= */
-let toastTimer = null;
-function showToast(msg){
-  const toast = document.getElementById('toast');
-  if(!toast) return;
-  toast.querySelector('.t-msg').textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2400);
-}
-
-/* ================= FOUNDER SETUP MODAL ================= */
-function ensureFounders(onReady){
-  let founders = PrivexStorage.loadFounders();
-  if(founders && founders.length === 4 && founders.every(n=>n && n.trim())){
-    if(onReady) onReady(founders);
-    return;
-  }
-  const overlay = document.getElementById('founderModal');
-  if(!overlay){ if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']); return; }
-  overlay.classList.add('show');
-  const form = document.getElementById('founderForm');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const inputs = form.querySelectorAll('input');
-    const names = Array.from(inputs).map((i,idx)=> i.value.trim() || ('المؤسس ' + (idx+1)));
-    PrivexStorage.saveFounders(names);
-    overlay.classList.remove('show');
-    showToast('تم حفظ بيانات الفريق المؤسس');
-    if(onReady) onReady(names);
-    renderAllFounderRows();
-  });
-  const skipBtn = document.getElementById('founderSkip');
-  if(skipBtn){
-    skipBtn.addEventListener('click', ()=>{
-      overlay.classList.remove('show');
-      if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']);
-    });
-  }
-}
-
-/* ================= VOTING SYSTEM ================= */
-function initials(name){
-  const parts = name.trim().split(/\s+/);
-  return (parts[0] ? parts[0][0] : 'م');
-}
-
-function renderVotingCard(sectionId){
-  const container = document.querySelector(`.voting-card[data-section="${sectionId}"] .founder-rows`);
-  if(!container) return;
-  const founders = PrivexStorage.loadFounders() || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4'];
-  const votes = PrivexStorage.loadVotes(sectionId);
-
-  container.innerHTML = founders.map((name, idx)=>{
-    const vote = votes[name] || null;
-    return `
-      <div class="founder-row">
-        <span class="founder-name"><span class="founder-avatar">${initials(name)}</span>${name}</span>
-        <span class="vote-btns" data-founder="${name.replace(/"/g,'')}" data-section="${sectionId}">
-          <button type="button" class="vote-btn ${vote==='agree'?'sel-agree':''}" data-value="agree">موافق</button>
-          <button type="button" class="vote-btn ${vote==='object'?'sel-object':''}" data-value="object">اعتراض</button>
-          <button type="button" class="vote-btn ${vote==='edit'?'sel-edit':''}" data-value="edit">يحتاج تعديل</button>
-        </span>
-      </div>`;
-  }).join('');
-
-  updateTally(sectionId);
-
-  container.querySelectorAll('.vote-btn').forEach(btn=>{
-    btn.addEventListener('click', function(){
-      const wrap = this.closest('.vote-btns');
-      const founder = wrap.getAttribute('data-founder');
-      const sec = wrap.getAttribute('data-section');
-      const value = this.getAttribute('data-value');
-      const currentVotes = PrivexStorage.loadVotes(sec);
-      currentVotes[founder] = (currentVotes[founder] === value) ? null : value;
-      if(!currentVotes[founder]) delete currentVotes[founder];
-      PrivexStorage.saveVotes(sec, currentVotes);
-      renderVotingCard(sec);
-      showToast('تم تسجيل التصويت');
-    });
-  });
-}
-
-function updateTally(sectionId){
-  const card = document.querySelector(`.voting-card[data-section="${sectionId}"]`);
-  if(!card) return;
-  const votes = PrivexStorage.loadVotes(sectionId);
-  const values = Object.values(votes);
-  const agree = values.filter(v=>v==='agree').length;
-  const object = values.filter(v=>v==='object').length;
-  const edit = values.filter(v=>v==='edit').length;
-  const tally = card.querySelector('.vc-tally');
-  if(tally){
-    tally.innerHTML = `
-      <span><span class="dot-agree"></span> ${agree} موافق</span>
-      <span><span class="dot-object"></span> ${object} اعتراض</span>
-      <span><span class="dot-edit"></span> ${edit} تعديل</span>`;
-  }
-}
-
-function renderAllFounderRows(){
-  document.querySelectorAll('.voting-card').forEach(card=>{
-    const sectionId = card.getAttribute('data-section');
-    if(sectionId) renderVotingCard(sectionId);
-  });
-}
-
-/* ================= NOTES ================= */
-function initNotes(){
-  document.querySelectorAll('.notes-textarea').forEach(area=>{
-    const sectionId = area.getAttribute('data-section');
-    area.value = PrivexStorage.loadNotes(sectionId);
-    let debounce;
-    area.addEventListener('input', ()=>{
-      clearTimeout(debounce);
-      debounce = setTimeout(()=>{
-        PrivexStorage.saveNotes(sectionId, area.value);
-        const hint = area.parentElement.querySelector('.notes-save-hint');
-        if(hint){ hint.textContent = 'تم الحفظ تلقائياً ✓'; setTimeout(()=> hint.textContent='يُحفظ تلقائياً أثناء الكتابة', 1600); }
-      }, 500);
-    });
-  });
-}
-
-/* ================= DECISION / APPROVAL ================= */
-function initDecisions(moduleKey){
-  document.querySelectorAll('.decision-card').forEach(card=>{
-    const sectionId = card.getAttribute('data-section');
-    const btn = card.querySelector('.decision-approve-btn');
-    const status = card.querySelector('.decision-status .status-text');
-    const stamp = card.querySelector('.stamp');
-    const meta = card.querySelector('.decision-meta');
-
-    function render(){
-      const d = PrivexStorage.loadDecision(sectionId);
-      card.classList.toggle('approved', d.approved);
-      if(status) status.textContent = d.approved ? 'تم اعتماد هذا القرار' : 'بانتظار الاعتماد';
-      if(stamp) stamp.textContent = d.approved ? '✓' : '○';
-      if(meta) meta.textContent = d.approved && d.at ? ('تاريخ الاعتماد: ' + new Date(d.at).toLocaleString('ar-IQ')) : 'لم يتم الاعتماد بعد';
-      if(btn) btn.textContent = d.approved ? 'إلغاء الاعتماد' : 'اعتماد القرار';
+    function loadMeeting(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { notes:{}, votes:{}, approvals:{}, meta:{} };
+      }catch(e){
+        console.warn('Storage read failed, using empty state.', e);
+        return { notes:{}, votes:{}, approvals:{}, meta:{} };
+      }
     }
 
-    if(btn){
+    function saveMeeting(state){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        return true;
+      }catch(e){
+        console.warn('Storage write failed.', e);
+        return false;
+      }
+    }
+
+    function saveNotes(sectionId, text){
+      const state = loadMeeting();
+      state.notes[sectionId] = { text, updatedAt: new Date().toISOString() };
+      saveMeeting(state);
+    }
+
+    function loadNotes(sectionId){
+      const state = loadMeeting();
+      return state.notes[sectionId] ? state.notes[sectionId].text : '';
+    }
+
+    function saveVotes(sectionId, choice){
+      const state = loadMeeting();
+      if(!state.votes[sectionId]) state.votes[sectionId] = {};
+      state.votes[sectionId][choice] = (state.votes[sectionId][choice] || 0) + 1;
+      state.votes[sectionId]._selected = choice;
+      saveMeeting(state);
+      return state.votes[sectionId];
+    }
+
+    function loadVotes(sectionId){
+      const state = loadMeeting();
+      return state.votes[sectionId] || {};
+    }
+
+    function saveApproval(sectionId, decisionLabel){
+      const state = loadMeeting();
+      state.approvals[sectionId] = { decision: decisionLabel, approvedAt: new Date().toISOString() };
+      saveMeeting(state);
+    }
+
+    function loadApproval(sectionId){
+      const state = loadMeeting();
+      return state.approvals[sectionId] || null;
+    }
+
+    function getPageProgress(pageId, totalSections){
+      const state = loadMeeting();
+      let done = 0;
+      for(let i=1;i<=totalSections;i++){
+        const sid = pageId + '-' + i;
+        if(state.approvals[sid]) done++;
+      }
+      return { done, total: totalSections };
+    }
+
+    // ================= NAVIGATION / PROGRESS ENGINE =================
+    const PAGES = [
+      {id:'index',    file:'index.html',      label:'البداية',        sections:0},
+      {id:'company',  file:'company.html',    label:'الشركة والهوية', sections:6},
+      {id:'management',file:'management.html',label:'الإدارة والمناصب',sections:6},
+      {id:'finance',  file:'finance.html',    label:'الأمور المالية', sections:8},
+      {id:'marketing',file:'marketing.html',  label:'التسويق والمجتمع',sections:6}
+    ];
+
+    function renderSidebarProgress(){
+      const track = document.querySelector('.sidebar-progress-fill');
+      const label = document.querySelector('.sidebar-progress-value');
+      if(!track) return;
+      let totalDone = 0, totalAll = 0;
+      PAGES.forEach(p=>{
+        if(p.sections>0){
+          const pr = getPageProgress(p.id, p.sections);
+          totalDone += pr.done; totalAll += pr.total;
+          const dot = document.querySelector('.nav-item[data-page=\''+p.id+'\'] .status-dot');
+          if(dot){
+            dot.classList.remove('done','active');
+            if(pr.done === pr.total && pr.total>0) dot.classList.add('done');
+            else if(pr.done>0) dot.classList.add('active');
+          }
+        }
+      });
+      const pct = totalAll ? Math.round((totalDone/totalAll)*100) : 0;
+      track.style.width = pct + '%';
+      if(label) label.textContent = pct + '%';
+      const ring = document.querySelector('.topbar-ring .fill');
+      const ringLabel = document.querySelector('.topbar-ring-label');
+      if(ring){
+        const c = 2*Math.PI*13;
+        ring.style.strokeDasharray = c;
+        ring.style.strokeDashoffset = c - (pct/100)*c;
+      }
+      if(ringLabel) ringLabel.textContent = pct+'%';
+    }
+
+    function markCurrentNav(pageId){
+      document.querySelectorAll('.nav-item').forEach(el=>{
+        el.classList.toggle('current', el.dataset.page === pageId);
+      });
+    }
+
+    // ================= SIDEBAR TOGGLE (mobile) =================
+    function toggleSidebar(){
+      document.querySelector('.sidebar').classList.toggle('open');
+    }
+
+    // ================= TOAST =================
+    function showToast(msg, icon){
+      icon = icon || '✓';
+      let t = document.querySelector('.toast');
+      if(!t){
+        t = document.createElement('div');
+        t.className='toast';
+        t.innerHTML = '<span class="ic">'+icon+'</span><span class="msg"></span>';
+        document.body.appendChild(t);
+      }
+      t.querySelector('.ic').textContent = icon;
+      t.querySelector('.msg').textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+    }
+
+    // ================= SECTION BLOCK (accordion) =================
+    function toggleSection(headEl){
+      headEl.closest('.section-block').classList.toggle('open');
+    }
+
+    // ================= NOTES BINDING =================
+    function bindNotes(sectionId){
+      const el = document.querySelector('.notes-area[data-section=\''+sectionId+'\']');
+      if(!el) return;
+      el.value = loadNotes(sectionId);
+      let debounce;
+      el.addEventListener('input', ()=>{
+        clearTimeout(debounce);
+        const meta = el.parentElement.querySelector('.notes-meta .save-state');
+        if(meta) meta.textContent = 'جارٍ الحفظ...';
+        debounce = setTimeout(()=>{
+          saveNotes(sectionId, el.value);
+          if(meta) meta.textContent = 'تم الحفظ محلياً ✓';
+        }, 500);
+      });
+    }
+
+    // ================= VOTING BINDING =================
+    function bindVoting(sectionId){
+      const wrap = document.querySelector('.vote-cards[data-section=\''+sectionId+'\']');
+      if(!wrap) return;
+      const votes = loadVotes(sectionId);
+      const selected = votes._selected;
+      wrap.querySelectorAll('.vote-card').forEach(card=>{
+        const choice = card.dataset.choice;
+        const count = votes[choice] || 0;
+        const cEl = card.querySelector('.vcount');
+        if(cEl) cEl.textContent = count + ' صوت';
+        if(choice === selected) card.classList.add('selected');
+        card.addEventListener('click', ()=>{
+          wrap.querySelectorAll('.vote-card').forEach(c=>c.classList.remove('selected'));
+          card.classList.add('selected');
+          const updated = saveVotes(sectionId, choice);
+          card.querySelector('.vcount').textContent = (updated[choice]||1) + ' صوت';
+          showToast('تم تسجيل التصويت','☑');
+          updateApproveState(sectionId);
+        });
+      });
+    }
+
+    // ================= APPROVAL BINDING =================
+    function updateApproveState(sectionId){
+      const btn = document.querySelector('.approve-btn[data-section=\''+sectionId+'\']');
+      const status = document.querySelector('.approve-status[data-section=\''+sectionId+'\']');
+      const approval = loadApproval(sectionId);
+      const badge = document.querySelector('.section-badge[data-section=\''+sectionId+'\']');
+      if(approval){
+        if(btn){ btn.classList.add('btn-approved'); btn.classList.remove('btn-primary'); btn.innerHTML = '✓ تم الاعتماد'; }
+        if(status) status.textContent = 'اعتُمد بتاريخ ' + new Date(approval.approvedAt).toLocaleDateString('ar-IQ');
+        if(badge){ badge.textContent='APPROVED'; badge.className='badge approved section-badge'; badge.dataset.section=sectionId; }
+      }
+    }
+
+    function bindApproval(sectionId, decisionLabel){
+      const btn = document.querySelector('.approve-btn[data-section=\''+sectionId+'\']');
+      if(!btn) return;
+      updateApproveState(sectionId);
       btn.addEventListener('click', ()=>{
-        const d = PrivexStorage.loadDecision(sectionId);
-        PrivexStorage.saveDecision(sectionId, !d.approved);
-        render();
-        updateModuleProgress(moduleKey);
-        showToast(!d.approved ? 'تم اعتماد القرار ✓' : 'تم إلغاء الاعتماد');
+        saveApproval(sectionId, decisionLabel);
+        updateApproveState(sectionId);
+        renderSidebarProgress();
+        renderDecisionLedger();
+        showToast('تم اعتماد القرار','✓');
       });
     }
-    render();
-  });
-  updateModuleProgress(moduleKey);
-}
 
-function updateModuleProgress(moduleKey){
-  const cards = document.querySelectorAll('.decision-card');
-  if(!cards.length) return;
-  let approved = 0;
-  cards.forEach(c=>{
-    const sectionId = c.getAttribute('data-section');
-    if(PrivexStorage.loadDecision(sectionId).approved) approved++;
-  });
-  const percent = (approved / cards.length) * 100;
-  PrivexStorage.setModuleProgress(moduleKey, percent);
-
-  const pageFill = document.getElementById('pageProgressFill');
-  if(pageFill) pageFill.style.width = percent + '%';
-  const sideFill = document.getElementById('sidebarProgressFill');
-  if(sideFill) sideFill.style.width = PrivexStorage.getOverallProgress() + '%';
-  const sideLabel = document.getElementById('sidebarProgressLabel');
-  if(sideLabel) sideLabel.textContent = PrivexStorage.getOverallProgress() + '%';
-  initSidebar(window.PRIVEX_ACTIVE_KEY);
-}
-
-/* ================= PRINT ================= */
-function initPrintButton(){
-  const btn = document.getElementById('printBtn');
-  if(btn) btn.addEventListener('click', ()=> window.print());
-}
-
-/* ================= BOOTSTRAP HELPER ================= */
-function bootPrivexPage(moduleKey){
-  window.PRIVEX_ACTIVE_KEY = moduleKey;
-  initSidebar(moduleKey);
-  initMobileMenu();
-  initPrintButton();
-  ensureFounders(()=>{ renderAllFounderRows(); });
-  initNotes();
-  if(document.querySelector('.decision-card')) initDecisions(moduleKey);
-  renderAllFounderRows();
-}
-
-
-/* ================= PAGE BOOTSTRAP ================= */
-document.addEventListener('DOMContentLoaded', function(){
-  bootPrivexPage('finance');
-  PrivexStorage.saveMeeting({ lastVisited: 'finance.html' });
-});
-</script>
-<script>
-
-/* ================= FINANCE-ONLY: BUDGET TOOL + BREAK-EVEN CALCULATOR ================= */
-document.addEventListener('DOMContentLoaded', function(){
-  const categories = [
-    {key:'salaries', label:'الرواتب', color:'#4f7cff', value:40},
-    {key:'reserve', label:'الاحتياطي', color:'#8b5cf6', value:15},
-    {key:'marketing', label:'التسويق', color:'#22d3ee', value:15},
-    {key:'equipment', label:'المعدات', color:'#34d399', value:10},
-    {key:'profit', label:'صافي الربح', color:'#fbbf24', value:20},
-  ];
-
-  const saved = PrivexStorage.loadMeeting();
-  let budget = (saved && saved.budgetAllocation) ? saved.budgetAllocation : {};
-  categories.forEach(c=>{ if(typeof budget[c.key] === 'number') c.value = budget[c.key]; });
-
-  function normalize(changedKey, newVal){
-    newVal = Math.max(0, Math.min(100, newVal));
-    const others = categories.filter(c=>c.key!==changedKey);
-    const othersTotal = others.reduce((s,c)=>s+c.value,0);
-    const remaining = 100 - newVal;
-    if(othersTotal > 0){
-      others.forEach(c=>{ c.value = Math.round((c.value/othersTotal)*remaining); });
+    // ================= DECISION LEDGER (side panel) =================
+    function renderDecisionLedger(){
+      const box = document.getElementById('decisionLedger');
+      if(!box) return;
+      const state = loadMeeting();
+      const keys = Object.keys(state.approvals || {}).filter(k=>k.startsWith(CURRENT_PAGE_ID+'-'));
+      if(keys.length === 0){
+        box.innerHTML = '<p style="color:var(--text-3);font-size:11.5px;">لا توجد قرارات معتمدة بعد في هذه الصفحة.</p>';
+        return;
+      }
+      box.innerHTML = keys.map(k=>{
+        const a = state.approvals[k];
+        const title = (document.querySelector('.section-block[data-section=\''+k+'\'] h3') || {}).textContent || k;
+        return '<div class="decision-card"><div class="decision-card-top"><b>'+title+'</b><span class="badge approved">APPROVED</span></div><p>'+a.decision+' — '+new Date(a.approvedAt).toLocaleString('ar-IQ')+'</p></div>';
+      }).join('');
     }
-    const changed = categories.find(c=>c.key===changedKey);
-    changed.value = newVal;
-    const total = categories.reduce((s,c)=>s+c.value,0);
-    categories[0].value += (100-total);
-  }
 
-  function renderBudget(){
-    const slidersWrap = document.getElementById('budgetSliders');
-    const legendWrap = document.getElementById('budgetLegend');
-    const pieEl = document.getElementById('budgetPie');
-    if(!slidersWrap) return;
-
-    slidersWrap.innerHTML = categories.map(c=>`
-      <div class="slider-row">
-        <div class="sr-top"><span>${c.label}</span><b>${c.value}%</b></div>
-        <input type="range" min="0" max="100" value="${c.value}" data-key="${c.key}">
-      </div>`).join('');
-
-    legendWrap.innerHTML = categories.map(c=>`
-      <div class="pl-item"><span class="pl-swatch" style="background:${c.color}"></span>${c.label} — ${c.value}%</div>`).join('');
-
-    let acc = 0;
-    const stops = categories.map(c=>{
-      const start = acc;
-      acc += c.value;
-      return `${c.color} ${start}% ${acc}%`;
-    }).join(', ');
-    pieEl.style.background = `conic-gradient(${stops})`;
-
-    slidersWrap.querySelectorAll('input[type=range]').forEach(input=>{
-      input.addEventListener('input', function(){
-        normalize(this.getAttribute('data-key'), parseInt(this.value,10));
-        const obj = {};
-        categories.forEach(c=> obj[c.key] = c.value);
-        PrivexStorage.saveMeeting({ budgetAllocation: obj });
-        renderBudget();
+    // ================= INIT =================
+    function initWorkshopPage(pageId, sectionIds){
+      window.CURRENT_PAGE_ID = pageId;
+      markCurrentNav(pageId);
+      renderSidebarProgress();
+      sectionIds.forEach(sid=>{
+        bindNotes(sid);
+        bindVoting(sid);
       });
+      renderDecisionLedger();
+      const toggleBtn = document.querySelector('.sidebar-toggle');
+      if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    }
+
+    function printPage(){ window.print(); }
+
+
+    // ================= PAGE INIT: FINANCE =================
+    document.addEventListener('DOMContentLoaded', function(){
+      initWorkshopPage('finance', ['finance-1', 'finance-2', 'finance-3', 'finance-4', 'finance-5', 'finance-6', 'finance-7', 'finance-8']);
+      bindApproval('finance-1', 'اعتماد نموذج تحقيق الإيراد الأساسي');
+      bindApproval('finance-2', 'اعتماد بنود التكاليف التشغيلية الثابتة');
+      bindApproval('finance-3', 'اعتماد سياسة شروط الدفع مع العملاء');
+      bindApproval('finance-4', 'اعتماد هامش الربح المستهدف');
+      bindApproval('finance-5', 'اعتماد سياسة الرواتب والمكافآت والعمولات');
+      bindApproval('finance-6', 'اعتماد نسبة الاقتطاع لصندوقي الاحتياط والطوارئ');
+      bindApproval('finance-7', 'اعتماد توزيع ميزانية التسويق والمعدات');
+      bindApproval('finance-8', 'اعتماد هدف نقطة التعادل الشهري');
+      calcMargin(); calcBreakeven();
     });
-  }
-  renderBudget();
 
-  // Break-even calculator
-  function computeBreakEven(){
-    const fixed = parseFloat(document.getElementById('beFixed').value) || 0;
-    const price = parseFloat(document.getElementById('bePrice').value) || 0;
-    const varCost = parseFloat(document.getElementById('beVar').value) || 0;
-    const margin = price - varCost;
-    const units = margin > 0 ? Math.ceil(fixed / margin) : 0;
-    const revenue = units * price;
-    document.getElementById('beUnits').textContent = margin>0 ? units : '—';
-    document.getElementById('beRevenue').textContent = margin>0 ? revenue.toLocaleString('en-US') : '—';
-    document.getElementById('beMargin').textContent = margin.toLocaleString('en-US') + ' IQD';
-    PrivexStorage.saveMeeting({ breakEvenInputs: { fixed, price, varCost } });
-  }
-  ['beFixed','bePrice','beVar'].forEach(id=>{
-    document.getElementById(id).addEventListener('input', computeBreakEven);
-  });
-  const savedBE = (saved && saved.breakEvenInputs) ? saved.breakEvenInputs : null;
-  if(savedBE){
-    document.getElementById('beFixed').value = savedBE.fixed;
-    document.getElementById('bePrice').value = savedBE.price;
-    document.getElementById('beVar').value = savedBE.varCost;
-  }
-  computeBreakEven();
-});
+    // ================= CALCULATORS =================
+    function calcMargin(){
+      const rev = parseFloat(document.getElementById('margin_revenue').value) || 0;
+      const exp = parseFloat(document.getElementById('margin_expenses').value) || 0;
+      const profit = rev - exp;
+      const margin = rev ? Math.round((profit/rev)*100) : 0;
+      document.getElementById('margin_result').textContent = profit + '$ / ' + margin + '%';
+      const side = document.getElementById('side_margin');
+      if(side) side.textContent = margin + '%';
+    }
 
-</script>
-<!-- ================= END OF FILE ================= -->
+    function calcBreakeven(){
+      const fixed = parseFloat(document.getElementById('be_fixed').value) || 0;
+      const price = parseFloat(document.getElementById('be_price').value) || 1;
+      const varc = parseFloat(document.getElementById('be_var').value) || 0;
+      const contribution = price - varc;
+      const units = contribution > 0 ? (fixed/contribution) : 0;
+      const label = units.toFixed(2) + ' مشروع';
+      document.getElementById('be_result').textContent = label;
+      const side = document.getElementById('side_breakeven');
+      if(side) side.textContent = label;
+    }
+
+    const BUDGET_KEYS = ['salary','marketing','reserve','equipment'];
+    function calcBudget(changed){
+      let vals = {};
+      BUDGET_KEYS.forEach(k=> vals[k] = parseFloat(document.getElementById('sl_'+k).value) || 0);
+      let total = BUDGET_KEYS.reduce((a,k)=>a+vals[k],0);
+      if(total !== 100 && total > 0){
+        const others = BUDGET_KEYS.filter(k=>k!==changed);
+        const otherTotal = others.reduce((a,k)=>a+vals[k],0);
+        const diff = 100 - vals[changed];
+        if(otherTotal > 0){
+          others.forEach(k=>{ vals[k] = Math.max(0, Math.round(vals[k]/otherTotal*diff)); });
+        }
+        let fixSum = BUDGET_KEYS.reduce((a,k)=>a+vals[k],0);
+        if(fixSum !== 100){ vals[others[0]] += (100-fixSum); }
+      }
+      BUDGET_KEYS.forEach(k=>{
+        document.getElementById('sl_'+k).value = vals[k];
+        document.getElementById('slv_'+k).textContent = vals[k]+'%';
+        document.getElementById('lbl_'+k).textContent = vals[k]+'%';
+      });
+      const pie = document.getElementById('budgetPie');
+      let acc = 0;
+      const colors = {salary:'var(--blue)', marketing:'var(--purple)', reserve:'var(--green)', equipment:'var(--amber)'};
+      let stops = [];
+      BUDGET_KEYS.forEach(k=>{
+        const start = acc; acc += vals[k];
+        stops.push(colors[k]+' '+start+'% '+acc+'%');
+      });
+      pie.style.background = 'conic-gradient(' + stops.join(', ') + ')';
+    }
+  </script>
 </body>
 </html>
+<!-- ================= END OF FILE ================= -->
