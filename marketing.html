@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!--
+===========================================================
+Project        : Privex Founders Operating System
+Module         : Marketing & Community
+Phase          : Phase 1
+Version        : 1.0.0
+File Name      : marketing.html
+Dependencies:
+- Sidebar Component
+- Topbar Component
+- Storage Layer
+- Navigation Engine
+- Shared UI Components
+Description:
+ورشة عمل تفاعلية لاستراتيجية العلامة التجارية، المحتوى، البودكاست، وبناء المجتمع حول Privex.
+Last Updated:
+2026-07-01
+===========================================================
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privex · التسويق والمجتمع</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   PRIVEX DESIGN SYSTEM — Shared across all Phase 1 modules
+   ========================================================== */
+:root{
+  --bg-void:#05060c;
+  --bg-deep:#090b16;
+  --bg-panel: rgba(20,24,42,0.55);
+  --bg-panel-solid:#10132224;
+  --bg-elevated: rgba(28,33,56,0.7);
+  --border-glass: rgba(255,255,255,0.08);
+  --border-glass-strong: rgba(255,255,255,0.16);
+  --blue-600:#3a5cff;
+  --blue-500:#4f7cff;
+  --blue-400:#7b9dff;
+  --purple-600:#7c3aed;
+  --purple-500:#8b5cf6;
+  --purple-400:#a78bfa;
+  --cyan:#22d3ee;
+  --text-primary:#eef1fb;
+  --text-secondary:#a4addc;
+  --text-dim:#5f6790;
+  --success:#34d399;
+  --success-dim: rgba(52,211,153,0.15);
+  --danger:#fb7185;
+  --danger-dim: rgba(251,113,133,0.15);
+  --warning:#fbbf24;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --shadow-glow: 0 0 40px rgba(79,124,255,0.15);
+  --font-body: 'Tajawal', 'Segoe UI', sans-serif;
+  --font-display: 'Rajdhani', 'Tajawal', sans-serif;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);
+  background:var(--bg-void);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  direction:rtl;
+}
+
+/* Ambient background texture */
+body::before{
+  content:'';
+  position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(79,124,255,0.16), transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(139,92,246,0.14), transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(34,211,238,0.08), transparent 45%),
+    var(--bg-void);
+}
+body::after{
+  content:'';
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image: radial-gradient(circle at 50% 30%, black, transparent 75%);
+}
+
+::selection{ background:var(--purple-500); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:rgba(120,140,255,0.3); border-radius:10px; }
+::-webkit-scrollbar-thumb:hover{ background:rgba(120,140,255,0.55); }
+
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; }
+textarea, input{ font-family:inherit; }
+
+.glass{
+  background:var(--bg-panel);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-md);
+}
+
+/* ================= APP SHELL ================= */
+.app-shell{
+  display:grid;
+  grid-template-columns: 1fr 264px;
+  min-height:100vh;
+}
+.main-col{ display:flex; flex-direction:column; min-width:0; }
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+  border-inline-start:1px solid var(--border-glass);
+  background:rgba(9,11,22,0.6);
+  backdrop-filter: blur(20px);
+  padding:28px 20px;
+  display:flex; flex-direction:column; gap:28px;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.brand{ display:flex; align-items:center; gap:10px; }
+.brand-mark{
+  width:38px; height:38px; border-radius:11px;
+  background:linear-gradient(135deg, var(--blue-500), var(--purple-500));
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:700; font-size:16px; color:#fff;
+  box-shadow:0 0 22px rgba(124,58,237,0.5);
+}
+.brand-text b{ display:block; font-family:var(--font-display); font-size:16px; letter-spacing:.5px;}
+.brand-text span{ display:block; font-size:11px; color:var(--text-dim); }
+
+.nav-group{ display:flex; flex-direction:column; gap:4px; }
+.nav-label{ font-size:11px; color:var(--text-dim); letter-spacing:1.5px; margin:6px 4px; font-family:var(--font-display); }
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:var(--radius-sm);
+  color:var(--text-secondary); font-size:14px; font-weight:500;
+  border:1px solid transparent;
+  transition:all .2s ease;
+  position:relative;
+}
+.nav-item .ni-dot{ width:6px; height:6px; border-radius:50%; background:var(--text-dim); flex-shrink:0; transition:all .2s ease;}
+.nav-item:hover{ background:var(--bg-elevated); color:var(--text-primary); }
+.nav-item.active{
+  background:linear-gradient(90deg, rgba(79,124,255,0.18), rgba(139,92,246,0.10));
+  color:#fff; border-color:var(--border-glass-strong);
+}
+.nav-item.active .ni-dot{ background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
+.nav-item .ni-progress{ margin-inline-start:auto; font-family:var(--font-display); font-size:11px; color:var(--text-dim); }
+
+.sidebar-progress{ margin-top:auto; padding-top:16px; border-top:1px solid var(--border-glass); }
+.sp-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); margin-bottom:8px; font-family:var(--font-display); letter-spacing:1px;}
+.sp-bar{ height:6px; border-radius:10px; background:rgba(255,255,255,0.06); overflow:hidden; }
+.sp-fill{ height:100%; border-radius:10px; background:linear-gradient(90deg, var(--blue-500), var(--purple-500), var(--cyan)); transition:width .6s ease; }
+
+/* ================= TOPBAR ================= */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 32px; border-bottom:1px solid var(--border-glass);
+  background:rgba(6,7,13,0.55); backdrop-filter: blur(14px);
+  position:sticky; top:0; z-index:20;
+}
+.tb-title{ display:flex; flex-direction:column; gap:2px; }
+.tb-title h1{ font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:.3px;}
+.tb-title span{ font-size:12px; color:var(--text-dim); }
+.tb-actions{ display:flex; align-items:center; gap:10px; }
+.save-indicator{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim); }
+.save-dot{ width:7px; height:7px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success); animation:pulse-dot 2.2s infinite; }
+@keyframes pulse-dot{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.page-progress{ height:3px; width:100%; background:rgba(255,255,255,0.05); }
+.page-progress-fill{ height:100%; background:linear-gradient(90deg, var(--blue-500), var(--cyan)); width:0%; transition:width .5s ease; }
+
+/* ================= CONTENT ================= */
+.content{ padding:36px 40px 90px; max-width:1180px; width:100%; margin:0 auto; }
+.content > *{ animation: fadeUp .6s ease both; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+/* stagger */
+.content > *:nth-child(1){animation-delay:.02s;}
+.content > *:nth-child(2){animation-delay:.08s;}
+.content > *:nth-child(3){animation-delay:.14s;}
+.content > *:nth-child(4){animation-delay:.20s;}
+.content > *:nth-child(5){animation-delay:.26s;}
+.content > *:nth-child(6){animation-delay:.32s;}
+.content > *:nth-child(7){animation-delay:.38s;}
+
+.eyebrow{ font-family:var(--font-display); font-size:12px; letter-spacing:2px; color:var(--cyan); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+.eyebrow::before{ content:''; width:22px; height:1px; background:var(--cyan); }
+
+/* ================= BUTTONS ================= */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 20px; border-radius:12px; border:1px solid var(--border-glass-strong);
+  background:var(--bg-elevated); color:var(--text-primary); font-size:14px; font-weight:600;
+  transition:all .2s ease;
+}
+.btn:hover{ transform:translateY(-1px); border-color:rgba(124,140,255,0.6); }
+.btn-primary{
+  background:linear-gradient(135deg, var(--blue-500), var(--purple-600));
+  border:none; box-shadow:0 6px 24px rgba(79,124,255,0.35);
+  color:#fff;
+}
+.btn-primary:hover{ box-shadow:0 8px 30px rgba(139,92,246,0.5); }
+.btn-ghost{ background:transparent; border:1px solid var(--border-glass); color:var(--text-secondary); }
+.btn-ghost:hover{ color:#fff; }
+.btn-sm{ padding:7px 14px; font-size:13px; border-radius:9px; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+.btn-danger{ background:var(--danger-dim); border:1px solid rgba(251,113,133,0.4); color:#ffb4c0;}
+.btn-success{ background:var(--success-dim); border:1px solid rgba(52,211,153,0.4); color:#7cf0c4;}
+
+/* ================= CARDS ================= */
+.card{ padding:24px; }
+.card-title{ font-family:var(--font-display); font-size:19px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+.card-sub{ color:var(--text-secondary); font-size:14px; line-height:1.9; }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+.badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; font-family:var(--font-display); letter-spacing:.5px;}
+.badge-blue{ background:rgba(79,124,255,0.16); color:var(--blue-400); border:1px solid rgba(79,124,255,0.3);}
+.badge-purple{ background:rgba(139,92,246,0.16); color:var(--purple-400); border:1px solid rgba(139,92,246,0.3);}
+.badge-cyan{ background:rgba(34,211,238,0.14); color:var(--cyan); border:1px solid rgba(34,211,238,0.3);}
+.badge-success{ background:var(--success-dim); color:var(--success); border:1px solid rgba(52,211,153,0.35);}
+
+/* ================= HERO ================= */
+.hero{
+  position:relative; padding:56px 44px; border-radius:var(--radius-lg); overflow:hidden;
+  background:linear-gradient(155deg, rgba(79,124,255,0.14), rgba(139,92,246,0.10) 60%, transparent);
+}
+.hero::before{
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 80% -10%, rgba(34,211,238,0.18), transparent 55%);
+  pointer-events:none;
+}
+.hero h2{ font-family:var(--font-display); font-size:38px; line-height:1.25; font-weight:800; max-width:720px;}
+.hero p{ color:var(--text-secondary); font-size:15.5px; max-width:640px; margin-top:14px; line-height:2; }
+
+/* ================= SECTION BLOCK (Workshop Unit) ================= */
+.section-block{ padding:30px 30px 26px; display:flex; flex-direction:column; gap:22px; }
+.sb-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+.sb-head-left{ display:flex; align-items:center; gap:14px; }
+.sb-index{
+  width:44px; height:44px; border-radius:13px; flex-shrink:0;
+  background:linear-gradient(135deg, rgba(79,124,255,0.25), rgba(139,92,246,0.25));
+  border:1px solid var(--border-glass-strong);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:800; font-size:17px;
+}
+.sb-title{ font-family:var(--font-display); font-size:21px; font-weight:700; }
+.sb-title small{ display:block; font-family:var(--font-body); font-size:12.5px; color:var(--text-dim); font-weight:400; margin-top:3px;}
+
+.sb-body{ color:var(--text-secondary); font-size:14.5px; line-height:2.1; }
+.sb-body p{ margin-bottom:10px; }
+.sb-body ul{ padding-inline-start:20px; display:flex; flex-direction:column; gap:6px; }
+
+.glossary{ display:flex; flex-direction:column; gap:8px; }
+.glossary-item{ display:flex; gap:10px; align-items:baseline; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-glass);}
+.glossary-term{ font-family:var(--font-display); color:var(--cyan); font-weight:700; font-size:13.5px; white-space:nowrap;}
+.glossary-def{ color:var(--text-secondary); font-size:13.5px; }
+
+.why-box{ padding:16px 18px; border-radius:12px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.25); font-size:13.5px; color:var(--text-secondary); line-height:1.9; }
+.why-box b{ color:var(--purple-400); font-family:var(--font-display); }
+
+.discussion{ display:flex; flex-direction:column; gap:10px; }
+.discussion h4{ font-family:var(--font-display); font-size:13px; letter-spacing:1px; color:var(--text-dim); margin-bottom:4px;}
+.discussion-q{ display:flex; gap:10px; padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); font-size:14px;}
+.discussion-q .q-mark{ color:var(--blue-400); font-family:var(--font-display); font-weight:800;}
+
+/* ================= NOTES ================= */
+.notes-wrap{ display:flex; flex-direction:column; gap:8px; }
+.notes-wrap label{ font-size:12.5px; color:var(--text-dim); font-family:var(--font-display); letter-spacing:.5px;}
+.notes-textarea{
+  width:100%; min-height:96px; resize:vertical; padding:14px 16px; border-radius:12px;
+  background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); color:var(--text-primary);
+  font-size:14px; line-height:1.8; outline:none; transition:border-color .2s ease;
+}
+.notes-textarea:focus{ border-color:var(--blue-500); background:rgba(79,124,255,0.05); }
+.notes-save-hint{ font-size:11px; color:var(--text-dim); }
+
+/* ================= VOTING ================= */
+.voting-card{ padding:20px; border-radius:14px; background:rgba(255,255,255,0.025); border:1px solid var(--border-glass); display:flex; flex-direction:column; gap:14px;}
+.vc-head{ display:flex; align-items:center; justify-content:space-between; }
+.vc-title{ font-family:var(--font-display); font-size:14px; letter-spacing:.5px; color:var(--text-secondary);}
+.vc-tally{ display:flex; gap:12px; font-size:12px; font-family:var(--font-display); }
+.vc-tally span{ display:flex; align-items:center; gap:5px; }
+.dot-agree{ width:7px;height:7px;border-radius:50%; background:var(--success);}
+.dot-object{ width:7px;height:7px;border-radius:50%; background:var(--danger);}
+.dot-edit{ width:7px;height:7px;border-radius:50%; background:var(--warning);}
+
+.founder-rows{ display:flex; flex-direction:column; gap:8px; }
+.founder-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid var(--border-glass); gap:10px; flex-wrap:wrap;}
+.founder-name{ font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:8px;}
+.founder-avatar{ width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; font-family:var(--font-display);}
+.vote-btns{ display:flex; gap:6px; }
+.vote-btn{ padding:6px 12px; border-radius:8px; border:1px solid var(--border-glass); background:transparent; color:var(--text-dim); font-size:12.5px; font-weight:600; transition:all .15s ease;}
+.vote-btn:hover{ border-color:var(--border-glass-strong); color:var(--text-primary);}
+.vote-btn.sel-agree{ background:var(--success-dim); border-color:var(--success); color:var(--success);}
+.vote-btn.sel-object{ background:var(--danger-dim); border-color:var(--danger); color:var(--danger);}
+.vote-btn.sel-edit{ background:rgba(251,191,36,0.14); border-color:var(--warning); color:var(--warning);}
+
+/* ================= DECISION ================= */
+.decision-card{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding:18px 22px; border-radius:14px; border:1px dashed var(--border-glass-strong);
+  background:rgba(255,255,255,0.02);
+}
+.decision-card.approved{ border-style:solid; border-color:rgba(52,211,153,0.5); background:var(--success-dim); }
+.decision-status{ display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600;}
+.decision-status .stamp{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); font-size:18px;}
+.decision-card.approved .stamp{ background:var(--success); color:#04140d; }
+.decision-meta{ font-size:11.5px; color:var(--text-dim); }
+
+/* ================= TIMELINE / PROGRESS OVERVIEW ================= */
+.timeline{ display:flex; align-items:center; gap:0; padding:26px; overflow-x:auto; }
+.tl-step{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:130px; position:relative;}
+.tl-node{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; background:rgba(255,255,255,0.05); border:2px solid var(--border-glass-strong); z-index:2; font-size:15px;}
+.tl-step.done .tl-node{ background:linear-gradient(135deg,var(--blue-500),var(--purple-500)); border-color:transparent; box-shadow:0 0 18px rgba(124,58,237,0.5);}
+.tl-step.current .tl-node{ border-color:var(--cyan); box-shadow:0 0 14px rgba(34,211,238,0.5); }
+.tl-line{ position:absolute; top:23px; height:2px; background:var(--border-glass); width:100%; right:50%; z-index:1;}
+.tl-step.done .tl-line{ background:linear-gradient(90deg,var(--purple-500),var(--blue-500)); }
+.tl-step:first-child .tl-line{ display:none; }
+.tl-label{ font-size:12.5px; text-align:center; color:var(--text-secondary); font-weight:600;}
+.tl-sub{ font-size:10.5px; color:var(--text-dim); }
+
+/* ================= TOAST ================= */
+.toast{
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--bg-elevated); border:1px solid var(--border-glass-strong); backdrop-filter:blur(16px);
+  padding:12px 22px; border-radius:12px; font-size:13.5px; display:flex; align-items:center; gap:10px;
+  opacity:0; pointer-events:none; transition:all .35s ease; z-index:100; box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.toast .t-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); }
+
+/* ================= MODAL (founder setup) ================= */
+.modal-overlay{ position:fixed; inset:0; background:rgba(4,5,10,0.7); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; pointer-events:none; transition:opacity .3s ease;}
+.modal-overlay.show{ opacity:1; pointer-events:auto; }
+.modal-box{ width:min(480px,92vw); padding:30px; transform:translateY(14px); transition:transform .3s ease;}
+.modal-overlay.show .modal-box{ transform:translateY(0); }
+.modal-box h3{ font-family:var(--font-display); font-size:20px; margin-bottom:6px;}
+.modal-box p{ color:var(--text-secondary); font-size:13.5px; margin-bottom:18px; }
+.founder-input-row{ display:flex; gap:8px; margin-bottom:10px; align-items:center;}
+.founder-input-row input{ flex:1; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,0.04); border:1px solid var(--border-glass); color:var(--text-primary); font-size:13.5px; outline:none;}
+.founder-input-row input:focus{ border-color:var(--blue-500); }
+.founder-input-row .fi-num{ width:26px; height:26px; border-radius:8px; background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--font-display); flex-shrink:0;}
+
+/* ================= UTILITIES ================= */
+.flex{ display:flex; } .items-center{ align-items:center; } .gap-8{gap:8px;} .gap-12{gap:12px;}
+.mt-8{margin-top:8px;} .mt-16{margin-top:16px;} .mt-24{margin-top:24px;} .mt-32{margin-top:32px;}
+.section-gap{ display:flex; flex-direction:column; gap:20px; }
+.divider{ height:1px; background:var(--border-glass); border:none; margin:6px 0; }
+.text-dim{ color:var(--text-dim); }
+.print-only{ display:none; }
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 980px){
+  .app-shell{ grid-template-columns:1fr; }
+  .sidebar{ position:fixed; inset-inline-end:0; top:0; width:78vw; max-width:300px; transform:translateX(100%); transition:transform .3s ease; z-index:60; border-inline-start:1px solid var(--border-glass); box-shadow:-20px 0 50px rgba(0,0,0,0.5);}
+  .sidebar.open{ transform:translateX(0); }
+  .menu-toggle{ display:flex !important; }
+  .grid-2, .grid-3{ grid-template-columns:1fr; }
+  .content{ padding:24px 18px 80px; }
+  .hero{ padding:36px 22px; }
+  .hero h2{ font-size:27px; }
+}
+.menu-toggle{ display:none; width:38px; height:38px; border-radius:10px; background:var(--bg-elevated); border:1px solid var(--border-glass); align-items:center; justify-content:center; font-size:18px;}
+.sidebar-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:50; opacity:0; pointer-events:none; transition:opacity .3s ease;}
+.sidebar-backdrop.show{ opacity:1; pointer-events:auto; }
+
+/* ================= PRINT ================= */
+@media print{
+  .sidebar, .topbar .tb-actions, .menu-toggle, .toast, .modal-overlay{ display:none !important; }
+  body{ background:#fff; color:#000; }
+  body::before, body::after{ display:none; }
+  .glass{ background:#fff; border:1px solid #ccc; -webkit-print-color-adjust:exact;}
+  .app-shell{ display:block; }
+}
+
+
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">PX</div>
+        <div class="brand-text"><b>PRIVEX</b><span>Founders OS · Phase 1</span></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">خارطة الاجتماع</div>
+        <div id="navGroup"></div>
+      </div>
+      <div class="sidebar-progress">
+        <div class="sp-label"><span>التقدم العام</span><span id="sidebarProgressLabel">0%</span></div>
+        <div class="sp-bar"><div class="sp-fill" id="sidebarProgressFill" style="width:0%"></div></div>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="main-col">
+
+      <!-- ================= TOPBAR ================= -->
+      <header class="topbar">
+        <div class="flex items-center gap-12">
+          <button class="menu-toggle" id="menuToggle">☰</button>
+          <div class="tb-title">
+            <h1>التسويق والمجتمع</h1>
+            <span>ورشة عمل: العلامة التجارية، المحتوى، البودكاست، والمجتمع</span>
+          </div>
+        </div>
+        <div class="tb-actions">
+          <span class="save-indicator"><span class="save-dot"></span> حفظ تلقائي محلي</span>
+          <button class="btn btn-ghost btn-sm" id="printBtn">🖨 طباعة PDF</button>
+        </div>
+      </header>
+      <div class="page-progress"><div class="page-progress-fill" id="pageProgressFill"></div></div>
+<main class="content section-gap">
+
+    <!-- ================= SECTION: BRANDING ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">01</div>
+          <div class="sb-title">العلامة التجارية<small>Branding</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>Branding هو الانطباع الشامل الذي يتركه اسم Privex في ذهن العميل: ليس فقط الشعار والألوان، بل طريقة الحديث، جودة التسليم، والتجربة الكاملة مع الشركة.</p>
+<p>لأن الفريق ينتمي إلى خلفية أمن سيبراني موثقة، يمكن بناء العلامة التجارية حول محور 'التقنية الموثوقة والآمنة' كميزة تفصلها عن منافسين أقل تخصصاً.</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>شعار وهوية بصرية داكنة وتقنية توحي بالأمان والاحترافية.</li><li>رسالة تسويقية أساسية: 'حلول تقنية تُبنى بعقلية أمنية من اليوم الأول'.</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Branding</span><span class="glossary-def">بناء الانطباع الشامل والمتسق للشركة في ذهن الجمهور.</span></div><div class="glossary-item"><span class="glossary-term">Positioning</span><span class="glossary-def">المكانة التي تريد الشركة أن تحتلها في ذهن العميل مقارنة بمنافسيها.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>علامة تجارية قوية تقلل تكلفة اكتساب العملاء الجدد بمرور الوقت، لأن الثقة تُبنى تلقائياً قبل أول محادثة مبيعات.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي الكلمة أو الانطباع الواحد الذي نريد أن يرتبط باسم Privex فوراً؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نستثمر خلفيتنا في الأمن السيبراني كجزء أساسي من العلامة التجارية؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من يملك القرار النهائي في اعتماد الهوية البصرية؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="branding" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="branding">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="branding">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: CONTENT-STRATEGY ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">02</div>
+          <div class="sb-title">استراتيجية التسويق والمحتوى<small>Marketing & Content Strategy</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>استراتيجية التسويق تحدد كيف نصل للعملاء المحتملين وما هي القنوات الأنسب (سوشال ميديا، شراكات، توصيات مباشرة). استراتيجية المحتوى تحدد نوعية المحتوى الذي ننشره بانتظام لبناء الثقة والوعي بخدماتنا.</p>
+<p>للشركات التقنية الناشئة، المحتوى التعليمي (شرح مفاهيم تقنية وأمنية للجمهور غير المتخصص) عادة يبني ثقة أسرع من الإعلانات المدفوعة المباشرة.</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>منشورات أسبوعية تشرح خطأ أمني شائع تقع فيه الشركات الصغيرة وكيفية تجنبه.</li><li>دراسات حالة مختصرة (Case Studies) لمشاريع منجزة، مع نتائج ملموسة.</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Content Strategy</span><span class="glossary-def">خطة منظمة لنوع وتوقيت المحتوى المنشور لتحقيق أهداف تسويقية محددة.</span></div><div class="glossary-item"><span class="glossary-term">Organic Reach</span><span class="glossary-def">الوصول الطبيعي للمحتوى دون دفع مقابل مالي للإعلانات.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>محتوى منتظم وموثوق يحوّل متابعي السوشال ميديا إلى عملاء فعليين تدريجياً، ويقلل الاعتماد الكامل على الإعلانات المدفوعة.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي القنوات التسويقية الثلاث الأولى التي نركّز عليها؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من في الفريق مسؤول عن إنتاج المحتوى بانتظام؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كم مرة أسبوعياً واقعياً يمكننا النشر دون التأثير على العمل التقني؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="content-strategy" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="content-strategy">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="content-strategy">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: PODCAST ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">03</div>
+          <div class="sb-title">استراتيجية البودكاست<small>Podcast Strategy</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>البودكاست أداة قوية لبناء سلطة معرفية (Authority) في مجال الأمن السيبراني والتقنية، خصوصاً أن الفريق يملك خلفية أكاديمية قوية تؤهله لمناقشة مواضيع متخصصة بثقة.</p>
+<p>لا يحتاج البودكاست إنتاجاً معقداً في البداية؛ حلقات قصيرة ومركزة أفضل من حلقات طويلة غير منتظمة.</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>حلقة شهرية تستضيف أحد أعضاء الدفعة التأسيسية (450 طالباً) لمناقشة موضوع أمني حديث.</li><li>سلسلة قصيرة بعنوان 'خطأ أمني بـ 5 دقائق' تشرح ثغرة شائعة وحلها.</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Podcast Strategy</span><span class="glossary-def">خطة منظمة لمحتوى وتوقيت وضيوف واستضافة البودكاست.</span></div><div class="glossary-item"><span class="glossary-term">Authority Building</span><span class="glossary-def">بناء صورة الخبير الموثوق في مجال معيّن عبر محتوى متخصص متكرر.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>البودكاست يربط Privex مباشرة بمجتمع دفعة الأمن السيبراني الأوسع، ويحوّل الفريق من 'شركة تطوير' إلى 'صوت معرفي' في المجال.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>هل نبدأ بحلقات فردية أم بضيوف من مجتمع الدفعة الأكاديمية؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما هي وتيرة النشر الواقعية (أسبوعية، شهرية)؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من يتولى التسجيل والمونتاج والنشر؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="podcast" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="podcast">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="podcast">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: COMMUNITY ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">04</div>
+          <div class="sb-title">بناء المجتمع<small>Community Building</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>بناء المجتمع يعني تحويل جمهور Privex من متابعين سلبيين إلى مجتمع نشط يشارك، يوصي، ويصبح مصدر عملاء متكرر. أقرب مجتمع طبيعي للفريق هو مجتمع طلاب الأمن السيبراني، وتحديداً الدفعة التأسيسية المكوّنة من نحو 450 طالباً.</p>
+<p>استثمار هذا المجتمع لا يعني البيع المباشر له، بل بناء علاقة تعاون: فرص تدريب، تعاون على مشاريع، وتوصيات متبادلة.</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>مجموعة تواصل خاصة لخريجي وطلاب الدفعة لمشاركة فرص العمل والتدريب.</li><li>برنامج تدريب مصغّر تقدّمه Privex لطلاب الدفعة مقابل بناء علاقة طويلة المدى معهم.</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Community Building</span><span class="glossary-def">بناء علاقة تفاعلية مستمرة مع جمهور مستهدف بدلاً من تسويق أحادي الاتجاه.</span></div><div class="glossary-item"><span class="glossary-term">Network Effect</span><span class="glossary-def">زيادة قيمة المجتمع كلما زاد عدد الأعضاء النشطين فيه.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>مجتمع الأمن السيبراني وطلاب الدفعة التأسيسية يمثلون ميزة تنافسية لا يملكها أغلب المنافسين: قناة توصية وتوظيف وشراكة جاهزة منذ اليوم الأول.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>كيف نبدأ التواصل الرسمي مع مجتمع الدفعة التأسيسية كخطوة أولى؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>ما الذي تقدّمه Privex لهذا المجتمع مقابل بناء العلاقة (لا مجرد الأخذ)؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>هل نبني مجتمعاً منفصلاً خاصاً بعملاء Privex أيضاً على المدى الطويل؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="community" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="community">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="community">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: YEARLY-PLAN ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">05</div>
+          <div class="sb-title">خطة السنة الأولى<small>Year One Plan</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>خطة السنة الكاملة تقسّم الأهداف التسويقية الكبيرة إلى مراحل ربع سنوية قابلة للتنفيذ والقياس، بدلاً من هدف سنوي غامض.</p>
+<p>يُفضّل أن تبدأ الخطة ببناء الأساس (الهوية، القنوات) قبل الانتقال لمرحلة النمو المكثف والإعلانات المدفوعة.</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>الربع الأول: بناء الهوية البصرية، إطلاق القنوات، أول 3 دراسات حالة.</li><li>الربع الثاني: إطلاق البودكاست، بدء التواصل مع مجتمع الدفعة التأسيسية.</li><li>الربع الثالث والرابع: تقييم النتائج، وتوسيع الاستثمار في القنوات الأكثر فعالية.</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Quarterly Milestones</span><span class="glossary-def">أهداف مرحلية كل ثلاثة أشهر تُستخدم لقياس التقدم نحو الهدف السنوي.</span></div><div class="glossary-item"><span class="glossary-term">KPI</span><span class="glossary-def">مؤشر أداء رئيسي رقمي يُستخدم لقياس نجاح كل نشاط تسويقي.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>بدون خطة زمنية مقسّمة، يصبح التسويق نشاطاً عشوائياً غير مقاس. التقسيم الربع سنوي يتيح تقييم ما ينجح وتعديل ما لا ينجح بسرعة.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>ما هو الهدف الرقمي الواقعي (عدد عملاء، متابعين، حلقات بودكاست) لكل ربع سنة؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>من يتابع تنفيذ هذه الخطة ويحاسب على التأخر؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>متى نراجع الخطة ونعدلها بناءً على النتائج الفعلية؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="yearly-plan" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="yearly-plan">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="yearly-plan">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: GROWTH-IDEAS ================= -->
+    <section class="glass section-block">
+      <div class="sb-head">
+        <div class="sb-head-left">
+          <div class="sb-index">06</div>
+          <div class="sb-title">أفكار تطوير الشركة<small>Growth Ideas</small></div>
+        </div>
+        <span class="badge badge-blue">ورشة عمل تفاعلية</span>
+      </div>
+
+      <div class="sb-body section-gap">
+        <p>هذا القسم مخصص لتجميع أفكار نمو مستقبلية لا تحتاج تنفيذاً فورياً، لكنها تستحق التوثيق والمراجعة الدورية عند نضوج الشركة.</p>
+<p>توثيق هذه الأفكار الآن يمنع ضياعها، ويمنح الفريق مرجعاً جاهزاً عند التخطيط للمراحل القادمة من النظام (Phase 2 وما بعدها).</p>
+        
+      <div>
+        <h4 style="font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">أمثلة تطبيقية</h4>
+        <ul><li>توسيع الخدمات لتشمل تدقيقاً أمنياً (Security Audit) كخدمة مستقلة قائمة بذاتها.</li><li>برنامج شراكة مع شركات ناشئة أخرى لتبادل الإحالات (Referrals).</li></ul>
+      </div>
+        
+      <div class="glossary"><div class="glossary-item"><span class="glossary-term">Growth Ideas Backlog</span><span class="glossary-def">قائمة موثّقة بأفكار نمو مستقبلية بانتظار الأولوية والتنفيذ.</span></div><div class="glossary-item"><span class="glossary-term">Referral Program</span><span class="glossary-def">برنامج يكافئ من يُحيل عميلاً جديداً للشركة.</span></div></div>
+      </div>
+
+      <div class="why-box"><b>لماذا هذا القسم مهم؟</b><br>الأفكار غير الموثّقة تُنسى غالباً. سجل مركزي لأفكار النمو يسهّل على الفريق العودة إليها عند التخطيط لمراحل النظام القادمة.</div>
+
+      <div class="discussion">
+        <h4>أسئلة للنقاش</h4>
+        <div class="discussion-q"><span class="q-mark">?</span><span>ما هي أفكار النمو التي يطرحها كل عضو الآن وإن لم تكن أولوية حالية؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>أي فكرة من هذه الأفكار تستحق أن تكون أولوية في الربع القادم؟</span></div><div class="discussion-q"><span class="q-mark">?</span><span>كيف نحافظ على هذا السجل محدّثاً بشكل دوري؟</span></div>
+      </div>
+
+      <div class="notes-wrap">
+        <label>ملاحظات الاجتماع</label>
+        <textarea class="notes-textarea" data-section="growth-ideas" placeholder="اكتبوا هنا أهم ما تم نقاشه بخصوص هذا القسم..."></textarea>
+        <span class="notes-save-hint">يُحفظ تلقائياً أثناء الكتابة</span>
+      </div>
+
+      <div class="voting-card" data-section="growth-ideas">
+        <div class="vc-head">
+          <span class="vc-title">تصويت الفريق المؤسس</span>
+          <div class="vc-tally"></div>
+        </div>
+        <div class="founder-rows"></div>
+      </div>
+
+      <div class="decision-card" data-section="growth-ideas">
+        <div class="decision-status">
+          <span class="stamp">○</span>
+          <div><span class="status-text">بانتظار الاعتماد</span><br><span class="decision-meta text-dim" style="font-size:11.5px;">لم يتم الاعتماد بعد</span></div>
+        </div>
+        <button class="btn btn-success decision-approve-btn">اعتماد القرار</button>
+      </div>
+    </section>
+
+    <!-- ================= PHASE 1 COMPLETE ================= -->
+    <div class="glass hero" style="text-align:center;">
+      <span class="eyebrow" style="justify-content:center;">نهاية المرحلة الأولى</span>
+      <h2 style="font-size:26px;">تم الانتهاء من جميع وحدات المرحلة الأولى 🎉</h2>
+      <p style="margin:14px auto 0;">راجعوا القرارات المعتمدة في كل وحدة، وتأكدوا من تصويت جميع الأعضاء الأربعة قبل الانتقال للمرحلة الثانية من النظام.</p>
+      <div class="flex gap-12 mt-24" style="justify-content:center;flex-wrap:wrap;">
+        <a href="index.html" class="btn btn-primary">العودة للبوابة الرئيسية</a>
+        <button class="btn btn-ghost" id="printBtnBottom">🖨 طباعة تقرير الاجتماع الكامل</button>
+      </div>
+    </div>
+</main>
+</div>
+</div>
+
+  <!-- ================= FOUNDER SETUP MODAL ================= -->
+  <div class="modal-overlay" id="founderModal">
+    <div class="modal-box glass">
+      <h3>مرحباً بالفريق المؤسس 👋</h3>
+      <p>أدخلوا أسماء الأعضاء الأربعة لتفعيل نظام التصويت والملاحظات الخاص بكل عضو خلال الاجتماع.</p>
+      <form id="founderForm">
+        <div class="founder-input-row"><span class="fi-num">1</span><input type="text" placeholder="اسم العضو الأول" required></div>
+        <div class="founder-input-row"><span class="fi-num">2</span><input type="text" placeholder="اسم العضو الثاني" required></div>
+        <div class="founder-input-row"><span class="fi-num">3</span><input type="text" placeholder="اسم العضو الثالث" required></div>
+        <div class="founder-input-row"><span class="fi-num">4</span><input type="text" placeholder="اسم العضو الرابع" required></div>
+        <div class="flex gap-8 mt-16">
+          <button type="submit" class="btn btn-primary" style="flex:1">حفظ ومتابعة</button>
+          <button type="button" class="btn btn-ghost" id="founderSkip">تخطي الآن</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION ================= -->
+  <div class="toast" id="toast"><span class="t-dot"></span><span class="t-msg">تم الحفظ</span></div>
+
+<script>
+const PROJECT_INFO = {
+    project: "Privex Founders Operating System",
+    phase: 1,
+    version: "1.0.0",
+    module: "Marketing & Community",
+    file: "marketing.html",
+    dependsOn: [
+        "Sidebar Component",
+        "Topbar Component",
+        "Storage Layer",
+        "Navigation Engine",
+        "Shared UI Components"
+    ],
+    nextModule: "— نهاية المرحلة الأولى، بانتظار المرحلة الثانية"
+};
+// PROJECT_INFO is documentation metadata only — not consumed by app logic.
+
+/* ================= STORAGE ================= */
+/* ================= STORAGE LAYER ================= */
+/* Independent storage layer — swappable with Firebase later without
+   changing any calling code across the app. */
+const STORAGE_PREFIX = 'privex_';
+
+const PrivexStorage = {
+  _key(k){ return STORAGE_PREFIX + k; },
+
+  saveMeeting(data){
+    try{
+      const existing = this.loadMeeting() || {};
+      const merged = Object.assign({}, existing, data, { updatedAt: new Date().toISOString() });
+      localStorage.setItem(this._key('meeting'), JSON.stringify(merged));
+      return merged;
+    }catch(e){ console.error('saveMeeting failed', e); return null; }
+  },
+  loadMeeting(){
+    try{
+      const raw = localStorage.getItem(this._key('meeting'));
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ console.error('loadMeeting failed', e); return null; }
+  },
+
+  saveFounders(names){
+    try{ localStorage.setItem(this._key('founders'), JSON.stringify(names)); return true; }
+    catch(e){ console.error('saveFounders failed', e); return false; }
+  },
+  loadFounders(){
+    try{
+      const raw = localStorage.getItem(this._key('founders'));
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  },
+
+  saveVotes(sectionId, votes){
+    try{
+      const all = this._loadAll('votes');
+      all[sectionId] = votes;
+      localStorage.setItem(this._key('votes'), JSON.stringify(all));
+      return true;
+    }catch(e){ console.error('saveVotes failed', e); return false; }
+  },
+  loadVotes(sectionId){
+    const all = this._loadAll('votes');
+    return all[sectionId] || {};
+  },
+
+  saveNotes(sectionId, text){
+    try{
+      const all = this._loadAll('notes');
+      all[sectionId] = text;
+      localStorage.setItem(this._key('notes'), JSON.stringify(all));
+      return true;
+    }catch(e){ console.error('saveNotes failed', e); return false; }
+  },
+  loadNotes(sectionId){
+    const all = this._loadAll('notes');
+    return all[sectionId] || '';
+  },
+
+  saveDecision(sectionId, approved){
+    try{
+      const all = this._loadAll('decisions');
+      all[sectionId] = { approved: !!approved, at: new Date().toISOString() };
+      localStorage.setItem(this._key('decisions'), JSON.stringify(all));
+      return true;
+    }catch(e){ console.error('saveDecision failed', e); return false; }
+  },
+  loadDecision(sectionId){
+    const all = this._loadAll('decisions');
+    return all[sectionId] || { approved:false, at:null };
+  },
+
+  _loadAll(bucket){
+    try{
+      const raw = localStorage.getItem(this._key(bucket));
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  },
+
+  setModuleProgress(moduleKey, percent){
+    try{
+      const all = this._loadAll('progress');
+      all[moduleKey] = Math.round(percent);
+      localStorage.setItem(this._key('progress'), JSON.stringify(all));
+      return true;
+    }catch(e){ return false; }
+  },
+  getModuleProgress(moduleKey){
+    const all = this._loadAll('progress');
+    return all[moduleKey] || 0;
+  },
+  getAllProgress(){
+    return this._loadAll('progress');
+  },
+  getOverallProgress(){
+    const modules = ['company','management','finance','marketing'];
+    const all = this.getAllProgress();
+    const sum = modules.reduce((s,m)=> s + (all[m]||0), 0);
+    return Math.round(sum / modules.length);
+  },
+
+  exportSnapshot(){
+    const snapshot = {
+      meeting: this.loadMeeting(),
+      founders: this.loadFounders(),
+      votes: this._loadAll('votes'),
+      notes: this._loadAll('notes'),
+      decisions: this._loadAll('decisions'),
+      progress: this._loadAll('progress'),
+      exportedAt: new Date().toISOString()
+    };
+    return snapshot;
+  }
+};
+
+/* ================= NAVIGATION ENGINE ================= */
+const NAV_ITEMS = [
+  { key:'index',      file:'index.html',      label:'البوابة الرئيسية',      icon:'01' },
+  { key:'company',    file:'company.html',    label:'الهوية والرؤية',        icon:'02' },
+  { key:'management',  file:'management.html', label:'الإدارة والصلاحيات',    icon:'03' },
+  { key:'finance',    file:'finance.html',    label:'الأمور المالية',        icon:'04' },
+  { key:'marketing',  file:'marketing.html',  label:'التسويق والمجتمع',      icon:'05' },
+];
+
+function initSidebar(activeKey){
+  const nav = document.getElementById('navGroup');
+  if(!nav) return;
+  const progress = PrivexStorage.getAllProgress();
+  nav.innerHTML = NAV_ITEMS.map(item=>{
+    const isModule = item.key !== 'index';
+    const pct = isModule ? (progress[item.key]||0) : null;
+    return `
+      <a class="nav-item ${item.key===activeKey?'active':''}" href="${item.file}">
+        <span class="ni-dot"></span>
+        <span>${item.label}</span>
+        ${pct!==null ? `<span class="ni-progress">${pct}%</span>` : ''}
+      </a>`;
+  }).join('');
+
+  const overall = PrivexStorage.getOverallProgress();
+  const fill = document.getElementById('sidebarProgressFill');
+  const label = document.getElementById('sidebarProgressLabel');
+  if(fill) fill.style.width = overall + '%';
+  if(label) label.textContent = overall + '%';
+}
+
+function initMobileMenu(){
+  const toggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if(!toggle || !sidebar) return;
+  const open = ()=>{ sidebar.classList.add('open'); backdrop.classList.add('show'); };
+  const close = ()=>{ sidebar.classList.remove('open'); backdrop.classList.remove('show'); };
+  toggle.addEventListener('click', open);
+  backdrop && backdrop.addEventListener('click', close);
+}
+
+/* ================= TOAST ================= */
+let toastTimer = null;
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  if(!toast) return;
+  toast.querySelector('.t-msg').textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2400);
+}
+
+/* ================= FOUNDER SETUP MODAL ================= */
+function ensureFounders(onReady){
+  let founders = PrivexStorage.loadFounders();
+  if(founders && founders.length === 4 && founders.every(n=>n && n.trim())){
+    if(onReady) onReady(founders);
+    return;
+  }
+  const overlay = document.getElementById('founderModal');
+  if(!overlay){ if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']); return; }
+  overlay.classList.add('show');
+  const form = document.getElementById('founderForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const inputs = form.querySelectorAll('input');
+    const names = Array.from(inputs).map((i,idx)=> i.value.trim() || ('المؤسس ' + (idx+1)));
+    PrivexStorage.saveFounders(names);
+    overlay.classList.remove('show');
+    showToast('تم حفظ بيانات الفريق المؤسس');
+    if(onReady) onReady(names);
+    renderAllFounderRows();
+  });
+  const skipBtn = document.getElementById('founderSkip');
+  if(skipBtn){
+    skipBtn.addEventListener('click', ()=>{
+      overlay.classList.remove('show');
+      if(onReady) onReady(founders || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4']);
+    });
+  }
+}
+
+/* ================= VOTING SYSTEM ================= */
+function initials(name){
+  const parts = name.trim().split(/\s+/);
+  return (parts[0] ? parts[0][0] : 'م');
+}
+
+function renderVotingCard(sectionId){
+  const container = document.querySelector(`.voting-card[data-section="${sectionId}"] .founder-rows`);
+  if(!container) return;
+  const founders = PrivexStorage.loadFounders() || ['المؤسس 1','المؤسس 2','المؤسس 3','المؤسس 4'];
+  const votes = PrivexStorage.loadVotes(sectionId);
+
+  container.innerHTML = founders.map((name, idx)=>{
+    const vote = votes[name] || null;
+    return `
+      <div class="founder-row">
+        <span class="founder-name"><span class="founder-avatar">${initials(name)}</span>${name}</span>
+        <span class="vote-btns" data-founder="${name.replace(/"/g,'')}" data-section="${sectionId}">
+          <button type="button" class="vote-btn ${vote==='agree'?'sel-agree':''}" data-value="agree">موافق</button>
+          <button type="button" class="vote-btn ${vote==='object'?'sel-object':''}" data-value="object">اعتراض</button>
+          <button type="button" class="vote-btn ${vote==='edit'?'sel-edit':''}" data-value="edit">يحتاج تعديل</button>
+        </span>
+      </div>`;
+  }).join('');
+
+  updateTally(sectionId);
+
+  container.querySelectorAll('.vote-btn').forEach(btn=>{
+    btn.addEventListener('click', function(){
+      const wrap = this.closest('.vote-btns');
+      const founder = wrap.getAttribute('data-founder');
+      const sec = wrap.getAttribute('data-section');
+      const value = this.getAttribute('data-value');
+      const currentVotes = PrivexStorage.loadVotes(sec);
+      currentVotes[founder] = (currentVotes[founder] === value) ? null : value;
+      if(!currentVotes[founder]) delete currentVotes[founder];
+      PrivexStorage.saveVotes(sec, currentVotes);
+      renderVotingCard(sec);
+      showToast('تم تسجيل التصويت');
+    });
+  });
+}
+
+function updateTally(sectionId){
+  const card = document.querySelector(`.voting-card[data-section="${sectionId}"]`);
+  if(!card) return;
+  const votes = PrivexStorage.loadVotes(sectionId);
+  const values = Object.values(votes);
+  const agree = values.filter(v=>v==='agree').length;
+  const object = values.filter(v=>v==='object').length;
+  const edit = values.filter(v=>v==='edit').length;
+  const tally = card.querySelector('.vc-tally');
+  if(tally){
+    tally.innerHTML = `
+      <span><span class="dot-agree"></span> ${agree} موافق</span>
+      <span><span class="dot-object"></span> ${object} اعتراض</span>
+      <span><span class="dot-edit"></span> ${edit} تعديل</span>`;
+  }
+}
+
+function renderAllFounderRows(){
+  document.querySelectorAll('.voting-card').forEach(card=>{
+    const sectionId = card.getAttribute('data-section');
+    if(sectionId) renderVotingCard(sectionId);
+  });
+}
+
+/* ================= NOTES ================= */
+function initNotes(){
+  document.querySelectorAll('.notes-textarea').forEach(area=>{
+    const sectionId = area.getAttribute('data-section');
+    area.value = PrivexStorage.loadNotes(sectionId);
+    let debounce;
+    area.addEventListener('input', ()=>{
+      clearTimeout(debounce);
+      debounce = setTimeout(()=>{
+        PrivexStorage.saveNotes(sectionId, area.value);
+        const hint = area.parentElement.querySelector('.notes-save-hint');
+        if(hint){ hint.textContent = 'تم الحفظ تلقائياً ✓'; setTimeout(()=> hint.textContent='يُحفظ تلقائياً أثناء الكتابة', 1600); }
+      }, 500);
+    });
+  });
+}
+
+/* ================= DECISION / APPROVAL ================= */
+function initDecisions(moduleKey){
+  document.querySelectorAll('.decision-card').forEach(card=>{
+    const sectionId = card.getAttribute('data-section');
+    const btn = card.querySelector('.decision-approve-btn');
+    const status = card.querySelector('.decision-status .status-text');
+    const stamp = card.querySelector('.stamp');
+    const meta = card.querySelector('.decision-meta');
+
+    function render(){
+      const d = PrivexStorage.loadDecision(sectionId);
+      card.classList.toggle('approved', d.approved);
+      if(status) status.textContent = d.approved ? 'تم اعتماد هذا القرار' : 'بانتظار الاعتماد';
+      if(stamp) stamp.textContent = d.approved ? '✓' : '○';
+      if(meta) meta.textContent = d.approved && d.at ? ('تاريخ الاعتماد: ' + new Date(d.at).toLocaleString('ar-IQ')) : 'لم يتم الاعتماد بعد';
+      if(btn) btn.textContent = d.approved ? 'إلغاء الاعتماد' : 'اعتماد القرار';
+    }
+
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        const d = PrivexStorage.loadDecision(sectionId);
+        PrivexStorage.saveDecision(sectionId, !d.approved);
+        render();
+        updateModuleProgress(moduleKey);
+        showToast(!d.approved ? 'تم اعتماد القرار ✓' : 'تم إلغاء الاعتماد');
+      });
+    }
+    render();
+  });
+  updateModuleProgress(moduleKey);
+}
+
+function updateModuleProgress(moduleKey){
+  const cards = document.querySelectorAll('.decision-card');
+  if(!cards.length) return;
+  let approved = 0;
+  cards.forEach(c=>{
+    const sectionId = c.getAttribute('data-section');
+    if(PrivexStorage.loadDecision(sectionId).approved) approved++;
+  });
+  const percent = (approved / cards.length) * 100;
+  PrivexStorage.setModuleProgress(moduleKey, percent);
+
+  const pageFill = document.getElementById('pageProgressFill');
+  if(pageFill) pageFill.style.width = percent + '%';
+  const sideFill = document.getElementById('sidebarProgressFill');
+  if(sideFill) sideFill.style.width = PrivexStorage.getOverallProgress() + '%';
+  const sideLabel = document.getElementById('sidebarProgressLabel');
+  if(sideLabel) sideLabel.textContent = PrivexStorage.getOverallProgress() + '%';
+  initSidebar(window.PRIVEX_ACTIVE_KEY);
+}
+
+/* ================= PRINT ================= */
+function initPrintButton(){
+  const btn = document.getElementById('printBtn');
+  if(btn) btn.addEventListener('click', ()=> window.print());
+}
+
+/* ================= BOOTSTRAP HELPER ================= */
+function bootPrivexPage(moduleKey){
+  window.PRIVEX_ACTIVE_KEY = moduleKey;
+  initSidebar(moduleKey);
+  initMobileMenu();
+  initPrintButton();
+  ensureFounders(()=>{ renderAllFounderRows(); });
+  initNotes();
+  if(document.querySelector('.decision-card')) initDecisions(moduleKey);
+  renderAllFounderRows();
+}
+
+
+/* ================= PAGE BOOTSTRAP ================= */
+document.addEventListener('DOMContentLoaded', function(){
+  bootPrivexPage('marketing');
+  PrivexStorage.saveMeeting({ lastVisited: 'marketing.html' });
+});
+</script>
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('printBtnBottom');
+  if(btn) btn.addEventListener('click', ()=> window.print());
+});
+
+</script>
+<!-- ================= END OF FILE ================= -->
+</body>
+</html>
